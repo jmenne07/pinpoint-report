@@ -1,0 +1,15 @@
+{% extends "georeport/base.html" %}
+{% load static %}
+{% block title %}New report {% endblock %}
+{% block body %} 
+<form method="post">
+    {% csrf_token %}
+    {{ reportForm }}
+    <input type="submit"/>
+</form>
+<script src="{% static 'georeport/create_Report.js' %}"></script>
+
+<!-- TODO better URLS -->
+<a href="/georeport">Cancel</a>
+{% endblock %}
+

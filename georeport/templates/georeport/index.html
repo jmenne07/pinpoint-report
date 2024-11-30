@@ -1,0 +1,14 @@
+{% extends "georeport/base.html" %}
+{% load static %}
+{% block title %}Index{% endblock %}
+
+{% block body %}
+<h1>Reports </h1>
+<a href="create">New Report</a>
+<ul>
+    {% for report in report_list %}
+        <li><a href="{{ report.id }}">{{ report.title }}</a></li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
