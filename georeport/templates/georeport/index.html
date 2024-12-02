@@ -8,6 +8,10 @@
 <ul>
     {% for report in report_list %}
         <li><a href="{{ report.id }}">{{ report.title }}</a></li>
+        <script>
+            let marker{{report.id}} = L.marker([{{report.latitude}},{{report.longitude}}]);
+            marker{{report.id}}.addTo(map);
+        </script>
     {% endfor %}
 </ul>
 

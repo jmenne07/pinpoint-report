@@ -5,6 +5,10 @@ from django.forms import ModelForm
 
 
 class Report(models.Model):
+    class State(models.IntegerChoices):
+        NEW = 0
+        FINISHED = 1
+
     title = models.CharField(max_length=80)
     creation_time = models.DateTimeField(auto_now_add=True)
     # TODO last change shall be set to creation_time at creation_time
@@ -13,6 +17,8 @@ class Report(models.Model):
 
     latitude = models.DecimalField(max_digits=8, decimal_places=6)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
+
+    state = models.IntegerField(choices=State, default=0)
 
     # TODO add status
     #
