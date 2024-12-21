@@ -1,0 +1,9 @@
+
+{% extends "georeport/base.html" %}
+{% load static %}
+{% block title %}Detail {{ category.id }} {% endblock %}
+{% block body %}
+    <h1>Categoriy {{ category.id }}</h1>
+    <p>Name: {{ category.name }}</p>
+    <a href="{% url 'index' %}">Back</a>
+{% endblock %}
