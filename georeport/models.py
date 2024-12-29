@@ -1,7 +1,6 @@
 from asyncio import wait
 from django.db import models
 
-from django.forms import ModelForm
 # Create your models here.
 
 
@@ -40,9 +39,3 @@ class Report(models.Model):
     #
     def __str__(self):
         return self.title
-
-
-class ReportForm(ModelForm):
-    class Meta:
-        model = Report
-        fields = ["title", "description", "latitude", "longitude", "category"]

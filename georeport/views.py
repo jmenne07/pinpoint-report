@@ -2,7 +2,8 @@ from django.shortcuts import get_object_or_404, render, redirect
 
 # Create your views here.
 
-from .models import Category, Report, ReportForm
+from .models import Category, Report
+from .forms import ReportForm
 
 
 def index(request):
