@@ -35,6 +35,10 @@ class Report(models.Model):
         Category, on_delete=models.RESTRICT, default=get_default_related
     )
 
+    published = models.BooleanField(default=True)
+
+    email = models.EmailField()
+
     # TODO add status
     #
     def __str__(self):

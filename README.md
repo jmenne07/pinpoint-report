@@ -13,3 +13,5 @@ planned upcoming Features:
 - [ ] Sending Mails
 - [ ] Open311 Compliance
 - [ ] Tests
+
+- [ ] Publishing and depublishing of reports

@@ -6,12 +6,15 @@
 <h1>Reports </h1>
 <a href="create">New Report</a>
 <ul>
+    <!-- List with published reports -->
     {% for report in report_list %}
-        <li><a href="{{ report.id }}">{{ report.title }}</a></li>
-        <script>
-            let marker{{report.id}} = L.marker([{{report.latitude}},{{report.longitude}}]);
-            marker{{report.id}}.addTo(map);
-        </script>
+        {% if report.published %}
+            <li><a href="{{ report.id }}">{{ report.title }}</a></li>
+            <script>
+                let marker{{report.id}} = L.marker([{{report.latitude}},{{report.longitude}}]);
+                marker{{report.id}}.addTo(map);
+            </script>
+        {% endif %}
     {% endfor %}
 </ul>
 

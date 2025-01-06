@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render, redirect
-
+from django.http import HttpResponseForbidden
 # Create your views here.
 
 from .models import Category, Report
@@ -18,7 +18,10 @@ def index(request):
 
 def details(request, id):
     report = get_object_or_404(Report, pk=id)
-    return render(request, "georeport/detail.html", context={"report": report})
+    if report.published:
+        return render(request, "georeport/detail.html", context={"report": report})
+    else:
+        return HttpResponseForbidden("The report is not published")
 
 
 def category_details(request, id):
