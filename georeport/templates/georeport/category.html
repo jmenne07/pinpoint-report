@@ -5,5 +5,16 @@
 {% block body %}
     <h1>Categoriy {{ category.id }}</h1>
     <p>Name: {{ category.name }}</p>
+    {% if category.parent %}
+    <p>Supercategory:<a href={{category.parent.id }}>{{category.parent}}</a></p>
+    {%endif%}
+    {% if category.children.exists %}
+    <h3>Subcategories:</h3>
+    <ul>
+        {% for child in category.children.all %}
+            <li><a href={{ child.id }}>{{child.name}} </a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     <a href="{% url 'index' %}">Back</a>
 {% endblock %}

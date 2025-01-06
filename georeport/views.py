@@ -1,9 +1,10 @@
-from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponseForbidden
-# Create your views here.
+from django.http import HttpResponseForbidden, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 
-from .models import Category, Report
 from .forms import ReportForm
+
+# Create your views here.
+from .models import Category, Report
 
 
 def index(request):
