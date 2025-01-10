@@ -6,9 +6,11 @@ from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import ReportForm
+import json
 
 # Create your views here.
 from .models import Category, Report
+import pdb
 
 
 def index(request):
@@ -36,11 +38,32 @@ def category_details(request, id):
 
 def create(request):
     if request.method == "POST":
-        reportForm = ReportForm(request.POST)
-        # TOOD Inputvalidations
+        post = request.POST
+        report = {}
+        report["title"] = post["title"]
+        report["longitude"] = post["longitude"]
+        report["latitude"] = post["latitude"]
+        report["category"] = post["category"]
+        report["email"] = post["email"]
+
+        reportForm = ReportForm(report)
+        # reportForm = ReportForm(request.POST)
+
+        # TODO Inputvalidation
         reportForm.save()
         return redirect("index")
     else:
         reportForm = ReportForm()
 
-    return render(request, "georeport/create.html", context={"reportForm": reportForm})
+    return render(
+        request,
+        "georeport/create.html",
+        context={"reportForm": reportForm, "categories": Category.objects.all()},
+    )
+
+
+def get_subcategories(request, id):
+    subcats = Category.objects.filter(parent__id=id)
+    data = [{"id": cat.id, "name": cat.name} for cat in subcats]
+    data = {"subcategories": data}
+    return JsonResponse(data)

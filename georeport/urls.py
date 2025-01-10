@@ -11,4 +11,6 @@ urlpatterns = [
     path("<int:id>", views.details, name="detail"),
     path("create", views.create, name="create"),
     path("category/<int:id>", views.category_details, name="category"),
+    # TODO
+    path("category/<int:id>/children", views.get_subcategories, name="subcategories"),
 ]

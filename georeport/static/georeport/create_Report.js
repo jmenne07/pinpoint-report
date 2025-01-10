@@ -6,6 +6,12 @@ var lat_input = document.getElementById("id_latitude");
 var lng_input = document.getElementById("id_longitude");
 let marker = L.marker();
 
+/* 
+ * set to 6 decimals points to get a precision of around 10cm 
+ * according to https://en.wikipedia.org/wiki/Decimal_degrees
+*/
+const precision = 6
+
 
 lat_input.addEventListener("change", () => {
     marker.setLatLng([lat_input.value, lng_input.value])
@@ -22,8 +28,11 @@ function onMapClick(e) {
     marker.setLatLng(e.latlng)
         .addTo(map);
 
-    lat_input.value = e.latlng.lat.toFixed(6);
-    lng_input.value = e.latlng.lng.toFixed(6);
+    lat_input.value = e.latlng.lat.toFixed(precision);
+    lng_input.value = e.latlng.lng.toFixed(precision);
+
+    document.getElementById("latitude").value = lat_input.value;
+    document.getElementById("longitude").value = lng_input.value;
 
 }
 
