@@ -1,9 +1,13 @@
+var level = 0
 function getsubcats(element) {
     const id = element.id;;
     var level = 0;
 
-    if (id != "category")
-        level = id;
+    if (id == "category")
+        level = 0;
+    else
+        level = id
+
     console.log(level);
     const rootselect = document.getElementById(id);
 
@@ -34,7 +38,11 @@ function getsubcats(element) {
                 }
                 return
             }
-            let select = document.createElement("select");
+
+            let select = document.getElementById(level);
+            if (select != null)
+                select.remove();
+            select = document.createElement("select");
             select.id = level;
             select.name = select.id;
             select.value = "";
@@ -68,8 +76,8 @@ function getsubcats(element) {
 
 }
 
-/*TODO Better ids for selection */
-/*TODO Labels for selection*/
-/*TODO tidy up*/
-
+// TODO: name changes
+// TODO: Better IDs for new selections 
+// TODO: Labels for selection*/
+// TODO: Tidy up 
 
