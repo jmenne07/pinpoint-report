@@ -1,3 +1,7 @@
+/* 
+ * Copyright: (c) 2025, Jörn Menne <jmenne@posteo.de>
+ * GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-3.0.md)
+*/
 var level = 0
 function getsubcats(element) {
     const id = element.id;;
@@ -30,6 +34,7 @@ function getsubcats(element) {
             let subcats = data["subcategories"];
             if (subcats.length == 0) {
                 let oldselect = document.getElementById(level);
+                rootselect.name = "category";
                 if (oldselect) {
                     form.removeChild(oldselect);
                     oldselect.remove();
@@ -50,6 +55,8 @@ function getsubcats(element) {
             select.onchange = function () {
                 getsubcats(this);
             }
+            select.name = "category";
+            rootselect.name = "root";
 
             var option = document.createElement("option");
             option.value = "";
@@ -76,7 +83,6 @@ function getsubcats(element) {
 
 }
 
-// TODO: name changes
 // TODO: Better IDs for new selections 
 // TODO: Labels for selection*/
 // TODO: Tidy up 
