@@ -6,11 +6,12 @@ GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-
 {% load static %}
 {% block title %}New report {% endblock %}
 {% block body %} 
+<!--
 <form method="post">
     {% csrf_token %}
     {{ reportForm }}
     <input type="submit"/>
-</form>
+</form>-->
 <script src="{% static 'georeport/recurse_selection.js' %}"></script>
 <form method="post" id="form">
     {% csrf_token %}
