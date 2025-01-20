@@ -4,6 +4,7 @@
 
 from asyncio import wait
 from django.db import models
+from django.contrib.auth.models import Group, User, Permission
 
 # Create your models here.
 
@@ -17,6 +18,8 @@ class Category(models.Model):
         null=True,
         blank=True,
     )
+
+    group = models.ManyToManyField(User, related_name="owner")
 
     class Meta:
         verbose_name_plural = "Categories"

@@ -33,7 +33,16 @@ def details(request, id):
 
 def category_details(request, id):
     category = get_object_or_404(Category, pk=id)
-    return render(request, "georeport/category.html", context={"category": category})
+    user = request.user
+
+    allowed = category.group.all()
+
+    if user in allowed or user.is_superuser:
+        return render(
+            request, "georeport/category.html", context={"category": category}
+        )
+    else:
+        return HttpResponseForbidden("Not allowed")
 
 
 def create(request):

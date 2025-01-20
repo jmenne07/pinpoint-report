@@ -19,9 +19,12 @@ from django.contrib import admin
 from django.urls import path, include
 from debug_toolbar.toolbar import debug_toolbar_urls
 
+from georeport.admin import admin_site
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("snippets.urls")),
+    path("myadmin/", admin_site.urls),
+    path("snippets/", include("snippets.urls")),
     path("georeport/", include("georeport.urls")),
     path("polls/", include("polls.urls")),
 ] + debug_toolbar_urls()

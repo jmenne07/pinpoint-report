@@ -11,7 +11,7 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 
-router.register(r"snippets", SnippetViewSet, basename="snippet")
+router.register(r"", SnippetViewSet, basename="snippet")
 router.register(r"users", UserViewSet, basename="user")
 
 urlpatterns = [path("", include(router.urls))]

@@ -3,6 +3,7 @@
 
 
 from django.contrib import admin, messages
+from django.urls import base
 from django.utils.translation import ngettext
 
 # Register your models here.
@@ -47,3 +48,23 @@ class CategoryInline(admin.TabularInline):
 class CategoryAdmin(admin.ModelAdmin):
     exlude = None
     inlines = [CategoryInline]
+
+    def has_change_permission(self, request, obj=None):
+        basepermission = super().has_change_permission(request, obj)
+        if obj:
+            allowed = obj.group.all()
+        else:
+            allowed = []
+
+        if basepermission and (request.user in allowed):
+            return True
+        return False
+
+
+class GeoreportAdminSite(admin.AdminSite):
+    site_header = "My cool admin site"
+
+
+admin_site = GeoreportAdminSite(name="coolAdmin")
+admin_site.register(Report, ReportAdmin)
+admin_site.register(Category, CategoryAdmin)
