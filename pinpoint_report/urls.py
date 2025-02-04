@@ -1,5 +1,5 @@
 """
-URL configuration for pinpoint project.
+URL configuration for pinpoint_report project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
@@ -16,15 +16,13 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+from django.conf import settings
 from debug_toolbar.toolbar import debug_toolbar_urls
-
-from georeport.admin import admin_site
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("myadmin/", admin_site.urls),
-    path("snippets/", include("snippets.urls")),
-    path("georeport/", include("georeport.urls")),
-    path("polls/", include("polls.urls")),
-] + debug_toolbar_urls()
+]
+
+if settings.TESTING:
+    urlpatterns = [*urlpatterns] + debug_toolbar_urls()
