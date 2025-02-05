@@ -16,7 +16,7 @@ django.setup()
 project = "Pinpoint-Report"
 copyright = "2025, Jörn Menne"
 author = "Jörn Menne"
-release = "0.1"
+release = "0.1.5"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -27,6 +27,8 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinxcontrib.plantuml",
     "sphinx.ext.mathjax",
+    "myst_parser",
+    "sphinx.ext.todo",
 ]
 
 templates_path = ["_templates"]
@@ -38,3 +40,7 @@ exclude_patterns = []
 
 html_theme = "alabaster"
 html_static_path = ["_static"]
+
+
+# Options for todo
+todo_include_todos = True
