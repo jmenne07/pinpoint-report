@@ -1,3 +1,4 @@
 sphinx 
 sphinxcontrib-plantuml
+sphinxcontrib-mermaid
 -r requirements.txt

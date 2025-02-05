@@ -26,6 +26,7 @@ extensions = [
     "sphinx.ext.duration",
     "sphinx.ext.napoleon",
     "sphinxcontrib.plantuml",
+    "sphinxcontrib.mermaid",
     "sphinx.ext.mathjax",
     "myst_parser",
     "sphinx.ext.todo",

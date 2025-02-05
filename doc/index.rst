@@ -16,6 +16,9 @@ documentation for details.
     :caption: Contents:
 
     georeport/models
-    
+    georeport/views
+
+
+    info/model-info
 
 .. todolist::
