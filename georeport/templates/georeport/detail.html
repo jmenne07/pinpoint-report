@@ -1,0 +1,29 @@
+<!--
+Copyright: (c) 2025, Jörn Menne <jmenne@posteo.de>
+GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-3.0.md)
+-->
+{% extends "georeport/base.html" %}
+{% load static %}
+{% load georeport_extras %}
+{% block title %}Detail {{ report.id }} {% endblock %} 
+{% block body %} 
+   <div class="detail"> 
+    <h2>Report {{ report.id }}</h2>
+    <p>Title: {{ report.title }}</p>
+    <p>Description: {{report.description }}</p>
+    <p>Erstellt am : {{ report.creation_time }}</p>
+    <p>Geändert: {{ report.last_changed  }}</p>
+    <p id="p-lat" data-lat="{{ report.latitude }}">Latitude: {{ report.latitude }}</p>
+    <p id="p-lng" data-lng="{{ report.longitude }}">Longitude: {{ report.longitude }}</p>
+    <p>Status: {{ report.get_state_display }} </p>
+    <p>Kategorie: {{ report.category }} </p>
+    <a href="{% url 'index' %}">Back</a>
+    <script src="{% static 'georeport/addMarker.js' %}"></script>
+<!--    <img src="{{report.image.url}}" alt="Kein Bild vorhanden" scale=0.25>-->
+    {% for img in report.images.all %}
+        <!--<img src="{% static 'georeport/images/' %}{{img.file}}" alt={{img.alt}} scale=0.25 width=500px>-->
+        <img src={{urls|key:img.alt}} alt={{img.alt}} width=500px>
+    {% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+<!--
+Copyright: (c) 2025, Jörn Menne <jmenne@posteo.de>
+GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-3.0.md)
+-->
+{% extends "georeport/base.html" %}
+{% load static %}
+{% block title %}Detail {{ category.id }} {% endblock %}
+{% block body %}
+<div class="detail">
+    <h2>Category {{ category.id }}</h2>
+    <p>Name: {{ category.name }}</p>
+    {% if category.parent %}
+    <p>Supercategory:<a href={{category.parent.id }}>{{category.parent}}</a></p>
+    {%endif%}
+    {% if category.children.exists %}
+    <h3>Subcategories:</h3>
+    <ul>
+        {% for child in category.children.all %}
+            <li><a href={{ child.id }}>{{child.name}} </a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <a href="{% url 'georeport:index' %}">Back</a>
+</div>
+{% endblock %}

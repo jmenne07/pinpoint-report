@@ -1,0 +1,36 @@
+<!--
+Copyright: (c) 2025, Jörn Menne <jmenne@posteo.de>
+GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-3.0.md)
+-->
+{% extends "georeport/base.html" %}
+{% load static %}
+{% block title %}Index{% endblock %}
+{% block body %}
+<div class="detail" id="newReport"><h3><a href="create">New Report</a></h3></div>
+<div class="content">
+    <div class="list">
+        <h2>Reports </h2>
+        <ul>
+            <!-- List with published reports -->
+            {% for report in report_list %}
+                {% if report.published %}
+                    <li><a href="{{ report.id }}">{{ report.title }}</a></li>
+                    <script>
+                        let marker{{report.id}} = L.marker([{{report.latitude}},{{report.longitude}}]);
+                        marker{{report.id}}.addTo(map);
+                    </script>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="list">
+        <h2>Categories</h2>
+        <ul>
+            {% for category in category_list %}
+            <li><a href="category/{{ category.id }}">{{ category.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% endblock %}

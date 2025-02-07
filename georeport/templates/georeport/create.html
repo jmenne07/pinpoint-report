@@ -1,0 +1,50 @@
+<!--
+Copyright: (c) 2025, Jörn Menne <jmenne@posteo.de>
+GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-3.0.md)
+-->
+{% extends "georeport/base.html" %}
+{% load static %}
+{% block title %}New report {% endblock %}
+{% block body %} 
+
+<!--
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ reportForm }}
+    <input type="submit"/>
+</form>
+-->
+<script src="{% static 'georeport/recurse_selection.js' %}"></script>
+<div class="detail">
+<form method="post" id="form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required> </br>
+    <label for="description">Description:</label>
+    <input type="text" id="description" name="description"> </br>
+    <label for="latitude">Latitude:</label>
+    <input type="number" id="latitude" name="latitude" step=0.000001 required > </br>
+    <label for="longitude">Longitude:</label>
+    <input type="number" id="longitude" name="longitude" step=0.000001 required > </br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"i required > </br>
+    <label for="images">Bilder</label>
+    <input type="file" accept="images/*" name="image" id ="image" multiple> </br>
+    <select id="category" name="category" onchange="getsubcats(this)" required>
+        <option value="" disabled selected>Choose a category.</option>
+        {% for cat in categories %}
+            {% if cat.parent is none %}
+                <option value="{{cat.id}}">{{cat.name}}</option>
+            {% endif %}
+        {% endfor %}
+    </select></br>
+    <input type="submit" id="submit">
+</form>
+<script src="{% static 'georeport/retreiveCoordinates.js' %}"></script>
+</div>
+<div class="detail">
+<!-- TODO better URLS -->
+<a href="/georeport">Cancel</a>
+</div>
+{% endblock %}
+

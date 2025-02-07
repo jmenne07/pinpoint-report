@@ -1,3 +1,58 @@
-#map {
-    height: 500px;
+body {
+    background-color: whitesmoke;
+}
+
+h1 {
+    text-align: center;
+}
+
+#map{
+    height: 400px;
+    width: 75%;
+    border: 3px solid darkgray;
+    margin: auto;
+    border-radius: 25px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    padding: 15px;
+
+}
+
+
+.container{
+    width: 75%;
+    margin: auto;
+}
+
+.content{
+    display:flex;
+    flex-wrap: wrap;
+    flex-direction:  row;
+    justify-content: border-box;
+    align-items: center;
+}
+
+.list{
+    flex: 1;
+    border-radius: 25px;
+    margin: 10px;
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+.detail{
+    flex:1;
+    max-width: 75%;
+    border-radius: 25px;
+    margin: auto;
+    margin-top: 15px;
+    padding: 15px;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+#newReport{
+    text-align:center
+    font-weight: bold;
+    background-color: snow;
 }

@@ -7,25 +7,95 @@ Each view is associated with a url in urls.py.
 A view takes a request and creates a respond for the request.
 """
 
-from django.shortcuts import render
-from django.views.decorators.http import require_safe
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
+from django.shortcuts import get_object_or_404, render
+from django.views.decorators.http import require_GET, require_safe
+
+from .models import Category, Report
 
 
 @require_safe
-def index(request):
+def index(request) -> HttpResponse:
     """
     Function which handles request going to "/georeport".
+
+    Returns:
+        HttpResponse
     """
-    return render(request, "georeport/index.html")
+    reports = Report.objects.all()  # type: ignore Attribute object unknown
+    categories = Category.objects.all()  # type: ignore Attribute object unknown
+
+    return render(
+        request,
+        "georeport/index.html",
+        context={"report_list": reports, "category_list": categories},
+    )
 
 
-# TODO: Category-List
+@require_GET
+def get_categories(request, id=None) -> JsonResponse:
+    """
+    Creates a jsonResponse containing the available categories.
+    If an id was given, only the subcategories of the category with the given id are returned.
+
+    Arguments:
+        request: HttpRequest
+
+        id: int
+            Integer-identifier of the category, from which the subcategories shall be send.
+            If it is not provided, all categories are included in the response
+
+    Returns:
+        JsonResponse: Contains categories as data
+    """
+    if id is None:
+        cats = Category.objects.all()  # type:ignore Object attribute unknown
+    else:
+        cats = Category.objects.filter(parent__id=id)  # type: ignore Attribute object us unknown
+    data = [{"id": cat.id, "name": cat.name} for cat in cats]
+    data = {"subcategories": data}
+    return JsonResponse(data)
+
+
 # TODO: Category-Detail
-# TODO: Subcategories
+
+
+def category_detail_view(request, id) -> HttpResponse:
+    """
+    Function to handle requests to see information about a single category identified by id
+
+    Arguments:
+        request: HttpRequest
+        id: int
+            Integer-identifier of the category to be seen.
+    """
+    cat = get_object_or_404(Category, pk=id)
+
+    # Check if the user is allowed to view the category
+    user = request.user
+    allowed_user = cat.user.all()
+    allowed_groups = cat.groups.all()
+    allowed = False
+    if user.is_superuser:
+        allowed = True
+    if user in allowed_user:
+        allowed = True
+
+    for group in allowed_groups:
+        if user in group.user_set.all():
+            allowed = True
+
+    if allowed:
+        return render(request, "georeport/category.html", context={"categroy": cat})
+
+    else:
+        raise PermissionDenied
+
 
 # TODO: Report-List
 # TODO: Create-Report
 
-# TODO: Detailview Report
+# TODO: Detail-View Report
 
 # TODO: Finish Link
