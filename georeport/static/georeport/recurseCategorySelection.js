@@ -14,89 +14,89 @@ var maxlevel = 0;
 
 function getsubcats(element) {
 
-    // Set the current level to know which selections have to be removed (if any)
-    const id = element.id;
-    var level;
-    if (id == "category")
-        level = 0;
-    else
-        level = id;
-    console.log(level);
+  // Set the current level to know which selections have to be removed (if any)
+  const id = element.id;
+  var level;
+  if (id == "category")
+    level = 0;
+  else
+    level = id;
+  console.log(level);
 
-    // Get surrunding elements
-    const form = document.getElementById("form");
-    const submit = document.getElementById("submit");
+  // Get surrunding elements
+  const form = document.getElementById("form");
+  const submit = document.getElementById("submit");
 
-    //create a url to fetch the children
-    let url = "category/${element.value}/children";
-    console.log(url);
-    fetch(url)
-        // Check if the response is correct
-        .then(response => {
-            if (!response.ok)
-                throw new Error("HTTP Error: Status: ${response.status}");
-            return response.json();
-        })
-        //Handle the json-Data
-        .then(data => {
-            console.log(data);
-            // NOTE: Level has to be increased here, since if it would be later increased, it would be handled as a string
-            // while removing the higher levels
+  //create a url to fetch the children
+  let url = "category/${element.value}/children";
+  console.log(url);
+  fetch(url)
+    // Check if the response is correct
+    .then(response => {
+      if (!response.ok)
+        throw new Error("HTTP Error: Status: ${response.status}");
+      return response.json();
+    })
+    //Handle the json-Data
+    .then(data => {
+      console.log(data);
+      // NOTE: Level has to be increased here, since if it would be later increased, it would be handled as a string
+      // while removing the higher levels
 
-            g
-            level++;
-            let subcats = data["subcategories"];
-            //Remove submit temporarly to set the correct position
-            form.removeChild(submit);
+      g
+      level++;
+      let subcats = data["categories"];
+      //Remove submit temporarly to set the correct position
+      form.removeChild(submit);
 
-            //Remove all selects with a higher level than element
-            if (maxlevel >= level) {
-                for (let i = level; i <= maxlevel; i++) {
-                    oldselect = document.getElementById(i);
-                    oldselect.remove();
-                }
-            }
-            let oldselect = document.getElementById(level);
+      //Remove all selects with a higher level than element
+      if (maxlevel >= level) {
+        for (let i = level; i <= maxlevel; i++) {
+          oldselect = document.getElementById(i);
+          oldselect.remove();
+        }
+      }
+      let oldselect = document.getElementById(level);
 
 
-            if (subcats.length == 0) {
-                // set element as the lowest level
-                element.name = "category";
-                maxlevel = level - 1;
-            }
-            else {
+      if (subcats.length == 0) {
+        // set element as the lowest level
+        element.name = "category";
+        maxlevel = level - 1;
+      }
+      else {
 
-                //Create a new selection element as lowest level
-                let select = document.createElement("select");
-                select.id = level;
-                select.name = select.id;
-                select.value = "";
-                select.innerHTML = "Choose a subcategory";
-                select.onchange = function () {
-                    getsubcats(this);
-                }
-                select.name = "category";
+        //Create a new selection element as lowest level
+        let select = document.createElement("select");
+        select.id = level;
+        select.name = select.id;
+        select.value = "";
+        select.innerHTML = "Choose a subcategory";
+        select.onchange = function () {
+          getsubcats(this);
+        }
+        select.name = "category";
 
-                // Create the new options 
-                var option = document.createElement("option");
-                option.value = "";
-                option.innerHTML = "Subcategory";
-                option.disabled = true;
-                option.selected = true;
-                select.appendChild(option);
+        // Create the new options 
+        var option = document.createElement("option");
+        option.value = "";
+        option.innerHTML = "Subcategory";
+        option.disabled = true;
+        option.selected = true;
+        select.appendChild(option);
 
-                for (var cat of subcats) {
-                    option = document.createElement("option")
-                    option.value = cat.id;
-                    option.innerHTML = cat.name;
-                    select.appendChild(option);
-                }
+        for (var cat of subcats) {
+          option = document.createElement("option")
+          option.value = cat.id;
+          option.innerHTML = cat.name;
+          select.appendChild(option);
+        }
 
-                element.name = "root";
-                form.replaceChild(select, oldselect);
-                maxlevel = level;
-            }
-            //Reappend submit
-            form.appendChild(submit);
-        })
+        element.name = "root";
+        form.replaceChild(select, oldselect);
+        maxlevel = level;
+      }
+      //Reappend submit
+      form.appendChild(submit);
+    })
 }

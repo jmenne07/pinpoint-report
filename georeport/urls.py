@@ -11,11 +11,11 @@ app_name = "georeport"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    #  path("<int:id>", views.details, name="detail"),
-    #  path("create", views.create, name="create"),
     path("category/<int:id>", views.category_detail_view, name="category"),
-    path("services/<int:id>", views.category_detail_view, name="servcice"),
     path("category/<int:id>/children", views.get_categories, name="subcategories"),
-    path("services/", views.get_categories),
+    path("services/<int:id>", views.category_detail_view, name="servcice"),
+    path("services/", views.get_categories, name="category-list"),
+    # path("<int:id>", views.details, name="detail"),
+    #  path("create", views.create, name="create"),
     #  path("<str:b64nonce>/<str:b64ct>", views.finish_link, name="finish"),
 ]

@@ -9,6 +9,8 @@ from django.db import models
 from django.contrib.auth.models import Group, User
 from typing import override
 
+from django.forms import DecimalField
+
 # Create your models here.
 
 
@@ -62,7 +64,7 @@ class Report(models.Model):
         Category, on_delete=models.RESTRICT, related_name="reports"
     )
     title = models.CharField(max_length=100, unique=True)
-    descrption = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
     email = models.EmailField()
     # TODO: Images
 
@@ -74,6 +76,12 @@ class Report(models.Model):
         The old statevariable is neede to determine, if the state was changed.
     """
     published = models.BooleanField(default=False)  # type: ignore Correct type can not be dtermined
+
+    # Location
+    # NOTE: Latitude is between -90 and 90°, while Longitude is between -180 and 180°
+    # Therefore the latitude field is slightly smaller
+    longitude = models.DecimalField(max_digits=9, decimal_places=6)
+    latitude = models.DecimalField(max_digits=8, decimal_places=6)
 
     @override
     def __str__(self) -> str:
