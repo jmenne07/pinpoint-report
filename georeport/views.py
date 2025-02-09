@@ -123,6 +123,15 @@ def create_report_view(request):
     )
 
 
-# TODO: Detail-View Report
+@require_safe
+def report_detail_view(request, id):
+    """
+    Returns the detail-view page of a single report
+    """
+    report = get_object_or_404(Report, pd=id)
+
+    if report.published:
+        return render(request, "georeport/detail.html", context={"report": report})
+
 
 # TODO: Finish Link
