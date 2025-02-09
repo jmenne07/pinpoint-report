@@ -80,6 +80,7 @@ class Report(models.Model):
     # Location
     # NOTE: Latitude is between -90 and 90°, while Longitude is between -180 and 180°
     # Therefore the latitude field is slightly smaller
+    # TODO: Restrict geocoordinates to the values above (or even smaller)
     longitude = models.DecimalField(max_digits=9, decimal_places=6)
     latitude = models.DecimalField(max_digits=8, decimal_places=6)
 
@@ -87,7 +88,5 @@ class Report(models.Model):
     def __str__(self) -> str:
         return str(self.title)
 
-
-# TODO: Location
 
 # TODO: Image

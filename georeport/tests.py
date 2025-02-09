@@ -8,28 +8,80 @@ from .models import Category, Report
 
 
 class ReportTestCase(TestCase):
-    def setUp(self):
-        Category.objects.create(name="Cat1")  # type:ignore Attribute object is unknown
-        Report.objects.create(  # type:ignore Attribute object is unknown
+    @classmethod
+    def setUpTestData(cls):
+        cls.cat = Category.objects.create(name="Cat1")  # type:ignore Attribute object is unknown
+
+    def test_create_report_get(self):
+        """
+        Test the create report view if get is called
+        """
+        url = reverse("georeport:create")
+        response = self.client.get(url)
+
+        # Test create view
+        self.assertEqual(response.status_code, 200)  # type:ignore Attribute status_code unknown
+        self.assertTemplateUsed(response, "georeport/create.html")
+        # Check if category is in context of request
+        self.assertIn(self.cat.id, response.context)  # type:ignore
+
+    def test_create_report_post(self):
+        """
+        Test create_report_view with a post call
+        """
+        # Testcase setup
+        post_data = {
+            "title": "Test",
+            "description": "description",
+            "category": self.cat.id,
+            "email": "test@example.de",
+            "longitude": 8.741698,
+            "latitude": 51.715841,
+        }
+        url = reverse("georeport:create")
+        response = self.client.post(url, post_data)
+
+        # check response
+        self.assertEqual(response.status_code, 302)  # type: ignore
+        self.assertEqual(response.url, reverse("georeport:index"))  # type:ignore
+
+        report = Report.objects.get(pk=1, title=post_data["title"])  # type: ignore
+        self.assertEqual(report.description, post_data["description"])
+        self.assertEqual(report.category.id, post_data["category"])
+        self.assertEqual(report.email, post_data["email"])
+        self.assertEqual(float(report.latitude), float(post_data["latitude"]))
+        self.assertEqual(float(report.longitude), float(post_data["longitude"]))
+        self.assertFalse(report.published)
+        self.assertEqual(report.state, 0)
+
+    def test_detail_view(self):
+        self.assertTrue(True)
+        url = reverse("georeport:report", kwargs={"id": 1})
+        # Test report not existsing
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)  # type:ignore
+        report = Report.objects.create(  # type:ignore
             title="Test",
-            email="test@test.de",
-            category=Category.objects.first(),  # type:ignore Attribute object is unknown
-            latitude=0,
-            longitude=0,
+            category=self.cat,
+            email="test@pinpoint.de",
+            longitude=8.741698,
+            latitude=51.715841,
         )
+        # Test unpulished report
+        self.assertFalse(report.published)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)  # type:ignore
 
-    def test_unpulished_as_default(self):
-        report = Report.objects.get(title="Test")  # type:ignore Attribute object is unknown
-        self.assertEqual(report.published, False)
+        report.published = True
+        report.save()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)  # type: ignore
+        self.assertContains(response, f"Title: {report.title}", status_code=200)
+        self.assertTemplateUsed(response, "georeport/detail.html")
+        # TODO: test if response contains title
 
 
-# TODO: Test latlng
-
-
-# TODO: Test get_categories
-
-
-class CategoryViewTests(TestCase):
+class GetCategoryViewTests(TestCase):
     @classmethod
     def setUpTestData(cls):
         """

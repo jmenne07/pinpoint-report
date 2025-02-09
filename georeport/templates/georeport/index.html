@@ -14,7 +14,7 @@ GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-
             <!-- List with published reports -->
             {% for report in report_list %}
                 {% if report.published %}
-                    <li><a href="{{ report.id }}">{{ report.title }}</a></li>
+                    <li><a href="{% url 'georeport:report' report.id%}">{{ report.title }}</a></li>
                     <script>
                         let marker{{report.id}} = L.marker([{{report.latitude}},{{report.longitude}}]);
                         marker{{report.id}}.addTo(map);
@@ -27,7 +27,7 @@ GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-
         <h2>Categories</h2>
         <ul>
             {% for category in category_list %}
-            <li><a href="category/{{ category.id }}">{{ category.name }}</a></li>
+              <li><a href="{% url 'georeport:category' category.id  %}">{{ category.name }}</a></li>
             {% endfor %}
         </ul>
     </div>

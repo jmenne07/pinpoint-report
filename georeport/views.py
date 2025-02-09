@@ -9,9 +9,8 @@ A view takes a request and creates a respond for the request.
 
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.decorators.http import require_GET, require_safe, require_http_methods
-
 from .models import Category, Report
 
 from .forms import ReportForm
@@ -60,9 +59,6 @@ def get_categories(request, id=None) -> JsonResponse:
     return JsonResponse(data)
 
 
-# TODO: Category-Detail
-
-
 @require_safe
 def category_detail_view(request, id) -> HttpResponse:
     """
@@ -89,6 +85,7 @@ def category_detail_view(request, id) -> HttpResponse:
         if user in group.user_set.all():
             allowed = True
 
+    # If User is allowd to view the category provice it, otherwise rise 403- PermissionDenied
     if allowed:
         return render(request, "georeport/category.html", context={"categroy": cat})
 
@@ -97,7 +94,6 @@ def category_detail_view(request, id) -> HttpResponse:
 
 
 # TODO: Report-List
-# TODO: Create-Report
 
 
 @require_http_methods(["GET", "POST"])
@@ -111,10 +107,17 @@ def create_report_view(request):
         report["description"] = post["description"]
         report["category"] = post["category"]
         report["email"] = post["email"]
+        report["longitude"] = post["longitude"]
+        report["latitude"] = post["latitude"]
+        reportForm = ReportForm(report)
+        # TODO: Check if category is a leaf
+        # NOTE: Currently not implemented, since it is assumed, that
+        # reports are created with the website, and there every category-selection is required
+        if reportForm.is_valid():
+            reportForm.save()
 
-        reportform = ReportForm(report)
-
-        # TODO: Location
+        # TODO: Send confirmation-Mails
+        return redirect("georeport:index")
 
     return render(
         request,
@@ -128,10 +131,12 @@ def report_detail_view(request, id):
     """
     Returns the detail-view page of a single report
     """
-    report = get_object_or_404(Report, pd=id)
+    report = get_object_or_404(Report, pk=id)
 
     if report.published:
         return render(request, "georeport/detail.html", context={"report": report})
+
+    raise PermissionDenied
 
 
 # TODO: Finish Link

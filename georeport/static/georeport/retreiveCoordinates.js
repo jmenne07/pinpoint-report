@@ -15,12 +15,12 @@ let marker = L.marker();
 
 // Add change listener to the input-elements
 lat_element.addEventListener("change", () => {
-    marker.setLatLng([lat_element.value, lng_element.value])
-        .addTo(map);
+  marker.setLatLng([lat_element.value, lng_element.value])
+    .addTo(map);
 });
 lng_element.addEventListener("change", () => {
-    marker.setLatLng([lat_element.value, lng_element.value])
-        .addTo(map);
+  marker.setLatLng([lat_element.value, lng_element.value])
+    .addTo(map);
 });
 
 
@@ -31,9 +31,11 @@ lng_element.addEventListener("change", () => {
  * The precirsion is accorcding to https://en.wikipedia.org/wiki/Decimal_degrees
  */
 function onMapClick(e, decimal_precision = 6) {
-    marker.setLatLng(e.latlng).addTo(map);
+  marker.setLatLng(e.latlng).addTo(map);
 
-    lat_element.value = e.latlng.lat.toFixed(decimal_precision);
-    lng_element.value = e.latlng.lng.toFixed(decimal_precision);
+  lat_element.value = e.latlng.lat.toFixed(decimal_precision);
+  lng_element.value = e.latlng.lng.toFixed(decimal_precision);
 
 }
+
+map.on("click", onMapClick);

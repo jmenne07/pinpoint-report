@@ -69,6 +69,7 @@ function getsubcats(element) {
           getsubcats(this);
         }
         select.name = "category";
+        select.required = true;
 
         // Create the new options 
         var option = document.createElement("option");

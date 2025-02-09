@@ -13,4 +13,4 @@ class ReportForm(ModelForm):
 
     class Meta:
         model = Report
-        fields = ["title", "description", "email", "category"]
+        fields = ["title", "description", "email", "category","latitude", "longitude"]
