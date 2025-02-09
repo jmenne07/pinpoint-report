@@ -1,3 +1,5 @@
+
+
 /*
  * Copyright: (c) 2025, Jörn Menne <jmenne@posteo.de>
  * GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-3.0.md)
@@ -9,8 +11,7 @@
  * subcategories are removed.
 */
 
-// Global variable to check the depth of the selections
-var maxlevel = 0;
+var maxlevel = 0
 
 function getsubcats(element) {
 
@@ -28,7 +29,7 @@ function getsubcats(element) {
   const submit = document.getElementById("submit");
 
   //create a url to fetch the children
-  let url = "category/${element.value}/children";
+  let url = `category/${element.value}/children`;
   console.log(url);
   fetch(url)
     // Check if the response is correct
@@ -40,33 +41,25 @@ function getsubcats(element) {
     //Handle the json-Data
     .then(data => {
       console.log(data);
-      // NOTE: Level has to be increased here, since if it would be later increased, it would be handled as a string
-      // while removing the higher levels
-
-      g
-      level++;
       let subcats = data["categories"];
+      level++;
       //Remove submit temporarly to set the correct position
       form.removeChild(submit);
 
-      //Remove all selects with a higher level than element
+      // Remove all equal or  higher selects defineProperties
       if (maxlevel >= level) {
         for (let i = level; i <= maxlevel; i++) {
-          oldselect = document.getElementById(i);
-          oldselect.remove();
+          sel = document.getElementById(i);
+          sel.remove();
         }
       }
-      let oldselect = document.getElementById(level);
-
-
       if (subcats.length == 0) {
-        // set element as the lowest level
         element.name = "category";
         maxlevel = level - 1;
       }
       else {
 
-        //Create a new selection element as lowest level
+        //Create a new selection element
         let select = document.createElement("select");
         select.id = level;
         select.name = select.id;
@@ -93,10 +86,11 @@ function getsubcats(element) {
         }
 
         element.name = "root";
-        form.replaceChild(select, oldselect);
+        form.appendChild(select);
         maxlevel = level;
       }
       //Reappend submit
       form.appendChild(submit);
+      console.log(maxlevel);
     })
 }
