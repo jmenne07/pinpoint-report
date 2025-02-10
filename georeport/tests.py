@@ -6,6 +6,8 @@ from django.urls import reverse
 
 from .models import Category, Report
 
+from django.contrib.auth.models import User
+
 
 class ReportTestCase(TestCase):
     @classmethod
@@ -55,6 +57,7 @@ class ReportTestCase(TestCase):
         self.assertEqual(report.state, 0)
 
     def test_detail_view(self):
+        # TODO: Split up
         self.assertTrue(True)
         url = reverse("georeport:report", kwargs={"id": 1})
         # Test report not existsing
@@ -78,7 +81,7 @@ class ReportTestCase(TestCase):
         self.assertEqual(response.status_code, 200)  # type: ignore
         self.assertContains(response, f"Title: {report.title}", status_code=200)
         self.assertTemplateUsed(response, "georeport/detail.html")
-        # TODO: test if response contains title
+        self.assertContains(response, f"Title: {report.title}")
 
 
 class GetCategoryViewTests(TestCase):
@@ -157,3 +160,23 @@ class GetCategoryViewTests(TestCase):
             category = data["categories"][0]
             self.assertIn("id", category)
             self.assertIn("name", category)
+
+    # TODO: Split up
+    def test_category_detail_view(self):
+        # Check 404 if id does not exits
+        url = reverse("georeport:category", kwargs={"id": 99})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)  # type:ignore
+
+        url = reverse("georeport:category", kwargs={"id": self.root1.id})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)  # type:ignore
+
+        user = User.objects.create_user(username="test", password="1234")
+
+        self.root1.user.add(user)
+        self.root1.save()
+        self.client.login(username="test", password="1234")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)  # type:ignore
+        self.assertTemplateUsed(response, "georeport/category.html")

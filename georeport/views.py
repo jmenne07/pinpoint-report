@@ -10,12 +10,21 @@ A view takes a request and creates a respond for the request.
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
+from django.utils.http import urlsafe_base64_decode
 from django.views.decorators.http import require_GET, require_safe, require_http_methods
+
+from pinpoint_report.settings import DEFAULT_FROM_EMAIL
 from .models import Category, Report
 
 from .forms import ReportForm
+from django.conf import settings
+from django.core.mail import send_mail
+
+from Crypto.Cipher import ChaCha20
+from base64 import urlsafe_b64decode
 
 
+# TODO: test
 @require_safe
 def index(request) -> HttpResponse:
     """
@@ -34,6 +43,7 @@ def index(request) -> HttpResponse:
     )
 
 
+# Test available
 @require_GET
 def get_categories(request, id=None) -> JsonResponse:
     """
@@ -59,6 +69,7 @@ def get_categories(request, id=None) -> JsonResponse:
     return JsonResponse(data)
 
 
+# Test available
 @require_safe
 def category_detail_view(request, id) -> HttpResponse:
     """
@@ -96,6 +107,7 @@ def category_detail_view(request, id) -> HttpResponse:
 # TODO: Report-List
 
 
+# Test available
 @require_http_methods(["GET", "POST"])
 def create_report_view(request):
     if request.method == "POST":
@@ -115,6 +127,8 @@ def create_report_view(request):
         # reports are created with the website, and there every category-selection is required
         if reportForm.is_valid():
             reportForm.save()
+            send_creation_confirmation(report)
+            send_creation_mail(report)
 
         # TODO: Send confirmation-Mails
         return redirect("georeport:index")
@@ -126,6 +140,7 @@ def create_report_view(request):
     )
 
 
+# Test available
 @require_safe
 def report_detail_view(request, id):
     """
@@ -140,3 +155,56 @@ def report_detail_view(request, id):
 
 
 # TODO: Finish Link
+# TODO: Tests
+def set_report_to_finish_view(request, b64nonce, b64ciphertext):
+    nonce = urlsafe_base64_decode(b64nonce)
+    ciphertext = urlsafe_base64_decode(b64ciphertext)
+    cipher = ChaCha20.new(key=settings.KEY, nonce=nonce)
+    id = int(cipher.decrypt(ciphertext))
+    report = get_object_or_404(Report, pk=id)
+
+    if report.state == 1:
+        report.state = 2
+        report.save()
+
+    return redirect("georeport:detail", id)
+
+
+# TODO:Tests
+def send_creation_confirmation(report):
+    if not settings.email:
+        return
+    recipient_list = [report.email]
+    subject = "Report created"
+    message = f'The report with title "{report.title}" was created with id {report.id}'
+    send_mail(
+        subject=subject,
+        message=message,
+        recipient_list=recipient_list,
+        from_email=DEFAULT_FROM_EMAIL,
+    )
+
+
+# TODO: Tests
+# TODO: Recruse groupmembers mail addresses
+def send_creation_mail(report):
+    if not settings.send_mail:
+        return
+    recipient_list = []
+    subject = f"Report {report.id} was created."
+    message = (
+        f'A new report with id: {report.id} and title "{report.title}" was created.'
+    )
+
+    for user in report.category.users.all():
+        recipient_list.append(user.email)
+    for group in report.category.groups.all():
+        for user in group.user_set.all():
+            recipient_list.append(user.email)
+
+    send_mail(
+        subject=subject,
+        message=message,
+        recipient_list=recipient_list,
+        from_email=DEFAULT_FROM_EMAIL,
+    )

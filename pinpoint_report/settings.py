@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import sys
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -26,7 +27,11 @@ SECRET_KEY = "django-insecure-^f3zw!cfp(mkh()na5(i-#s3472ue*n7@m34crljq82e66#_0m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]"]
+ALLOWED_HOSTS = [
+    ".localhost",
+    "127.0.0.1",
+    "[::1]",
+]
 
 
 # Application definition
@@ -138,3 +143,10 @@ if not TESTING:
         "debug_toolbar.middleware.DebugToolbarMiddleware",
         *MIDDLEWARE,
     ]
+
+
+# E-Mail configuration. Emails will only be sent, if SEND_MAIL is set to request
+SEND_MAIL = True
+EMAIL_HOST = "localhost"
+EMAIL_PORT = "8025"
+DEFAULT_FROM_EMAIL = "example@pinpoint-report.de"
