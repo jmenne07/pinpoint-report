@@ -1,10 +1,15 @@
 # Copyright: (c) 2025, Jörn Menne <jmenne@posteo.de>
 # GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-3.0.md)
-from django.contrib import admin
+from django.conf.global_settings import DEFAULT_FROM_EMAIL
+from django.contrib import admin, messages
 from typing import override
-
+from django.utils.translation import ngettext
 from georeport.models import Category, Report
-
+from django.conf import settings
+from Crypto.Cipher import ChaCha20
+from base64 import urlsafe_b64encode
+from django.shortcuts import reverse
+from django.core.mail import send_mail
 
 # TODO: CategoryAdmin
 
@@ -27,15 +32,162 @@ class CategoryAdmin(admin.ModelAdmin):
     the admin site, such that the model can be edited on there.
     """
 
-    exclude = ["user", "groups"]
+    # exclude = ["users", "groups"]
     inlines = [CategoryInline]
     search_fields = ["name"]
     # TODO: Prevent circles while creating groups
+
+    @override
+    def has_change_permission(self, request, obj=None):
+        """
+        Override has change_permission, in order to only
+        allow user associated to a category to modify the
+        category.
+        The association can be directly (user to category) or
+        indirectly over groups.
+        """
+        user = request.user
+        basepermission = super().has_change_permission(request, obj)
+        # Always allow superusers to modify
+        if user.is_superuser:
+            return True
+
+        if obj:
+            allowed = getAllowedUsers(obj)
+        else:
+            allowed = []
+
+        if basepermission and (request.user in allowed):
+            return True
+        return False
+
+
+def getAllowedUsers(category):
+    """
+    Function to get a queryset with all users, which should
+    have access to the category.
+
+    Arguments:
+        category: Category
+            A category, to which allowed users shall be found
+
+    Returns:
+        Queryset containing all uses associated with the category.
+    """
+    # TODO: Find better location for this function
+    qs = category.users.all()
+    for group in category.groups.all():
+        qs = qs | group.user_set.all()
+
+    if category.parent:
+        qs = qs | getAllowedUsers(category.parent)
+    return qs
 
 
 # TODO: ReportAdmin
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     exclude = [
-        "_oldstate",
+        "_oldState",
     ]
+    readonly_fields = [
+        "created_at",
+        "updated_at",
+    ]
+
+    list_display = ["title", "category__name", "state", "published"]
+    list_filter = ["state"]
+
+    @admin.action(description="Publish selected reports.")
+    def make_public(self, request, queryset):
+        """
+        Admin-action to bulk-publish reports.
+
+        Arguments:
+            request: The current http-request. The request is created by performing the action.
+            queryset: A queryset containing every Report, which was selected by the user.
+
+        """
+        updated = queryset.update(published=True)
+        self.message_user(
+            request,
+            ngettext(
+                "%d report was published",
+                "%d reports were published",
+                updated,
+            )
+            % updated,
+            messages.SUCCESS,
+        )
+
+    @override
+    def save_model(self, request, obj, form, change):
+        """
+        Override of the default save-function of a ModelAdmin to provide
+        custom actions before the object is saved.
+
+        For information about the arguments please refer to admin.ModelAdmin.save_model.
+        """
+        # send an update-mail if the state was chagned
+        if not obj.state == obj._oldState:
+            send_update(obj)
+
+        # TODO: close__link shall also work on descendants
+        if obj.state == 1 and obj.category.close_with_link:
+            send_close_link(obj)
+
+        obj._oldstate = obj.state
+        super().save_model(request, obj, form, change)
+
+
+def send_update(report):
+    # TODO: Tests
+    if not settings.SEND_MAIL:
+        return
+    recipient_list = [report.email]
+    subject = f"Report with title {report.title} was updated."
+    message = f"The state of the report {report.id}: {report.title} was changed to {report.state}."
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=recipient_list,
+        fail_silently=True,
+    )
+
+
+def send_close_link(report):
+    """
+    If the category allows it, a link is send to the owners of the category,
+    over which the category can be closed
+    """
+    # TODO: Tests
+
+    if not settings.SEND_MAIL:
+        return
+    # Create a encrypted version of the id to send as a close_link
+    message = ""
+    padded_id = str(report.id).zfill(6)
+    cipher = ChaCha20.new(key=settings.KEY)
+    byte_text = bytes(padded_id, "utf-8")
+    ciphertext = cipher.encrypt(byte_text)
+    nonce = cipher.nonce
+
+    b64nonce = urlsafe_b64encode(nonce).decode("utf-8")
+    b64ct = urlsafe_b64encode(ciphertext).decode("utf-8")
+    url = reverse("georeport:index")
+    message = f"localhost:8000{url}{b64nonce}/{b64ct}"
+    print(message)
+
+    subject = f"Close link for report {report.id}"
+    user = getAllowedUsers(report.category)
+    recipient_list = []
+    for u in user:
+        recipient_list.append(u.email)
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        recipient_list=recipient_list,
+        fail_silently=True,
+    )

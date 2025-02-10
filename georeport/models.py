@@ -29,8 +29,11 @@ class Category(models.Model):
         blank=True,
     )
 
-    user = models.ManyToManyField(User, related_name="owner", blank=True)
+    users = models.ManyToManyField(User, related_name="owner", blank=True)
     groups = models.ManyToManyField(Group, related_name="group_owner", blank=True)
+
+    # TODO: Make it so, that descendens are also affected by the field
+    close_with_link = models.BooleanField(default=False)  # type:ignore
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -63,7 +66,7 @@ class Report(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.RESTRICT, related_name="reports"
     )
-    title = models.CharField(max_length=100, unique=True)
+    title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     email = models.EmailField()
     # TODO: Images

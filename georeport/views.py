@@ -23,6 +23,8 @@ from django.core.mail import send_mail
 from Crypto.Cipher import ChaCha20
 from base64 import urlsafe_b64decode
 
+from .admin import send_update
+
 
 # TODO: test
 @require_safe
@@ -84,7 +86,7 @@ def category_detail_view(request, id) -> HttpResponse:
 
     # Check if the user is allowed to view the category
     user = request.user
-    allowed_user = cat.user.all()
+    allowed_user = cat.users.all()
     allowed_groups = cat.groups.all()
     allowed = False
     if user.is_superuser:
@@ -156,24 +158,31 @@ def report_detail_view(request, id):
 
 # TODO: Finish Link
 # TODO: Tests
-def set_report_to_finish_view(request, b64nonce, b64ciphertext):
-    nonce = urlsafe_base64_decode(b64nonce)
-    ciphertext = urlsafe_base64_decode(b64ciphertext)
+def close_with_link_view(request, b64nonce, b64ct):
+    nonce = urlsafe_b64decode(b64nonce)
+    ct = urlsafe_b64decode(b64ct)
     cipher = ChaCha20.new(key=settings.KEY, nonce=nonce)
-    id = int(cipher.decrypt(ciphertext))
+    pk = cipher.decrypt(ct)
+    id = int(pk)
     report = get_object_or_404(Report, pk=id)
 
     if report.state == 1:
         report.state = 2
         report.save()
-
-    return redirect("georeport:detail", id)
+        send_update(report)
+    return redirect("georeport:report", id)
 
 
 # TODO:Tests
-def send_creation_confirmation(report):
-    if not settings.email:
+def send_creation_confirmation(report_dict):
+    if not settings.SEND_MAIL:
         return
+    report = (
+        Report.objects.filter(title=report_dict["title"])  # type:ignore
+        .filter(latitude=report_dict["latitude"])
+        .filter(longitude=report_dict["longitude"])
+        .first()
+    )
     recipient_list = [report.email]
     subject = "Report created"
     message = f'The report with title "{report.title}" was created with id {report.id}'
@@ -182,14 +191,21 @@ def send_creation_confirmation(report):
         message=message,
         recipient_list=recipient_list,
         from_email=DEFAULT_FROM_EMAIL,
+        fail_silently=True,
     )
 
 
 # TODO: Tests
 # TODO: Recruse groupmembers mail addresses
-def send_creation_mail(report):
-    if not settings.send_mail:
+def send_creation_mail(report_dict):
+    if not settings.SEND_MAIL:
         return
+    report = (
+        Report.objects.filter(title=report_dict["title"])  # type:ignore
+        .filter(latitude=report_dict["latitude"])
+        .filter(longitude=report_dict["longitude"])
+        .first()
+    )
     recipient_list = []
     subject = f"Report {report.id} was created."
     message = (
@@ -207,4 +223,5 @@ def send_creation_mail(report):
         message=message,
         recipient_list=recipient_list,
         from_email=DEFAULT_FROM_EMAIL,
+        fail_silently=True,
     )

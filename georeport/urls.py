@@ -18,5 +18,9 @@ urlpatterns = [
     path("<int:id>", views.report_detail_view, name="report"),
     path("requests/<int:id>", views.report_detail_view, name="request-id"),
     path("create", views.create_report_view, name="create"),
-    #  path("<str:b64nonce>/<str:b64ct>", views.finish_link, name="finish"),
+    path(
+        "<str:b64nonce>/<str:b64ct>",
+        views.close_with_link_view,
+        name="finish",
+    ),
 ]

@@ -174,7 +174,7 @@ class GetCategoryViewTests(TestCase):
 
         user = User.objects.create_user(username="test", password="1234")
 
-        self.root1.user.add(user)
+        self.root1.users.add(user)
         self.root1.save()
         self.client.login(username="test", password="1234")
         response = self.client.get(url)

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 import sys
 from pathlib import Path
+from Crypto.Random import get_random_bytes
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -150,3 +151,7 @@ SEND_MAIL = True
 EMAIL_HOST = "localhost"
 EMAIL_PORT = "8025"
 DEFAULT_FROM_EMAIL = "example@pinpoint-report.de"
+
+# Setup for ciphers
+# WARNING: It is advised to use a fixes 32 byte string in production
+KEY = get_random_bytes(32)
