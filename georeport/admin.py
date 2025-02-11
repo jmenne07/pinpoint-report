@@ -1,17 +1,18 @@
 # Copyright: (c) 2025, Jörn Menne <jmenne@posteo.de>
 # GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-3.0.md)
-from django.conf.global_settings import DEFAULT_FROM_EMAIL
-from django.contrib import admin, messages
-from typing import override
-from django.utils.translation import ngettext
-from georeport.models import Category, Report
-from django.conf import settings
-from Crypto.Cipher import ChaCha20
 from base64 import urlsafe_b64encode
-from django.shortcuts import reverse
-from django.core.mail import send_mail
+from typing import override
 
-# TODO: CategoryAdmin
+from Crypto.Cipher import ChaCha20
+from django.conf import settings
+from django.contrib import admin, messages
+from django.contrib.auth.admin import GroupAdmin, UserAdmin
+from django.contrib.auth.models import Group, User
+from django.core.mail import send_mail
+from django.shortcuts import reverse
+from django.utils.translation import ngettext
+
+from georeport.models import Category, Report
 
 
 class CategoryInline(admin.TabularInline):
@@ -25,6 +26,26 @@ class CategoryInline(admin.TabularInline):
         return False
 
 
+class CategoryUserInline(admin.TabularInline):
+    model = Category.users.through
+    extra = 0
+    can_delete = False
+
+    @override
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+class CategoryGroupInline(admin.TabularInline):
+    model = Category.groups.through
+    extra = 0
+    can_delete = False
+
+    @override
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     """
@@ -32,8 +53,8 @@ class CategoryAdmin(admin.ModelAdmin):
     the admin site, such that the model can be edited on there.
     """
 
-    # exclude = ["users", "groups"]
-    inlines = [CategoryInline]
+    exclude = ["users", "groups"]
+    inlines = [CategoryInline, CategoryGroupInline, CategoryUserInline]
     search_fields = ["name"]
     # TODO: Prevent circles while creating groups
 
@@ -84,7 +105,6 @@ def getAllowedUsers(category):
     return qs
 
 
-# TODO: ReportAdmin
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     exclude = [
@@ -191,3 +211,19 @@ def send_close_link(report):
         recipient_list=recipient_list,
         fail_silently=True,
     )
+
+
+admin.site.unregister(User)
+admin.site.unregister(Group)
+
+
+@admin.register(User)
+class MyUserAdmin(UserAdmin):
+    exlude = None
+    inlines = [CategoryUserInline]
+
+
+@admin.register(Group)
+class MyGroupAdmin(GroupAdmin):
+    exlude = None
+    inlines = [CategoryGroupInline]

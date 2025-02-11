@@ -132,7 +132,6 @@ def create_report_view(request):
             send_creation_confirmation(report)
             send_creation_mail(report)
 
-        # TODO: Send confirmation-Mails
         return redirect("georeport:index")
 
     return render(

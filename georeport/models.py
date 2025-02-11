@@ -69,8 +69,7 @@ class Report(models.Model):
     title = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     email = models.EmailField()
-    # TODO: Images
-
+    # TODO: Images NEXT
     # Fields set at creation
     state = models.IntegerField(choices=State, default=0)  # type: ignore Correct type can not be dtermined
     _oldState = models.IntegerField(choices=State, default=0)  # type: ignore Correct type can not be dtermined
@@ -92,4 +91,4 @@ class Report(models.Model):
         return str(self.title)
 
 
-# TODO: Image
+# TODO: Image NEXT
