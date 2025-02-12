@@ -157,6 +157,7 @@ def report_detail_view(request, id):
 
 # TODO: Finish Link
 # TODO: Tests
+@require_GET
 def close_with_link_view(request, b64nonce, b64ct):
     nonce = urlsafe_b64decode(b64nonce)
     ct = urlsafe_b64decode(b64ct)

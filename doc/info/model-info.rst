@@ -14,6 +14,8 @@ reports.
 
 The structure of the database is shown in the following diagram.
 
+.. TODO: Update Diagram 
+
 
 .. mermaid::
 

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 import sys
 from pathlib import Path
 from Crypto.Random import get_random_bytes
+from minio import Minio
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -155,3 +156,13 @@ DEFAULT_FROM_EMAIL = "example@pinpoint-report.de"
 # Setup for ciphers
 # WARNING: It is advised to use a fixes 32 byte string in production
 KEY = get_random_bytes(32)
+
+# Minio
+MINIO_HOST = "localhost"
+MINIO_PORT = 9000
+MINIO_ACCESS_KEY = "minio"
+MINIO_SECRET_KEY = "minio123"
+
+client = Minio(
+    f"{MINIO_HOST}:{MINIO_PORT}", access_key=MINIO_ACCESS_KEY, secret_key=SECRET_KEY
+)
