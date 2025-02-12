@@ -92,3 +92,16 @@ class Report(models.Model):
 
 
 # TODO: Image NEXT
+class Image(models.Model):
+    """
+    Representation of an image located in the minio
+    Each image is connected to exactly one report
+    """
+
+    file = models.CharField(max_length=255)
+
+    report = models.ForeignKey(Report, related_name="images", on_delete=models.CASCADE)
+
+    @override
+    def __str__(self) -> str:
+        return str(self.file)

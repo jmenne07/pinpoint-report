@@ -7,23 +7,26 @@ Each view is associated with a url in urls.py.
 A view takes a request and creates a respond for the request.
 """
 
-from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
-from django.shortcuts import get_object_or_404, render, redirect
-from django.utils.http import urlsafe_base64_decode
-from django.views.decorators.http import require_GET, require_safe, require_http_methods
-
-from pinpoint_report.settings import DEFAULT_FROM_EMAIL
-from .models import Category, Report
-
-from .forms import ReportForm
-from django.conf import settings
-from django.core.mail import send_mail
-
-from Crypto.Cipher import ChaCha20
+import os
+import shutil
 from base64 import urlsafe_b64decode
 
+from Crypto.Cipher import ChaCha20
+from django.conf import settings
+from django.core.exceptions import PermissionDenied
+from django.core.mail import send_mail
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_GET, require_http_methods, require_safe
+from minio import Minio
+
+from pinpoint_report.settings import DEFAULT_FROM_EMAIL
+
 from .admin import send_update
+from .forms import ImageForm, ReportForm
+from .models import Category, Report
+
+from .minio import handle_file_uploads, get_url
 
 
 # TODO: test
@@ -131,7 +134,8 @@ def create_report_view(request):
             reportForm.save()
             send_creation_confirmation(report)
             send_creation_mail(report)
-
+            # TODO: restrict to set number of images
+            handle_file_uploads(request.FILES, report)
         return redirect("georeport:index")
 
     return render(
@@ -148,9 +152,16 @@ def report_detail_view(request, id):
     Returns the detail-view page of a single report
     """
     report = get_object_or_404(Report, pk=id)
-
+    images = report.images.all()
+    urls = {}
+    for image in images:
+        urls[image.file] = get_url(image.file)
     if report.published:
-        return render(request, "georeport/detail.html", context={"report": report})
+        return render(
+            request,
+            "georeport/detail.html",
+            context={"report": report, "urls": urls},
+        )
 
     raise PermissionDenied
 

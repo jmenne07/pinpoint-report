@@ -2,7 +2,7 @@
 # GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-3.0.md)
 
 from django.forms import ModelForm
-from .models import Report
+from .models import Image, Report
 
 
 class ReportForm(ModelForm):
@@ -13,4 +13,10 @@ class ReportForm(ModelForm):
 
     class Meta:
         model = Report
-        fields = ["title", "description", "email", "category","latitude", "longitude"]
+        fields = ["title", "description", "email", "category", "latitude", "longitude"]
+
+
+class ImageForm(ModelForm):
+    class Meta:
+        model = Image
+        fields = ["file", "report"]

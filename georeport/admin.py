@@ -10,9 +10,18 @@ from django.contrib.auth.admin import GroupAdmin, UserAdmin
 from django.contrib.auth.models import Group, User
 from django.core.mail import send_mail
 from django.shortcuts import reverse
+from django.utils.html import format_html
 from django.utils.translation import ngettext
 
-from georeport.models import Category, Report
+from georeport.models import Category, Image, Report
+
+from django import forms
+from .minio import get_url
+
+import pdb
+from django.utils.safestring import mark_safe
+
+# TODO: reorder
 
 
 class CategoryInline(admin.TabularInline):
@@ -105,18 +114,35 @@ def getAllowedUsers(category):
     return qs
 
 
+class ImageInline(admin.StackedInline):
+    model = Image
+    extra = 0
+    can_delete = True
+
+    @override
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def image_preview(self, obj):
+        if obj.file:
+            url = get_url(obj.file)
+            return format_html(f'<img src="{url}" width="300px" height="300px"/>')
+        return ""
+
+    fields = ("image_preview",)
+    readonly_fields = ("image_preview",)
+
+
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
+    # TODO: If images are added through admin, they are not in minio. This feature has to be added
     exclude = [
         "_oldState",
     ]
-    readonly_fields = [
-        "created_at",
-        "updated_at",
-    ]
-
+    readonly_fields = ["created_at", "updated_at"]
     list_display = ["title", "category__name", "state", "published"]
     list_filter = ["state"]
+    inlines = [ImageInline]
 
     @admin.action(description="Publish selected reports.")
     def make_public(self, request, queryset):
@@ -158,6 +184,8 @@ class ReportAdmin(admin.ModelAdmin):
 
         obj._oldstate = obj.state
         super().save_model(request, obj, form, change)
+
+    actions = [make_public]
 
 
 def send_update(report):
