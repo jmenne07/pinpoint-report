@@ -1,5 +1,9 @@
+# Copyright: (c) 2025, Jörn Menne <jmenne@posteo.de>
+# GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-3.0.md)
+
 from . import views
 from django.urls import path
+
 # TODO: Adjust to open311
 #  /services: -> List with Categories  <- GET ✅
 #  /sercvice/{id} -> single Category <- GET ✅

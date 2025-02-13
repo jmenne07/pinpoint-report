@@ -15,11 +15,8 @@ from django.utils.translation import ngettext
 
 from georeport.models import Category, Image, Report
 
-from django import forms
 from .minio import get_url
 
-import pdb
-from django.utils.safestring import mark_safe
 
 # TODO: reorder
 
@@ -36,7 +33,7 @@ class CategoryInline(admin.TabularInline):
 
 
 class CategoryUserInline(admin.TabularInline):
-    model = Category.users.through
+    model = Category.users.through  # type:ignore through is not known
     extra = 0
     can_delete = False
 
@@ -46,7 +43,7 @@ class CategoryUserInline(admin.TabularInline):
 
 
 class CategoryGroupInline(admin.TabularInline):
-    model = Category.groups.through
+    model = Category.groups.through  # type:ignore through is not known
     extra = 0
     can_delete = False
 

@@ -7,8 +7,6 @@ Each view is associated with a url in urls.py.
 A view takes a request and creates a respond for the request.
 """
 
-import os
-import shutil
 from base64 import urlsafe_b64decode
 
 from Crypto.Cipher import ChaCha20
@@ -18,12 +16,9 @@ from django.core.mail import send_mail
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_GET, require_http_methods, require_safe
-from minio import Minio
-
-from pinpoint_report.settings import DEFAULT_FROM_EMAIL
 
 from .admin import send_update
-from .forms import ImageForm, ReportForm
+from .forms import ReportForm
 from .models import Category, Report
 
 from .minio import handle_file_uploads, get_url
@@ -201,7 +196,7 @@ def send_creation_confirmation(report_dict):
         subject=subject,
         message=message,
         recipient_list=recipient_list,
-        from_email=DEFAULT_FROM_EMAIL,
+        from_email=settings.DEFAULT_FROM_EMAIL,
         fail_silently=True,
     )
 
@@ -233,6 +228,6 @@ def send_creation_mail(report_dict):
         subject=subject,
         message=message,
         recipient_list=recipient_list,
-        from_email=DEFAULT_FROM_EMAIL,
+        from_email=settings.DEFAULT_FROM_EMAIL,
         fail_silently=True,
     )

@@ -9,7 +9,6 @@ from django.db import models
 from django.contrib.auth.models import Group, User
 from typing import override
 
-from django.forms import DecimalField
 
 # Create your models here.
 

@@ -4,6 +4,9 @@ register = template.Library()
 
 
 def key(value, arg):
+    """
+    Custom templatetag to access dictionaries in templates
+    """
     return value[arg]
 
 
