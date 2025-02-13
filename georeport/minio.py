@@ -5,11 +5,15 @@ from django.conf import settings
 import os
 import shutil
 from minio import Minio
+
 from .models import Report
 from .forms import ImageForm
 
 client = Minio(
-    "localhost:9000", access_key="minio", secret_key="minio123", secure=False
+    settings.MINIO_ENDPOINT,
+    access_key=settings.MINIO_ACCESS_KEY,
+    secret_key=settings.MINIO_SECRET_KEY,
+    secure=False,
 )
 
 

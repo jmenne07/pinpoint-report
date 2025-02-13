@@ -157,8 +157,8 @@ DEFAULT_FROM_EMAIL = "example@pinpoint-report.de"
 KEY = get_random_bytes(32)
 
 # Minio
-MINIO_HOST = "localhost"
-MINIO_PORT = 9000
+MINIO_ENDPOINT = "localhost:9000"
+# MINIO_ENDPOINT = "minio:9000"
 MINIO_ACCESS_KEY = "minio"
 MINIO_SECRET_KEY = "minio123"
 
