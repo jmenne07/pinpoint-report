@@ -110,6 +110,13 @@ def category_detail_view(request, id) -> HttpResponse:
 # Test available
 @require_http_methods(["GET", "POST"])
 def create_report_view(request):
+    """
+    Functions to handle request, to create a new report.
+
+    Arguments:
+        request: The http-request. Either GET or POST requests are supported.
+
+    """
     if request.method == "POST":
         post = request.POST
 
@@ -130,7 +137,8 @@ def create_report_view(request):
             send_creation_confirmation(report)
             send_creation_mail(report)
             # TODO: restrict to set number of images
-            handle_file_uploads(request.FILES, report)
+            if request.FILES:
+                handle_file_uploads(request.FILES, report)
         return redirect("georeport:index")
 
     return render(
@@ -144,7 +152,11 @@ def create_report_view(request):
 @require_safe
 def report_detail_view(request, id):
     """
-    Returns the detail-view page of a single report
+    Returns the detail-view page of a single report.
+
+    Arguments:
+        request: Http-Request for the view.
+        id: The id of the report to be shown.
     """
     report = get_object_or_404(Report, pk=id)
     images = report.images.all()
@@ -165,6 +177,16 @@ def report_detail_view(request, id):
 # TODO: Tests
 @require_GET
 def close_with_link_view(request, b64nonce, b64ct):
+    """
+    A view which acceprts an nonce and a ciphertext.
+    The nonce and ciphertext are then decrypted to a report.
+    If this report is in the correct state, the report will change its state to closed.
+
+    Arguments:
+        request: The http-request
+        b64nonce: A base64 encoded nonce
+        b64ct: A base64 encoded ciphertext
+    """
     nonce = urlsafe_b64decode(b64nonce)
     ct = urlsafe_b64decode(b64ct)
     cipher = ChaCha20.new(key=settings.KEY, nonce=nonce)
@@ -181,6 +203,12 @@ def close_with_link_view(request, b64nonce, b64ct):
 
 # TODO:Tests
 def send_creation_confirmation(report_dict):
+    """
+    Send a confirmation-email to the creator of a report.
+
+    Arguments:
+        report_dict: A dictionary containeing information about the newly created report.
+    """
     if not settings.SEND_MAIL:
         return
     report = (
@@ -204,6 +232,12 @@ def send_creation_confirmation(report_dict):
 # TODO: Tests
 # TODO: Recruse groupmembers mail addresses
 def send_creation_mail(report_dict):
+    """
+    Sends an email to the owners of a group to which a report belongs.
+
+    Arguments:
+        report_dict: A dictionary containeing information about the newly created report.
+    """
     if not settings.SEND_MAIL:
         return
     report = (

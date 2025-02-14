@@ -132,11 +132,15 @@ class ImageInline(admin.StackedInline):
 
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
+    """
+    Class representing a Report in the django-Admin
+    """
+
     # TODO: If images are added through admin, they are not in minio. This feature has to be added
     exclude = [
         "_oldState",
     ]
-    readonly_fields = ["created_at", "updated_at"]
+    readonly_fields = ["created_at", "updated_at", "latitude", "longitude"]
     list_display = ["title", "category__name", "state", "published"]
     list_filter = ["state"]
     inlines = [ImageInline]
@@ -244,11 +248,19 @@ admin.site.unregister(Group)
 
 @admin.register(User)
 class MyUserAdmin(UserAdmin):
+    """
+    Custom UserAdmin, which adds the CategoryInline to the adminform
+    """
+
     exlude = None
     inlines = [CategoryUserInline]
 
 
 @admin.register(Group)
 class MyGroupAdmin(GroupAdmin):
+    """
+    Custom GroupAdmin, which adds the CategoryInline to the adminform
+    """
+
     exlude = None
     inlines = [CategoryGroupInline]

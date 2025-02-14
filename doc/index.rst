@@ -6,19 +6,18 @@
 Pinpoint-Report documentation
 =============================
 
-Add your content using ``reStructuredText`` syntax. See the
-`reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_
-documentation for details.
+This is a short documentation for the pinpoint-report web app.
+Within the modules, the documentation of the pythonmodules can be found.
+Under Model-Info additional information about the underlying datamodel can be found.
 
+In how to install the web-app please refert to the README.md
 
 .. toctree::
     :maxdepth: 2
     :caption: Contents:
 
-    georeport/models
-    georeport/views
-
-
+    georeport/code
     info/model-info
+    info/usage
 
 .. todolist::

@@ -12,11 +12,30 @@ class ReportForm(ModelForm):
     """
 
     class Meta:
+        """
+        Metaclass describing the Report Form
+        """
+
         model = Report
         fields = ["title", "description", "email", "category", "latitude", "longitude"]
 
 
 class ImageForm(ModelForm):
+    """
+    Small class to map a dictionary to the Image model.
+    Thic class extends the django-ModelForm
+    """
+
     class Meta:
+        """
+        Metaclass describing the Image Form
+        """
+
         model = Image
         fields = ["file", "report"]
+        """
+        Fields for this form:
+
+            File: Name of the file
+            Report: the report to which the image is ascociated.
+        """

@@ -53,9 +53,13 @@ class Report(models.Model):
         """
 
         NEW = 0
+        """"""
         IN_PROGESS = 1
+        """"""
         FINISHED = 2
+        """"""
         ARCHIVE = 3
+        """"""
 
     # Timebased autofields
     created_at = models.DateTimeField(auto_now=True)
@@ -72,10 +76,8 @@ class Report(models.Model):
     # Fields set at creation
     state = models.IntegerField(choices=State, default=0)  # type: ignore Correct type can not be dtermined
     _oldState = models.IntegerField(choices=State, default=0)  # type: ignore Correct type can not be dtermined
+    # The old statevariable is neede to determine, if the state was changed.
 
-    """
-        The old statevariable is neede to determine, if the state was changed.
-    """
     published = models.BooleanField(default=False)  # type: ignore Correct type can not be dtermined
 
     # Location

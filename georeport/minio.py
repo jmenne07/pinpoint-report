@@ -1,5 +1,8 @@
 # Copyright: (c) 2025, Jörn Menne <jmenne@posteo.de>
 # GNU General Public License v3.0 (see LICSENE or https://www.gnu.org/license/gpl-3.0.md)
+"""
+Module handling the minio connection of the application
+"""
 
 from django.conf import settings
 import os
@@ -19,8 +22,14 @@ client = Minio(
 
 def handle_file_uploads(request_files, report_dict):
     """
-    Handles the upload of files to
-    minio
+    Handles the upload of files to minio.
+
+    Arguments:
+        request_files: Files in the form of a django request.FILES object
+        report_dict: A dictionary containing information about a single report.
+            The dictionary is used to find the correct report by choosing the first report
+            with a matching title and matchin geocoordinates.
+
     """
     report = (
         Report.objects.filter(title=report_dict["title"])  # type:ignore
@@ -62,5 +71,8 @@ def handle_file_uploads(request_files, report_dict):
 def get_url(filename):
     """
     Wrapper for presigned_get_object
+
+    Arguments:
+        filename: The filename of the file to get.
     """
     return client.presigned_get_object(settings.BUCKET_NAME, filename)
