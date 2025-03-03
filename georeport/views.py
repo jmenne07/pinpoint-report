@@ -22,6 +22,7 @@ from .forms import ReportForm
 from .models import Category, Report
 
 from .minio import handle_file_uploads, get_url
+# TODO: Make minio optional
 
 
 # TODO: test
@@ -129,9 +130,9 @@ def create_report_view(request):
         report["longitude"] = post["longitude"]
         report["latitude"] = post["latitude"]
         reportForm = ReportForm(report)
-        # TODO: Check if category is a leaf
+        # NOTE: Check if category is a leaf
         # NOTE: Currently not implemented, since it is assumed, that
-        # reports are created with the website, and there every category-selection is required
+        # reports are created with the website, and there every category-selection is required. As such only leafs are given through the website.
         if reportForm.is_valid():
             reportForm.save()
             send_creation_confirmation(report)
@@ -173,7 +174,6 @@ def report_detail_view(request, id):
     raise PermissionDenied
 
 
-# TODO: Finish Link
 # TODO: Tests
 @require_GET
 def close_with_link_view(request, b64nonce, b64ct):
@@ -201,7 +201,7 @@ def close_with_link_view(request, b64nonce, b64ct):
     return redirect("georeport:report", id)
 
 
-# TODO:Tests
+# TODO: Tests
 def send_creation_confirmation(report_dict):
     """
     Send a confirmation-email to the creator of a report.

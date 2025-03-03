@@ -14,8 +14,6 @@ reports.
 
 The structure of the database is shown in the following diagram.
 
-.. TODO: Update Diagram 
-
 
 .. mermaid::
 
@@ -23,13 +21,14 @@ The structure of the database is shown in the following diagram.
         Report{
             string title
             string description
-            datetime creation_time
+            datetime created_at
             dateimte updated_at
             boolean published
             int state
             email email
             float Latitude
             float longitude
+            State state
         }
         Category{
             string name
