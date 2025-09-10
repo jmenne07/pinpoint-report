@@ -1,9 +1,9 @@
-# Django
-django 
+#django related requirements
+django
+django-restframework 
+drf-spectacular
 django-debug-toolbar
 
-# Crypto
+# Crypto related requirements
 pycryptodome
 
-# minio
-minio
