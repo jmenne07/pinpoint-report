@@ -13,6 +13,9 @@ from rest_framework.views import APIView
 from .models import ServiceRequest
 from .serializers import ServiceRequestSerializer
 
+
+from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
+from rest_framework_xml.renderers import XMLRenderer
 # Create your views here.
 
 
@@ -21,5 +24,13 @@ def index(request):
 
 
 class ServiceRequestList(generics.ListCreateAPIView):
-    queryset = ServiceRequest.objects.all()
+    queryset = ServiceRequest.objects.all()  # type: ignore
     serializer_class = ServiceRequestSerializer
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, XMLRenderer]
+
+
+class ServiceRequestDetails(generics.RetrieveAPIView):
+    queryset = ServiceRequest.objects.all()  # type: ignore
+    serializer_class = ServiceRequestSerializer
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, XMLRenderer]
+    # renderer_classes = [JSONRenderer, XMLRenderer, BrowsableAPIRenderer]

@@ -10,4 +10,5 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("requests/", views.ServiceRequestList.as_view()),
+    path("request/<int:pk>", views.ServiceRequestDetails.as_view()),
 ]

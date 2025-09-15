@@ -141,6 +141,15 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PARSER_CLASES": [
+        "rest_framework_xml.parsers.XMLParser",
+        "rest_framework.parsers.JSONParser",
+    ],
+    "DEFAULT_RENDER_CLASSES": [
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework_xml.renderers.XMLRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ],
 }
 
 # Debug Toolbar settings

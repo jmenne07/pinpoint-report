@@ -17,9 +17,12 @@ class ServiceRequest(models.Model):
 
     title = models.CharField(max_length=100)
 
-    status = models.IntegerField(choices=Status, default=0)
+    status = models.IntegerField(choices=Status, default=0)  # type: ignore
 
     description = models.TextField(null=True, blank=True)
 
     creation_time = models.DateTimeField(auto_now=True)
     updated_datetime = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.title)
