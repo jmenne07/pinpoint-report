@@ -8,8 +8,8 @@ from rest_framework import generics
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework_xml.renderers import XMLRenderer
 
-from .models import Entry
-from .serializers import EntrySerializer
+from .models import Entry, Category
+from .serializers import CategorySerializer, EntrySerializer
 
 # Create your views here.
 
@@ -27,4 +27,16 @@ class EntryList(generics.ListCreateAPIView):
 class EntryDetails(generics.RetrieveAPIView):
     queryset = Entry.objects.all()  # type: ignore
     serializer_class = EntrySerializer
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, XMLRenderer]
+
+
+class CategoryList(generics.ListAPIView):
+    queryset = Category.objects.all()  # type: ignore
+    serializer_class = CategorySerializer
+    renderer_classes = [JSONRenderer, BrowsableAPIRenderer, XMLRenderer]
+
+
+class CategoryDetails(generics.RetrieveAPIView):
+    queryset = Category.objects.all()  # type: ignore
+    serializer_class = CategorySerializer
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer, XMLRenderer]
