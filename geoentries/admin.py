@@ -4,11 +4,11 @@
 
 from django.contrib import admin
 
-from service_requests.models import ServiceRequest
+from .models import Entry
 
 # Register your models here.
 
 
-@admin.register(ServiceRequest)
+@admin.register(Entry)
 class ServiceRequestAdmin(admin.ModelAdmin):
     exlude = None

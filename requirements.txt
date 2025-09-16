@@ -1,6 +1,7 @@
 #django related requirements
 django
 django-restframework 
+djangorestframework-xml
 drf-spectacular
 django-debug-toolbar
 

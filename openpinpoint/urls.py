@@ -40,7 +40,7 @@ urlpatterns = [
         name="swagger-ui",
     ),
     path("api/redoc", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
-    path("open311/v2/", include("service_requests.urls")),
+    path("open311/v2/", include("geoentries.urls")),
 ]
 
 if not TESTING:

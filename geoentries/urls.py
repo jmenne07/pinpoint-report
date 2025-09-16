@@ -11,8 +11,8 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("requests/", views.ServiceRequestList.as_view()),
-    path("request/<int:pk>", views.ServiceRequestDetails.as_view()),
+    path("requests/", views.EntryList.as_view()),
+    path("request/<int:pk>", views.EntryDetails.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
