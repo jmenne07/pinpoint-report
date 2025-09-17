@@ -28,6 +28,8 @@ class Category(models.Model):
         blank=True,
     )
 
+    description = models.TextField(null=True, blank=True)
+
     users = models.ManyToManyField(User, related_name="owner", blank=True)
     groups = models.ManyToManyField(Group, related_name="group_owner", blank=True)
 

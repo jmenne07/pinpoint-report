@@ -11,7 +11,7 @@ from geoentries.models import Category, Entry
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ["id", "name", "parent"]
+        fields = ["id", "name", "description", "parent"]
 
 
 class EntrySerializer(serializers.ModelSerializer):
