@@ -20,4 +20,4 @@ class EntrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Entry
-        fields = ["id", "title", "status", "description", "long", "lat"]
+        fields = ["id", "title", "category", "status", "description", "long", "lat"]

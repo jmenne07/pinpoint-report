@@ -4,11 +4,16 @@
 
 from django.contrib import admin
 
-from .models import Entry
+from .models import Category, Entry
 
 # Register your models here.
 
 
 @admin.register(Entry)
-class ServiceRequestAdmin(admin.ModelAdmin):
+class EntryAdmin(admin.ModelAdmin):
+    exlude = None
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
     exlude = None

@@ -4,6 +4,7 @@ django-restframework
 djangorestframework-xml
 drf-spectacular
 django-debug-toolbar
+django-filter
 
 # Crypto related requirements
 pycryptodome

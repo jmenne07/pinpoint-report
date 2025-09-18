@@ -63,6 +63,9 @@ class Entry(models.Model):
     updated_datetime = models.DateTimeField(auto_now_add=True)
 
     title = models.CharField(max_length=100)
+    category = models.ForeignKey(
+        Category, on_delete=models.RESTRICT, related_name="entries"
+    )
 
     status = models.IntegerField(choices=Status, default=0)  # type: ignore
 
