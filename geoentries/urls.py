@@ -2,7 +2,7 @@
 # Licensed under the Apache License, Version 2.0
 # See NOTICE file for details.
 
-from django.urls import path
+from django.urls import base, path, include
 
 from rest_framework.urlpatterns import format_suffix_patterns
 
@@ -12,12 +12,14 @@ from . import views
 
 # TODO: Testing
 
-urlpatterns = [
-    path("", views.index, name="index"),
-    path("requests/", views.EntryList.as_view()),
-    path("request/<int:pk>", views.EntryDetails.as_view()),
-    path("services/", views.CategoryList.as_view()),
-    path("service/<int:pk>", views.CategoryDetails.as_view()),
-]
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = format_suffix_patterns(urlpatterns, suffix_required=False)
+router = DefaultRouter()
+router.register(r"requests", views.EntryViewSet, basename="entry")
+router.register(r"services", views.CategoryViewSet, basename="category")
+
+
+urlpatterns = [
+    path("", views.IndexView.as_view(), name="index"),
+    path("open311/v2/", include(router.urls)),
+]
