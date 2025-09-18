@@ -3,6 +3,8 @@
 # See NOTICE file for details.
 
 
+# TODO: Testing
+
 from rest_framework import serializers
 
 from geoentries.models import Category, Entry

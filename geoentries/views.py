@@ -11,7 +11,7 @@ from rest_framework_xml.renderers import XMLRenderer
 from .models import Entry, Category
 from .serializers import CategorySerializer, EntrySerializer
 
-# Create your views here.
+# TODO: Testing
 
 
 def index(request):

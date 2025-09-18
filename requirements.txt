@@ -9,3 +9,6 @@ django-filter
 # Crypto related requirements
 pycryptodome
 
+#testing
+pytest
+pytest-django

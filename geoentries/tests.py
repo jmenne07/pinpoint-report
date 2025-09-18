@@ -3,5 +3,3 @@
 # See NOTICE file for details.
 
 from django.test import TestCase
-
-# Create your tests here.

@@ -6,6 +6,8 @@ Module which contains classes reprensenting the database structure
 of the project.
 """
 
+# TODO: Testing
+
 from typing import override
 from django.db import models
 from django.contrib.auth.models import User, Group
