@@ -62,7 +62,7 @@ class Entry(models.Model):
 
     # Time based fields
     creation_time = models.DateTimeField(auto_now=True)
-    updated_datetime = models.DateTimeField(auto_now_add=True)
+    update_time = models.DateTimeField(auto_now_add=True)
 
     title = models.CharField(max_length=100)
     category = models.ForeignKey(
