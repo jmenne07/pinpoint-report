@@ -9,8 +9,11 @@ of the project.
 # TODO: Testing
 
 from typing import override
+from django.core import validators
 from django.db import models
 from django.contrib.auth.models import User, Group
+from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils.html import ValidationError
 
 # Create your models here.
 
@@ -76,9 +79,18 @@ class Entry(models.Model):
     # Location
     # NOTE: Latitude is between -90 and 90°, while Longitude is between -180 and 180°
     # Therefore the latitude field is slightly smaller
-    # TODO: Restrict geocoordinates to the values above (or even smaller)
-    longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True)
-    latitude = models.DecimalField(max_digits=8, decimal_places=6, null=True)
+    longitude = models.DecimalField(
+        max_digits=9,
+        decimal_places=6,
+        null=True,
+        validators=[MinValueValidator(-180), MaxValueValidator(180)],
+    )
+    latitude = models.DecimalField(
+        max_digits=8,
+        decimal_places=6,
+        null=True,
+        validators=[MinValueValidator(-90), MaxValueValidator(90)],
+    )
 
     @override
     def __str__(self) -> str:
