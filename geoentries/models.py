@@ -25,6 +25,7 @@ class Category(models.Model):
     """
 
     name = models.CharField(max_length=100)
+    # TODO: Prevent circles
     parent = models.ForeignKey(
         "self",
         on_delete=models.CASCADE,
@@ -77,6 +78,7 @@ class Entry(models.Model):
     description = models.TextField(null=True, blank=True)
 
     # Location
+    # TODO: Change to geodjango later on
     # NOTE: Latitude is between -90 and 90°, while Longitude is between -180 and 180°
     # Therefore the latitude field is slightly smaller
     longitude = models.DecimalField(

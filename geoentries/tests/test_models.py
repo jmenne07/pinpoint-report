@@ -10,6 +10,10 @@ from django.utils import timezone
 
 
 # Test category models
+
+# TODO: Test No circle
+
+
 @pytest.mark.django_db
 def test_create_category():
     cat1 = Category.objects.create(name="cat1", description="dies ist ein Test")
@@ -20,6 +24,15 @@ def test_create_category():
     assert cat1.subcategories.first() == cat2
     assert cat2.parent == cat1
     assert cat2.name == "cat2"
+
+
+def test_name_length():
+    cat = Category()
+    with pytest.raises(ValidationError, match="cannot be blank"):
+        cat.full_clean()
+    cat.name = "A" * 101
+    with pytest.raises(ValidationError, match="has at most"):
+        cat.full_clean()
 
 
 @pytest.fixture
