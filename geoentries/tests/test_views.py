@@ -6,8 +6,6 @@
 import pytest
 from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
-from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
 
 
 def test_index_view(client):
