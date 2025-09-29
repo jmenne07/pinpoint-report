@@ -15,7 +15,9 @@ def index_url():
 
 
 def setup(live_server, url):
-    driver = webdriver.Chrome()
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    driver = webdriver.Chrome(options=options)
     driver.get(f"{live_server}{url}")
     return driver
 
@@ -25,6 +27,9 @@ def teardown(driver):
 
 
 def test_map(live_server, index_url):
+    """
+    Check if the map is present, when it shall be shown
+    """
     driver = setup(live_server, index_url)
 
     # test if leaflet div is correct
@@ -39,7 +44,39 @@ def test_map(live_server, index_url):
     teardown(driver)
 
 
+# TODO: The following tests are incomplete, since the linked sites do not exists
 def test_link_melden(live_server, index_url):
+    """
+    Check, if there is a link to create a new request
+    """
     driver = setup(live_server, index_url)
 
-    link = driver.find_element(By.PARTIAL_LINK_TEXT, "melden")
+    try:
+        link = driver.find_element(By.PARTIAL_LINK_TEXT, "melden")
+        # TODO: Check if the link is set correct
+    finally:
+        teardown(driver)
+
+
+def test_link_all(live_server, index_url):
+    """
+    Check, if there is a link to a list with all requests.
+    """
+    driver = setup(live_server, index_url)
+    try:
+        link = driver.find_element(By.PARTIAL_LINK_TEXT, "alle")
+        # TODO: Check if the link is set correct
+    finally:
+        teardown(driver)
+
+
+def test_link_login(live_server, index_url):
+    """
+    Check, if there is a button/link to login.
+    """
+    driver = setup(live_server, index_url)
+    try:
+        link = driver.find_element(By.PARTIAL_LINK_TEXT, "login")
+        # TODO: Check if the link is set correct
+    finally:
+        teardown(driver)
