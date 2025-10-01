@@ -110,21 +110,51 @@ def test_map_in_create(live_server, create_url):
 
 
 def id_present(driver, value: str) -> bool:
+    """
+    Checks if an id is present in the DOM.
+    Next to the presented value, it also checks if there is an element with the given value create by django.
+    This is done by adding "id_" as a prefix.
+
+    Args:
+        driver: webdriver
+            The selenium webdriver, which controls the browser
+        value: str
+            The id, which shall be checked
+
+    Returns:
+        True if there is a element with value as an id.
+    """
+    is_present = False
     try:
         driver.find_element(By.ID, value)
+        is_present = True
     except NoSuchElementException:
-        return False
-    return True
+        pass
+    if "id" not in value:
+        value = "id_" + value
+    try:
+        driver.find_element(By.ID, value)
+        is_present = True
+    except NoSuchElementException:
+        pass
+
+    return is_present
 
 
-def test_create_elements(live_server, create_url):
+def test_create_elements(live_server, create_url) -> None:
     """
     Checks if all input elements are available.
+
+    Args:
+        live_server
+            A live_server used for testing
+        create_url:
+            The url given by the fixture create_url
     """
     driver = setup(live_server, create_url)
-    assert id_present(driver, "id_title") is True
-    assert id_present(driver, "id_description") is True
-    assert id_present(driver, "id_latitude") is True
-    assert id_present(driver, "id_longitude") is True
-    assert id_present(driver, "id_category") is True
+    assert id_present(driver, "title") is True
+    assert id_present(driver, "description") is True
+    assert id_present(driver, "latitude") is True
+    assert id_present(driver, "longitude") is True
+    assert id_present(driver, "category") is True
     teardown(driver)

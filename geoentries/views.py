@@ -9,6 +9,7 @@ from rest_framework import mixins, viewsets
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework_xml.renderers import XMLRenderer
 
+from django.urls import reverse_lazy
 from .models import Category, Entry
 from .serializers import CategorySerializer, EntrySerializer
 
@@ -20,7 +21,9 @@ class IndexView(TemplateView):
 class EntryCreateView(CreateView):
     template_name = "geoentries/create.html"
     model = Entry
-    fields = ["title", "description", "latitude", "longitude", "category"]
+    fields = ["category", "title", "description", "latitude", "longitude"]
+
+    success_url = reverse_lazy("geoentries:index")
 
 
 class ListView(TemplateView):

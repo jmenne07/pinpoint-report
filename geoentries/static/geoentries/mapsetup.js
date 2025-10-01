@@ -1,6 +1,8 @@
-// Copyright 2025 Jörn Menne
-// Licensed under the Apache License, Version 2.0
-// See NOTICE file for details.
+/*
+ * Copyright 2025 Jörn Menne
+ * Licensed under the Apache License, Version 2.0
+ * See NOTICE file for details.
+ */
 
 // Define the map and set the tilelayer
 var map = L.map("map").setView([51.7173, 8.753557], 15);
