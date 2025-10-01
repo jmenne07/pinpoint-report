@@ -11,7 +11,12 @@ from selenium.webdriver.common.by import By
 
 @pytest.fixture()
 def index_url():
-    return reverse("index")
+    return reverse("geoentries:index")
+
+
+@pytest.fixture()
+def create_url():
+    return reverse("geoentries:create")
 
 
 def setup(live_server, url):
@@ -26,6 +31,7 @@ def teardown(driver):
     driver.quit()
 
 
+# NOTE: Test Index
 def test_map(live_server, index_url):
     """
     Check if the map is present, when it shall be shown
@@ -64,7 +70,7 @@ def test_link_all(live_server, index_url):
     """
     driver = setup(live_server, index_url)
     try:
-        link = driver.find_element(By.PARTIAL_LINK_TEXT, "alle")
+        link = driver.find_element(By.PARTIAL_LINK_TEXT, "Alle")
         # TODO: Check if the link is set correct
     finally:
         teardown(driver)
@@ -80,3 +86,34 @@ def test_link_login(live_server, index_url):
         # TODO: Check if the link is set correct
     finally:
         teardown(driver)
+
+
+# NOTE: Test create request
+def test_map(live_server, create_url):
+    """
+    Check if the map is present, when it shall be shown
+    """
+    driver = setup(live_server, create_url)
+
+    # test if leaflet div is correct
+    map_div = driver.find_element(value="map")
+
+    if map_div.is_displayed():
+        map_height = int(map_div.value_of_css_property("height").replace("px", ""))
+        assert map_height > 0
+    else:
+        pytest.skip("Map exists, but is not displayed")
+
+    teardown(driver)
+
+
+def test_create_elements(live_server, create_url):
+    """
+    Checks if all input elements are available.
+    """
+    driver = setup(live_server, create_url)
+    driver.find_element(By.ID, "title")
+    driver.find_element(By.ID, "description")
+    driver.find_element(By.ID, "latitude")
+    driver.find_element(By.ID, "longitude")
+    driver.find_element(By.ID, "category")

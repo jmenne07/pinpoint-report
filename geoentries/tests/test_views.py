@@ -8,16 +8,9 @@ from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
 
 
-def test_index_view(client):
-    url = reverse("index")
-    response = client.get(url)
-    assert response.status_code == 200
-    assertTemplateUsed(response, "geoentries/base.html")
-
-
 @pytest.fixture(scope="module")
 def url():
-    return reverse("index")
+    return reverse("geoentries:index")
 
 
 class Test_Index:
@@ -25,4 +18,4 @@ class Test_Index:
         response = client.get(url)
         print(url)
         assert response.status_code == 200
-        assertTemplateUsed(response, "geoentries/base.html")
+        assertTemplateUsed(response, "geoentries/index.html")

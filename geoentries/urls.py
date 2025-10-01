@@ -14,6 +14,8 @@ from . import views
 
 from rest_framework.routers import DefaultRouter
 
+app_name = "geoentries"
+
 router = DefaultRouter()
 router.register(r"requests", views.EntryViewSet, basename="entry")
 router.register(r"services", views.CategoryViewSet, basename="category")
@@ -21,5 +23,6 @@ router.register(r"services", views.CategoryViewSet, basename="category")
 
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
+    path("create", views.CreateView.as_view(), name="create"),
     path("open311/v2/", include(router.urls)),
 ]

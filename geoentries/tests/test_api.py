@@ -16,13 +16,13 @@ def client():
 
 @pytest.mark.django_db
 def test_category_list(client):
-    url = reverse("category-list")
+    url = reverse("geoentries:category-list")
     response = client.get(url)
     assert response.status_code == 200
 
 
 @pytest.mark.django_db
 def test_entry_list(client):
-    url = reverse("entry-list")
+    url = reverse("geoentries:entry-list")
     response = client.get(url)
     assert response.status_code == 200

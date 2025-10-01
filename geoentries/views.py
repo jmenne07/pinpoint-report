@@ -14,7 +14,11 @@ from .serializers import CategorySerializer, EntrySerializer
 
 
 class IndexView(TemplateView):
-    template_name = "geoentries/base.html"
+    template_name = "geoentries/index.html"
+
+
+class CreateView(TemplateView):
+    template_name = "geoentries/create.html"
 
 
 class EntryViewSet(
