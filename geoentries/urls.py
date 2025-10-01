@@ -23,6 +23,7 @@ router.register(r"services", views.CategoryViewSet, basename="category")
 
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
-    path("create", views.CreateView.as_view(), name="create"),
+    path("create", views.EntryCreateView.as_view(), name="create"),
+    path("entries", views.ListView.as_view(), name="list"),
     path("open311/v2/", include(router.urls)),
 ]

@@ -1,10 +1,12 @@
 # Copyright 2025 Jörn Menne
 # Licensed under the Apache License, Version 2.0
 # See NOTICE file for details.
+import typing
 import pytest
 from django.urls import reverse
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
 # TODO: Correct database access
 
@@ -32,7 +34,7 @@ def teardown(driver):
 
 
 # NOTE: Test Index
-def test_map(live_server, index_url):
+def test_map_in_index(live_server, index_url):
     """
     Check if the map is present, when it shall be shown
     """
@@ -89,7 +91,7 @@ def test_link_login(live_server, index_url):
 
 
 # NOTE: Test create request
-def test_map(live_server, create_url):
+def test_map_in_create(live_server, create_url):
     """
     Check if the map is present, when it shall be shown
     """
@@ -107,13 +109,22 @@ def test_map(live_server, create_url):
     teardown(driver)
 
 
+def id_present(driver, value: str) -> bool:
+    try:
+        driver.find_element(By.ID, value)
+    except NoSuchElementException:
+        return False
+    return True
+
+
 def test_create_elements(live_server, create_url):
     """
     Checks if all input elements are available.
     """
     driver = setup(live_server, create_url)
-    driver.find_element(By.ID, "title")
-    driver.find_element(By.ID, "description")
-    driver.find_element(By.ID, "latitude")
-    driver.find_element(By.ID, "longitude")
-    driver.find_element(By.ID, "category")
+    assert id_present(driver, "id_title") is True
+    assert id_present(driver, "id_description") is True
+    assert id_present(driver, "id_latitude") is True
+    assert id_present(driver, "id_longitude") is True
+    assert id_present(driver, "id_category") is True
+    teardown(driver)

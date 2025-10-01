@@ -7,12 +7,5 @@ See NOTICE file for details.
 {% load static %}
 
 {% block body %}
-<div id="map"></div>
-
-<form method="post" enctype="mutlipart/form-data">
-    {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="Submit" />
-</form>
-
+    List with every Request
 {% endblock %}

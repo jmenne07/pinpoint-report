@@ -4,7 +4,7 @@
 
 
 # TODO: Testing
-from django.views.generic import TemplateView
+from django.views.generic import FormView, TemplateView, CreateView
 from rest_framework import mixins, viewsets
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework_xml.renderers import XMLRenderer
@@ -17,8 +17,14 @@ class IndexView(TemplateView):
     template_name = "geoentries/index.html"
 
 
-class CreateView(TemplateView):
+class EntryCreateView(CreateView):
     template_name = "geoentries/create.html"
+    model = Entry
+    fields = ["title", "description", "latitude", "longitude", "category"]
+
+
+class ListView(TemplateView):
+    template_name = "geoentries/list.html"
 
 
 class EntryViewSet(

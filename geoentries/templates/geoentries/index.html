@@ -1,4 +1,4 @@
-<!-- 
+<!--
 Copyright: (c) 2025 Jörn Menne
 Licensed under the Apache License, Version 2.0
 See NOTICE file for details.
@@ -7,8 +7,14 @@ See NOTICE file for details.
 {% load static %}
 
 {% block body %}
+<header>
+    Icon
     <a href="{% url 'admin:index' %}">login</a>
-    <a>Alle Anliegen</a>
-<a href="{% url 'geoentries:create' %}">Anliegen melden</a>
-    <div id="map"></div> 
+    <a href="{% url 'geoentries:list'}">Alle Anliegen</a>
+</header>
+
+<section>
+    <a href="{% url 'geoentries:create' %}">Anliegen melden</a>
+</section>
+<div id="map"></div>
 {% endblock %}
