@@ -62,6 +62,9 @@ class Entry(models.Model):
         CLOSED = 2
         ARCHIVED = 3
 
+    class Meta:
+        verbose_name_plural = "Entries"
+
     # id set automatically by django
 
     # Time based fields

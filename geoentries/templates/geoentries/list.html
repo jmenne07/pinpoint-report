@@ -8,4 +8,11 @@ See NOTICE file for details.
 
 {% block body %}
     List with every Request
+    <ul>
+    {% for entry in entries %}
+        <li>{{entry}} {{entry.id}} {{entry.category.name}}</li>
+    {% endfor %}
+    </ul>
+
+    <a href="{% url 'geoentries:index' %}">Back</a>
 {% endblock %}

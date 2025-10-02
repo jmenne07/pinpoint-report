@@ -4,7 +4,7 @@
 
 
 # TODO: Testing
-from django.views.generic import FormView, TemplateView, CreateView
+from django.views.generic import FormView, ListView, TemplateView, CreateView
 from rest_framework import mixins, viewsets
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework_xml.renderers import XMLRenderer
@@ -22,12 +22,13 @@ class EntryCreateView(CreateView):
     template_name = "geoentries/create.html"
     model = Entry
     fields = ["category", "title", "description", "latitude", "longitude"]
-
     success_url = reverse_lazy("geoentries:index")
 
 
-class ListView(TemplateView):
+class EntryListView(ListView):
     template_name = "geoentries/list.html"
+    context_object_name="entries"
+    model = Entry
 
 
 class EntryViewSet(
