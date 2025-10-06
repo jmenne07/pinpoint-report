@@ -19,6 +19,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import sys
 import os
+from Crypto.Random import get_random_bytes
 
 from pathlib import Path
 
@@ -153,6 +154,16 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
+
+# E-Mail configuration. Emails will only be sent, if SEND_MAIL is set to request
+SEND_MAIL = True
+EMAIL_HOST = "localhost"
+EMAIL_PORT = "8025"
+DEFAULT_FROM_EMAIL = "example@pinpoint-report.de"  # Setup for ciphers
+
+# WARNING: It is advised to use a fixed 32 byte string in production
+# KEY = get_random_bytes(32)
+KEY = b"0123456789abcdef0123456789abcdef"
 
 # Debug Toolbar settings
 TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ

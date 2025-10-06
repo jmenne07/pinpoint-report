@@ -7,12 +7,12 @@ See NOTICE file for details.
 {% load static %}
 
 {% block body %}
-    List with every Request
-    <ul>
+List with every Request
+<ul>
     {% for entry in entries %}
-        <li>{{entry}} {{entry.id}} {{entry.category.name}}</li>
+    <li>{{entry}} {{entry.id}} {{entry.category.name}} {{ entry.status}}</li>
     {% endfor %}
-    </ul>
+</ul>
 
-    <a href="{% url 'geoentries:index' %}">Back</a>
+<a href="{% url 'geoentries:index' %}">Back</a>
 {% endblock %}

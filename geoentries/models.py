@@ -77,6 +77,8 @@ class Entry(models.Model):
     )
 
     status = models.IntegerField(choices=Status, default=0)  # type: ignore
+    # _old_status = models.IntegerField(choices=Status, default=0)  # type: ignore
+    # NOTE: The old_status is used to check, if the status gets changed.
 
     description = models.TextField(null=True, blank=True)
 
@@ -96,6 +98,8 @@ class Entry(models.Model):
         null=True,
         validators=[MinValueValidator(-90), MaxValueValidator(90)],
     )
+
+    email = models.EmailField(blank=True, null=True)
 
     @override
     def __str__(self) -> str:

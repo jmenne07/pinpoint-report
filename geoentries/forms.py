@@ -13,4 +13,4 @@ class EntryForm(ModelForm):
 
     class Meta:
         model = Entry
-        fields = ["title", "description", "latitude", "longitude", "category"]
+        fields = ["title", "description", "latitude", "longitude", "category", "email"]
