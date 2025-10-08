@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openpinpoint"
+version = "0.2.0"
+description = "A Django app for managing and categorizing entries, built as part of the OpenPinpoint project."
+authors = [{ name = "Jörn Menne", email = "jmenne@posteo.de" }]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.13,<3.14"
+dependencies = [
+  # Core runtime dependencies
+  "django",
+  "djangorestframework",
+  "djangorestframework-xml",
+  "drf-spectacular",
+  "django-filter",
+  "pycryptodome",
+]
+
+[project.optional-dependencies]
+dev = [
+  # Development / code quality
+  "black",
+  "ruff",
+  "isort",
+  "pyright",
+  "django-stubs",
+]
+test = [
+  # Testing / debugging
+  "pytest",
+  "pytest-django",
+  "selenium",
+  "pytest-selenium",
+  "django-debug-toolbar",
+  "aiosmtpd",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["openpinpoint*", "geoentries*"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "openpinpoint.settings"
+python_files = ["tests.py", "test_*.py", "*_test.py"]
+addopts = "--ds=openpinpoint.settings"
+
+[tool.black]
+line-length = 88
+target-version = ["py313"]
+skip-string-normalization = false
+
+[tool.isort]
+profile = "black"
+line_length = 88
+multi_line_output = 3
+include_trailing_comma = true
+
+[tool.ruff]
+line-length = 88
+target-version = "py313"
+select = ["E", "F", "I"]
+ignore = ["E501"]
+
+[tool.pyright]
+include = ["openpinpoint"]
+exclude = ["**/__pycache__"]
+reportMissingImports = true
+reportUnusedImport = "warning"
+pythonVersion = "3.13"
+typeCheckingMode = "basic"

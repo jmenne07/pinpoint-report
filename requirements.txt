@@ -13,4 +13,4 @@ pycryptodome
 pytest
 pytest-django
 selenium
-pytest-selenium
+pytest-selenium 

@@ -2,12 +2,11 @@
 # Licensed under the Apache License, Version 2.0
 # See NOTICE file for details.
 
-from django.core.exceptions import ValidationError
-from django.test import TestCase
 import pytest
-from geoentries.models import Entry, Category
+from django.core.exceptions import ValidationError
 from django.utils import timezone
 
+from geoentries.models import Category, Entry
 
 # Test category models
 
@@ -45,6 +44,7 @@ def cat():
 def test_create_entry(cat):
     before = timezone.now()
     entry = Entry.objects.create(title="Test", category=cat, latitude=0, longitude=0)
+
     after = timezone.now()
 
     assert entry.title == "Test"

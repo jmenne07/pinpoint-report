@@ -17,8 +17,8 @@ from rest_framework.routers import DefaultRouter
 app_name = "geoentries"
 
 router = DefaultRouter()
-router.register(r"requests", views.EntryViewSet, basename="entry")
-router.register(r"services", views.CategoryViewSet, basename="category")
+router.register(r"requests", views.EntryAPIViewSet, basename="entry")
+router.register(r"services", views.CategoryAPIViewSet, basename="category")
 
 
 urlpatterns = [

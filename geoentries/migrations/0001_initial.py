@@ -11,41 +11,116 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
+        ("auth", "0012_alter_user_first_name_max_length"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('groups', models.ManyToManyField(blank=True, related_name='group_owner', to='auth.group')),
-                ('parent', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='subcategories', to='geoentries.category')),
-                ('users', models.ManyToManyField(blank=True, related_name='owner', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                ("description", models.TextField(blank=True, null=True)),
+                (
+                    "groups",
+                    models.ManyToManyField(
+                        blank=True, related_name="group_owner", to="auth.group"
+                    ),
+                ),
+                (
+                    "parent",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="subcategories",
+                        to="geoentries.category",
+                    ),
+                ),
+                (
+                    "users",
+                    models.ManyToManyField(
+                        blank=True, related_name="owner", to=settings.AUTH_USER_MODEL
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Categories',
+                "verbose_name_plural": "Categories",
             },
         ),
         migrations.CreateModel(
-            name='Entry',
+            name="Entry",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('creation_time', models.DateTimeField(auto_now=True)),
-                ('update_time', models.DateTimeField(auto_now_add=True)),
-                ('title', models.CharField(max_length=100)),
-                ('status', models.IntegerField(choices=[(0, 'Open'), (1, 'In Progress'), (2, 'Closed'), (3, 'Archived')], default=0)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('longitude', models.DecimalField(decimal_places=6, max_digits=9, null=True, validators=[django.core.validators.MinValueValidator(-180), django.core.validators.MaxValueValidator(180)])),
-                ('latitude', models.DecimalField(decimal_places=6, max_digits=8, null=True, validators=[django.core.validators.MinValueValidator(-90), django.core.validators.MaxValueValidator(90)])),
-                ('email', models.EmailField(blank=True, max_length=254, null=True)),
-                ('category', models.ForeignKey(on_delete=django.db.models.deletion.RESTRICT, related_name='entries', to='geoentries.category')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("creation_time", models.DateTimeField(auto_now=True)),
+                ("update_time", models.DateTimeField(auto_now_add=True)),
+                ("title", models.CharField(max_length=100)),
+                (
+                    "status",
+                    models.IntegerField(
+                        choices=[
+                            (0, "Open"),
+                            (1, "In Progress"),
+                            (2, "Closed"),
+                            (3, "Archived"),
+                        ],
+                        default=0,
+                    ),
+                ),
+                ("description", models.TextField(blank=True, null=True)),
+                (
+                    "longitude",
+                    models.DecimalField(
+                        decimal_places=6,
+                        max_digits=9,
+                        null=True,
+                        validators=[
+                            django.core.validators.MinValueValidator(-180),
+                            django.core.validators.MaxValueValidator(180),
+                        ],
+                    ),
+                ),
+                (
+                    "latitude",
+                    models.DecimalField(
+                        decimal_places=6,
+                        max_digits=8,
+                        null=True,
+                        validators=[
+                            django.core.validators.MinValueValidator(-90),
+                            django.core.validators.MaxValueValidator(90),
+                        ],
+                    ),
+                ),
+                ("email", models.EmailField(blank=True, max_length=254, null=True)),
+                (
+                    "category",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.RESTRICT,
+                        related_name="entries",
+                        to="geoentries.category",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Entries',
+                "verbose_name_plural": "Entries",
             },
         ),
     ]

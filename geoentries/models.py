@@ -9,11 +9,10 @@ of the project.
 # TODO: Testing
 
 from typing import override
-from django.core import validators
+
+from django.contrib.auth.models import Group, User
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.contrib.auth.models import User, Group
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.utils.html import ValidationError
 
 # Create your models here.
 

@@ -44,19 +44,21 @@ class EntryListView(ListView):
     model = Entry
 
 
-class EntryViewSet(
+class EntryAPIViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
     viewsets.GenericViewSet,
 ):
+    # TODO: Test
     queryset = Entry.objects.all()  # type: ignore
     serializer_class = EntrySerializer
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer, XMLRenderer]
     filterset_fields = ["id", "category", "status"]
 
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+class CategoryAPIViewSet(viewsets.ReadOnlyModelViewSet):
+    # TODO: Test
     queryset = Category.objects.all()  # type: ignore
     serializer_class = CategorySerializer
     enderer_classes = [JSONRenderer, BrowsableAPIRenderer, XMLRenderer]
@@ -64,7 +66,7 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @require_GET
-def close_with_link_view(request, b64nonce, b64ct):
+def close_with_link_view(request, b64nonce, b64ct):  # type: ignore
     # TODO: Test
     """
     A view which acceprts an nonce and a ciphertext.

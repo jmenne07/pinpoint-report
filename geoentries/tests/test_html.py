@@ -1,12 +1,11 @@
 # Copyright 2025 Jörn Menne
 # Licensed under the Apache License, Version 2.0
 # See NOTICE file for details.
-import typing
 import pytest
 from django.urls import reverse
 from selenium import webdriver
-from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 
 # TODO: Correct database access
 
@@ -157,4 +156,9 @@ def test_create_elements(live_server, create_url) -> None:
     assert id_present(driver, "latitude") is True
     assert id_present(driver, "longitude") is True
     assert id_present(driver, "category") is True
+    assert id_present(driver, "email") is True
     teardown(driver)
+
+
+# TODO: Check required fields
+# TODO: Test Latitude / Longitude selection
