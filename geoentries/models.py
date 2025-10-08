@@ -99,6 +99,7 @@ class Entry(models.Model):
     )
 
     email = models.EmailField(blank=True, null=True)
+    image = models.ImageField(blank=True, null=True, upload_to="images/")
 
     @override
     def __str__(self) -> str:

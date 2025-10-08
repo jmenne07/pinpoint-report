@@ -3,16 +3,19 @@
 # See NOTICE file for details.
 
 
+import os
+
 # TODO: Testing
 from base64 import urlsafe_b64decode
 
 from Crypto.Cipher import ChaCha20
 from django.conf import settings
 from django.core.mail import send_mail
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_GET
-from django.views.generic import CreateView, ListView, TemplateView
+from django.views.generic import CreateView, DetailView, ListView, TemplateView
 from rest_framework import mixins, viewsets
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework_xml.renderers import XMLRenderer
@@ -28,7 +31,15 @@ class IndexView(TemplateView):
 class EntryCreateView(CreateView):
     template_name = "geoentries/create.html"
     model = Entry
-    fields = ["category", "title", "description", "latitude", "longitude", "email"]
+    fields = [
+        "category",
+        "title",
+        "description",
+        "latitude",
+        "longitude",
+        "email",
+        "image",
+    ]
     success_url = reverse_lazy("geoentries:index")
 
     def form_valid(self, form):
@@ -42,6 +53,11 @@ class EntryListView(ListView):
     template_name = "geoentries/list.html"
     context_object_name = "entries"
     model = Entry
+
+
+class EntryDetailView(DetailView):
+    model = Entry
+    template_name = "geoentries/detail.html"
 
 
 class EntryAPIViewSet(

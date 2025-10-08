@@ -17,11 +17,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
-import sys
 import os
-from Crypto.Random import get_random_bytes
-
+import sys
 from pathlib import Path
+
+from Crypto.Random import get_random_bytes
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -76,6 +76,7 @@ TEMPLATES = [
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.request",
+                "django.template.context_processors.media",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
             ],
@@ -164,6 +165,10 @@ DEFAULT_FROM_EMAIL = "example@pinpoint-report.de"  # Setup for ciphers
 # WARNING: It is advised to use a fixed 32 byte string in production
 # KEY = get_random_bytes(32)
 KEY = b"0123456789abcdef0123456789abcdef"
+
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
+
 
 # Debug Toolbar settings
 TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ

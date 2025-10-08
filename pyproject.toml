@@ -17,7 +17,9 @@ dependencies = [
   "djangorestframework-xml",
   "drf-spectacular",
   "django-filter",
+
   "pycryptodome",
+  "Pillow",
 ]
 
 [project.optional-dependencies]

@@ -5,15 +5,15 @@
 # TODO: Testing
 
 from base64 import urlsafe_b64encode
-from django.contrib import admin
-
-from .models import Category, Entry
-from django.conf import settings
-from django.urls import reverse
-
-# Register your models here.
 
 from Crypto.Cipher import ChaCha20
+from django.conf import settings
+from django.contrib import admin
+from django.urls import reverse
+
+from .models import Category, Entry
+
+# Register your models here.
 
 
 @admin.register(Category)

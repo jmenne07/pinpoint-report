@@ -3,8 +3,8 @@
 # See NOTICE file for details.
 
 import pytest
-from rest_framework.test import APIClient
 from django.urls import reverse
+from rest_framework.test import APIClient
 
 # TODO: More tests for the api
 
