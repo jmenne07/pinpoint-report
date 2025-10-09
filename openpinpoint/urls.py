@@ -21,6 +21,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from drf_spectacular.views import (
@@ -29,7 +30,7 @@ from drf_spectacular.views import (
     SpectacularSwaggerView,
 )
 
-from .settings import TESTING
+from .settings import DEBUG, MEDIA_ROOT, MEDIA_URL, TESTING
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -42,6 +43,10 @@ urlpatterns = [
     path("api/redoc", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
     path("geoentries/", include("geoentries.urls")),
 ]
+
+if DEBUG:
+    urlpatterns += static(MEDIA_URL, document_root=str(MEDIA_ROOT))
+
 
 if not TESTING:
     from debug_toolbar.toolbar import debug_toolbar_urls
