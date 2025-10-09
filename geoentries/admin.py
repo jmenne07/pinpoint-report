@@ -10,6 +10,7 @@ from Crypto.Cipher import ChaCha20
 from django.conf import settings
 from django.contrib import admin
 from django.urls import reverse
+from django.utils.html import format_html
 
 from .models import Category, Entry
 
@@ -23,7 +24,29 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Entry)
 class EntryAdmin(admin.ModelAdmin):
-    exlude = None
+    fields = [
+        ("title", "category"),
+        ("creation_time", "update_time"),
+        "status",
+        "description",
+        "email",
+        ("latitude", "longitude"),
+        ("image", "image_preview"),
+    ]
+    readonly_fields = [
+        "image_preview",
+        "creation_time",
+        "update_time",
+    ]
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html(
+                '<img src="{}" style="max-height: 100px;"/>', obj.image.url
+            )
+        return ""
+
+    image_preview.short_description = "Preview"
 
 
 def send_close_link(entry) -> None:
