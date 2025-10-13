@@ -19,6 +19,7 @@ def create_url():
 
 
 class Test_Index:
+    @pytest.mark.django_db
     def test_index_view(self, client, index_url):
         response = client.get(index_url)
         print(index_url)

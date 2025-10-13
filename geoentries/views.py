@@ -3,7 +3,6 @@
 # See NOTICE file for details.
 
 
-
 # TODO: Testing
 from base64 import urlsafe_b64decode
 
@@ -22,7 +21,9 @@ from .models import Category, Entry
 from .serializers import CategorySerializer, EntrySerializer
 
 
-class IndexView(TemplateView):
+class IndexView(ListView):
+    model = Entry
+    context_object_name = "entries"
     template_name = "geoentries/index.html"
 
 

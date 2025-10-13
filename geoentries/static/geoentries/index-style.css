@@ -1,0 +1,28 @@
+.entry {
+    border: 5px solid var(--color-entry-open);
+    border-style: none solid none solid;
+    margin-bottom: 0.5rem;
+}
+
+#main-section {
+    text-align: center;
+
+    a {
+        background: var(--color-accent);
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        box-shadow: 1px 1px 3px 1px var(--color-shadow);
+
+
+    }
+}
+
+#map-container {
+    padding: 1rem;
+
+}
+
+#map {
+    height: 20rem;
+    border-radius: var(--border-radius);
+}

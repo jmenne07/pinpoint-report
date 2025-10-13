@@ -1,0 +1,38 @@
+h2{
+  padding-left: 1rem;
+}
+
+label{
+  display: block;
+  margin: 0.2rem auto;
+  padding-left: 1rem;
+}
+
+input, textarea, select{
+  width: 75%;
+  padding: 0.25rem;
+  border-radius: var(--border-radius);
+  margin: 0 auto;;
+  display: block;
+}
+
+textarea{
+  max-height:5rem;
+}
+
+select{
+  width: 80%;
+}
+
+.card{
+  padding: 0.3rem;
+  margin: 1rem;
+}
+
+#map{
+  height: 10rem;
+  border-radius: var(--border-radius);
+}
+.submit{
+  background-color: var(--color-accent);
+}

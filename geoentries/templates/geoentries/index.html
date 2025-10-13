@@ -5,16 +5,53 @@ See NOTICE file for details.
 -->
 {% extends "geoentries/base.html" %}
 {% load static %}
-
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'geoentries/index-style.css' %}" />
+{% endblock %}
 {% block body %}
 <header>
-    Icon
+    <img src="" alt="Icon" />
     <a href="{% url 'admin:index' %}">login</a>
     <a href="{% url 'geoentries:list'%}">Alle Anliegen</a>
 </header>
 
-<section>
+<section id="main-section">
+    <h2>Pinpoint</h2>
     <a href="{% url 'geoentries:create' %}">Anliegen melden</a>
 </section>
-<div id="map"></div>
+<section id="entry-section">
+    <h3>Orte der Anliegen</h3>
+    <div id="map-container" class="card">
+        <div id="map"></div>
+        <script src="{% static 'geoentries/mapsetup.js' %}"></script>
+    </div>
+    <h3>Anliegen</h3>
+    {% if entries %}
+    {% for entry in entries %}
+    <div class="card entry">
+
+        <h4>{{ entry.title }} </h4>
+        <p>Status: {{ entry.get_status_display }} </p>
+        <p>Beschreibung</p>
+        {% if entry.image %}
+        <img src="{{ entry.image.url }}" alt="Bild konnte nicht geladen werden" />
+        {% endif %}
+
+
+    </div>
+    {% endfor %}
+    {% else %}
+    <div>
+        <h4> Es gibt keine Anliegen </h4>
+    </div>
+    {% endif %}
+
+</section>
+<section>
+    <div>
+        <h3>Some Stats</h3>
+    </div>
+
+</section>
+
 {% endblock %}

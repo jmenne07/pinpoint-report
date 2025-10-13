@@ -5,14 +5,34 @@ See NOTICE file for details.
 -->
 {% extends "geoentries/base.html" %}
 {% load static %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'geoentries/create-style.css' %}" />
+{% endblock %}
 
 {% block body %}
-<div id="map"></div>
+<h2>Neues Anliegen</h2>
+
+<div class=card>
+    <div id="map"></div>
+</div>
 
 <form method="post" enctype="mutlipart/form-data">
     {% csrf_token %}
-    {{form.as_p}}
-    <input type="submit" value="Submit" />
+    <label for="{{ form.category.id_for_label }}">Category:</label>
+    {{ form.category }}</br>
+    <label for="{{ form.title.id_for_label }}">Title:</label>
+    {{ form.title }} </br>
+    <label for="{{ form.description.id_for_label }}">Description:</label>
+    {{ form.description }} </br>
+    <label for="{{ form.email.id_for_label }}">Email:</label>
+    {{ form.email }} </br>
+    <input type="submit" value="Submit" class="submit" /> </br>
+    <label for="{{ form.latitude.id_for_label }}">Latitude:</label>
+    {{ form.latitude }} </br>
+    <label for="{{ form.longitude.id_for_label }}">Longitude:</label>
+    {{ form.longitude }} </br>
+
+
 </form>
 <script src="{% static 'geoentries/mapsetup.js' %}"></script>
 <script src="{% static 'geoentries/retreiveCoordinates.js' %}"></script>
