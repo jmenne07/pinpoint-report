@@ -9,6 +9,7 @@ from base64 import urlsafe_b64decode
 from Crypto.Cipher import ChaCha20
 from django.conf import settings
 from django.core.mail import send_mail
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_GET
@@ -39,6 +40,11 @@ class IndexView(TemplateView):
         context["locations"] = Entry.objects.all()
         context["entries"] = Entry.objects.order_by("-creation_time")[:2]
         return context
+
+
+def get_location_data(request):
+    locations = Entry.objects.all().values("id", "latitude", "longitude")
+    return JsonResponse(list(locations), safe=False)
 
 
 class EntryCreateView(CreateView):

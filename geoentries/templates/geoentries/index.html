@@ -6,6 +6,10 @@ See NOTICE file for details.
 {% extends "geoentries/base.html" %}
 {% load static %}
 {% block stylesheets %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+
 <link rel="stylesheet" href="{% static 'geoentries/index-style.css' %}" />
 {% endblock %}
 {% block body %}
@@ -52,11 +56,5 @@ See NOTICE file for details.
     </div>
 
 </section>
-{% for location in locations %}
-        <script>
-  
-            let marker{{location.id}} = L.marker([{{location.latitude}}, {{location.longitude}}]);
-            marker{{location.id}}.addTo(map);
-        </script>
-        {% endfor %}
+<script src="{% static 'geoentries/locationcluster.js' %}"></script>
 {% endblock %}
