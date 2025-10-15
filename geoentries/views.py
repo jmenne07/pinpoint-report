@@ -12,19 +12,33 @@ from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_GET
-from django.views.generic import CreateView, DetailView, ListView, TemplateView
+from django.views.generic import (
+    CreateView,
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView,
+)
 from rest_framework import mixins, viewsets
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework_xml.renderers import XMLRenderer
 
 from .models import Category, Entry
 from .serializers import CategorySerializer, EntrySerializer
+import pdb
+
+from typing import Any
 
 
-class IndexView(ListView):
+class IndexView(TemplateView):
     model = Entry
-    context_object_name = "entries"
     template_name = "geoentries/index.html"
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["locations"] = Entry.objects.all()
+        context["entries"] = Entry.objects.order_by("-creation_time")[:2]
+        return context
 
 
 class EntryCreateView(CreateView):
@@ -44,8 +58,28 @@ class EntryCreateView(CreateView):
     def form_valid(self, form):
         response = super().form_valid(form)
         # TODO: Test
-        send_mail("TEst", "test", settings.DEFAULT_FROM_EMAIL, [self.object.email])  # type: ignore
+        send_mail(
+            "Confirmation",
+            f"Das Anliegen wurde mit der ID {self.object.id} erstellt.",  # type:ignore
+            settings.DEFAULT_FROM_EMAIL,
+            [self.object.email],  # type: ignore
+        )
         return response
+
+
+class EntryUpdateView(UpdateView):
+    template_name = "geoentries/update.html"
+    model = Entry
+    fields = [
+        "category",
+        "status",
+        "title",
+        "description",
+        "latitude",
+        "longitude",
+        "email",
+        "image",
+    ]
 
 
 class EntryListView(ListView):

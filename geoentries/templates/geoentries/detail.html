@@ -11,7 +11,8 @@ See NOTICE file for details.
 <p>Title: {{entry.title}}</p>
 <p>Description: {{entry.description}}</p>
 {% if entry.image %}
-<img src="{{ entry.image.url }}" alt="{{entry.name}}">
+<img src="{{ entry.image.url }}" alt="{{entry.name}}" style=" width:400px">
 {% endif %}
+<a href="{% url 'geoentries:index' %}">Zurück</a>
 
 {% endblock %}

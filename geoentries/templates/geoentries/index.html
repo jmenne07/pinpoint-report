@@ -26,18 +26,17 @@ See NOTICE file for details.
         <script src="{% static 'geoentries/mapsetup.js' %}"></script>
     </div>
     <h3>Anliegen</h3>
-    {% if entries %}
-    {% for entry in entries %}
+    {% if entries %}{% for entry in entries %}
     <div class="card entry">
+        <a href="{% url 'geoentries:detail' entry.id%}">
+            <h4>{{ entry.title }} </h4>
+            <p>Status: {{ entry.get_status_display }} </p>
+            <p>Beschreibung</p>
+            {% if entry.image %}
+            <img src="{{ entry.image.url }}" alt="Bild konnte nicht geladen werden" />
+            {% endif %}
 
-        <h4>{{ entry.title }} </h4>
-        <p>Status: {{ entry.get_status_display }} </p>
-        <p>Beschreibung</p>
-        {% if entry.image %}
-        <img src="{{ entry.image.url }}" alt="Bild konnte nicht geladen werden" />
-        {% endif %}
-
-
+        </a>
     </div>
     {% endfor %}
     {% else %}
@@ -53,5 +52,11 @@ See NOTICE file for details.
     </div>
 
 </section>
-
+{% for location in locations %}
+        <script>
+  
+            let marker{{location.id}} = L.marker([{{location.latitude}}, {{location.longitude}}]);
+            marker{{location.id}}.addTo(map);
+        </script>
+        {% endfor %}
 {% endblock %}

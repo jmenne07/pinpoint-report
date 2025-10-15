@@ -1,0 +1,51 @@
+<!--
+Copyright: (c) 2025 Jörn Menne
+Licensed under the Apache License, Version 2.0
+See NOTICE file for details.
+-->
+{% extends "geoentries/base.html" %}
+{% load static %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'geoentries/create-style.css' %}" />
+{% endblock %}
+
+{% block body %}
+<h2>Anliegen {{ object.id }}: {{ object.title}}</h2>
+
+<div class=card>
+    <div id="map"></div>
+</div>
+
+<form method="post" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+    <label for="{{ form.category.id_for_label }}">Category:</label>
+    {{ form.category }}</br>
+    <label for="{{ form.status.id_for_label }}"" Status:</label>
+    {{ form.status }}
+    <label for=" {{ form.title.id_for_label }}">Title:</label>
+    {{ form.title }} </br>
+    <label for="{{ form.description.id_for_label }}">Description:</label>
+    {{ form.description }} </br>
+    <label for="{{ form.email.id_for_label }}">Email:</label>
+    {{ form.email }} </br>
+    <label for="{{ form.image.id_for_label }}">Image:</label>
+    {{ form.image }}
+    {% if object.image %}
+    <img href="{{ object.image.url }}" alt="Bild konnte nicht geladen werden." style="height:200px" />
+    {% else %}
+    <p>Es wurde kein Bild hochgeladen.</p>
+    {% endif %}</br>
+    <input type="submit" value="Submit" class="submit" /> </br>
+    <label for="{{ form.latitude.id_for_label }}">Latitude:</label>
+    {{ form.latitude }} </br>
+    <label for="{{ form.longitude.id_for_label }}">Longitude:</label>
+    {{ form.longitude }} </br>
+
+
+</form>
+<a href="{% url 'geoentries:index' %}">Zurück</a>
+
+<script src="{% static 'geoentries/mapsetup.js' %}"></script>
+<script src="{% static 'geoentries/retreiveCoordinates.js' %}"></script>
+
+{% endblock %}
