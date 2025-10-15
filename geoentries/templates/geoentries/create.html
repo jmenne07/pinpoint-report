@@ -16,7 +16,7 @@ See NOTICE file for details.
     <div id="map"></div>
 </div>
 
-<form method="post" enctype="mutlipart/form-data">
+<form method="post" enctype="multipart/form-data" action="">
     {% csrf_token %}
     <label for="{{ form.category.id_for_label }}">Category:</label>
     {{ form.category }}</br>
@@ -26,6 +26,8 @@ See NOTICE file for details.
     {{ form.description }} </br>
     <label for="{{ form.email.id_for_label }}">Email:</label>
     {{ form.email }} </br>
+    <label for="{{ form.image.id_for_label }}">Image:</label>
+    {{ form.image }} </br>
     <input type="submit" value="Submit" class="submit" /> </br>
     <label for="{{ form.latitude.id_for_label }}">Latitude:</label>
     {{ form.latitude }} </br>
