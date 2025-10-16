@@ -5,6 +5,7 @@
 
 # TODO: Testing
 from base64 import urlsafe_b64decode
+from typing import Any
 
 from Crypto.Cipher import ChaCha20
 from django.conf import settings
@@ -26,9 +27,6 @@ from rest_framework_xml.renderers import XMLRenderer
 
 from .models import Category, Entry
 from .serializers import CategorySerializer, EntrySerializer
-import pdb
-
-from typing import Any
 
 
 class IndexView(TemplateView):
@@ -86,6 +84,8 @@ class EntryUpdateView(UpdateView):
         "email",
         "image",
     ]
+
+    success_url = reverse_lazy("geoentries:index")
 
 
 class EntryListView(ListView):

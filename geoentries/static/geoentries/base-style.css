@@ -40,6 +40,10 @@ header {
         }
     }
 
+    img {
+        max-height: 20px;
+    }
+
 
 }
 

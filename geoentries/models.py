@@ -8,11 +8,16 @@ of the project.
 
 # TODO: Testing
 
+from base64 import urlsafe_b64encode
 from typing import override
 
+from Crypto.Cipher import ChaCha20
+from django.conf import settings
 from django.contrib.auth.models import Group, User
+from django.core.mail import send_mail
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -104,3 +109,38 @@ class Entry(models.Model):
     @override
     def __str__(self) -> str:
         return str(self.title)
+
+    def save(self, **kwargs):
+        try:
+            old_status = Entry.objects.get(pk=self.id).status
+            if old_status == 0 and self.status == 1:
+                send_close_link(self)
+        except Entry.DoesNotExist:
+            pass
+        super().save(**kwargs)
+
+
+def send_close_link(entry) -> None:
+    """
+    Sends a link, which sets the status of an entry from "In progress" to "Closed"
+    """
+
+    # TODO: Test
+    if not settings.SEND_MAIL:
+        # TODO: Probably should raise an Error, since to work emails have to be send
+        return
+
+    padded_id = str(entry.id).zfill(6)
+    cipher = ChaCha20.new(key=settings.KEY)
+    byte_text = bytes(padded_id, "utf-8")
+    ciphertext = cipher.encrypt(byte_text)
+    nonce = cipher.nonce
+
+    b64nonce = urlsafe_b64encode(nonce).decode("utf-8")
+    b64ct = urlsafe_b64encode(ciphertext).decode("utf-8")
+
+    host = "localhost:8000"
+    url = reverse("geoentries:index")
+    message = f"{host}{url}{b64nonce}/{b64ct}"
+    send_mail("Link", message, settings.DEFAULT_FROM_EMAIL, ["test@pinpoint.de"])
+    print(message)

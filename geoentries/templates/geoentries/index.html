@@ -14,7 +14,7 @@ See NOTICE file for details.
 {% endblock %}
 {% block body %}
 <header>
-    <img src="" alt="Icon" />
+    <img src="{% static 'geoentries/icon.svg' %}" alt="Icon" />
     <a href="{% url 'admin:index' %}">login</a>
     <a href="{% url 'geoentries:list'%}">Alle Anliegen</a>
 </header>
