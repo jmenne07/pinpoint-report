@@ -13,11 +13,7 @@ See NOTICE file for details.
 <link rel="stylesheet" href="{% static 'geoentries/index-style.css' %}" />
 {% endblock %}
 {% block body %}
-<header>
-    <img src="{% static 'geoentries/icon.svg' %}" alt="Icon" />
-    <a href="{% url 'admin:index' %}">login</a>
-    <a href="{% url 'geoentries:list'%}">Alle Anliegen</a>
-</header>
+
 
 <section id="main-section">
     <h2>Pinpoint</h2>
@@ -31,7 +27,7 @@ See NOTICE file for details.
     </div>
     <h3>Anliegen</h3>
     {% if entries %}{% for entry in entries %}
-    <div class="card entry">
+    <div class="card entry s{{entry.status}}">
         <a href="{% url 'geoentries:detail' entry.id%}">
             <h4>{{ entry.title }} </h4>
             <p>Status: {{ entry.get_status_display }} </p>

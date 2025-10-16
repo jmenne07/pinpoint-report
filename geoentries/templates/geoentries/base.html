@@ -24,6 +24,11 @@ See NOTICE file for details.
 </head>
 
 <body>
+    <header>
+        <img src="{% static 'geoentries/icon.svg' %}" alt="Icon" />
+        <a href="{% url 'admin:index' %}">login</a>
+        <a href="{% url 'geoentries:list'%}">Alle Anliegen</a>
+    </header>
     {% block body %}
     {% endblock %}
 </body>

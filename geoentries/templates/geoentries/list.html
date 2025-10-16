@@ -5,14 +5,35 @@ See NOTICE file for details.
 -->
 {% extends "geoentries/base.html" %}
 {% load static %}
+{% block stylesheets %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 
+<link rel="stylesheet" href="{% static 'geoentries/list-style.css' %}" />
+{% endblock %}
 {% block body %}
-List with every Request
-<ul>
+<h2>Alle Anliegen</h2>
+<div id="map-container" class="card">
+    <div id="map"></div>
+    <script src="{% static 'geoentries/mapsetup.js' %}"></script>
+</div>
+<div class="container">
     {% for entry in entries %}
-    <li><a href="{% url 'geoentries:detail' entry.id %}" >{{entry}} {{entry.id}}</a> {{entry.category.name}} {{ entry.status}}</li>
+    <div class="card entry s{{entry.status}}">
+        <a href="{% url 'geoentries:detail' entry.id%}">
+            <h4>{{ entry.title }} </h4>
+            <p>Status: {{ entry.get_status_display }} </p>
+            <p>Beschreibung</p>
+            {% if entry.image %}
+            <img src="{{ entry.image.url }}" alt="Bild konnte nicht geladen werden" />
+            {% endif %}
+
+        </a>
+    </div>
     {% endfor %}
-</ul>
+</div>
 
 <a href="{% url 'geoentries:index' %}">Back</a>
+<script src="{% static 'geoentries/locationcluster.js' %}"></script>
 {% endblock %}
