@@ -9,6 +9,7 @@ from typing import Any
 
 from Crypto.Cipher import ChaCha20
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -71,7 +72,7 @@ class EntryCreateView(CreateView):
         return response
 
 
-class EntryUpdateView(UpdateView):
+class EntryUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "geoentries/update.html"
     model = Entry
     fields = [

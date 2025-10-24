@@ -2,6 +2,7 @@
 # Licensed under the Apache License, Version 2.0
 # See NOTICE file for details.
 
+from django.contrib.auth import views as auth_views
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
@@ -26,4 +27,15 @@ urlpatterns = [
     path("locations", views.get_location_data, name="locations"),
     path("open311/v2/", include(router.urls)),
     path("<str:b64nonce>/<str:b64ct>", views.close_with_link_view, name="finish"),
+]
+
+urlpatterns += [
+    path(
+        "login", auth_views.LoginView.as_view(next_page="geoentries:list"), name="login"
+    ),
+    path(
+        "logout",
+        auth_views.LogoutView.as_view(next_page="geoentries:index"),
+        name="logout",
+    ),
 ]

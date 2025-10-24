@@ -26,10 +26,17 @@ See NOTICE file for details.
 <body>
     <header>
         <img src="{% static 'geoentries/icon.svg' %}" alt="Icon" />
-        <a href="{% url 'admin:index' %}">login</a>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'geoentries:logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+        {% else %}
+        <a href="{% url 'geoentries:login' %}">login</a>
+        {% endif %}
         <a href="{% url 'geoentries:list'%}">Alle Anliegen</a>
     </header>
-    {% block body %}
+    {% block content %}
     {% endblock %}
 </body>
 

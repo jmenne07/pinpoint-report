@@ -20,6 +20,12 @@ body {
     margin: auto;
 }
 
+/* Remove all prestyling of buttons*/
+/* TODO: Find a better way to style the header button, but right now it does not hurt*/
+button {
+    all: unset;
+}
+
 header {
     background-color: var(--color-card-bg);
     padding: 5px 10px;
@@ -37,6 +43,28 @@ header {
 
         &:active {
             box-shadow: inset 1px 1px 2px 2px var(--color-shadow);
+        }
+    }
+
+
+    form {
+        float: right;
+
+        button {
+
+            float: right;
+            padding: 0rem 0.5rem;
+            margin: auto;
+            border-radius: var(--border-radius);
+
+            &:hover {
+                box-shadow: 1px 1px 2px 2px var(--color-shadow);
+            }
+
+            &:active {
+                box-shadow: inset 1px 1px 2px 2px var(--color-shadow);
+            }
+
         }
     }
 
