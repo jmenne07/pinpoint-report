@@ -30,6 +30,7 @@ dev = [
   "isort",
   "pyright",
   "django-stubs",
+  "django-cors-headers",
 ]
 test = [
   # Testing / debugging

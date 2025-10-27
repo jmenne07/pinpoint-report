@@ -21,6 +21,7 @@ from django.views.generic import (
     ListView,
     TemplateView,
     UpdateView,
+    View,
 )
 from rest_framework import mixins, viewsets
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
@@ -72,6 +73,12 @@ class EntryCreateView(CreateView):
         return response
 
 
+class EntryListView(ListView):
+    template_name = "geoentries/list.html"
+    context_object_name = "entries"
+    model = Entry
+
+
 class EntryUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "geoentries/update.html"
     model = Entry
@@ -89,15 +96,15 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy("geoentries:index")
 
 
-class EntryListView(ListView):
-    template_name = "geoentries/list.html"
-    context_object_name = "entries"
-    model = Entry
-
-
 class EntryDetailView(DetailView):
     model = Entry
     template_name = "geoentries/detail.html"
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if request.user.is_authenticated:
+            return redirect("geoentries:update", pk=self.object.pk)
+        return super().get(request, *args, **kwargs)
 
 
 class EntryAPIViewSet(

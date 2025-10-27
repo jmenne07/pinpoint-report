@@ -6,6 +6,7 @@ drf-spectacular
 django-debug-toolbar
 django-filter
 
+django-cors-headers
 # Crypto related requirements
 pycryptodome
 

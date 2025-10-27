@@ -64,6 +64,12 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+# Corsheader config
+if DEBUG:
+    INSTALLED_APPS = [*INSTALLED_APPS, "corsheaders"]
+    MIDDLEWARE = [*MIDDLEWARE, "corsheaders.middleware.CorsMiddleware"]
+    CORS_ALLOWED_ORIGINS = ["http://localhost:8000", "http://127.0.0.1:8000"]
+
 ROOT_URLCONF = "openpinpoint.urls"
 
 TEMPLATES = [
