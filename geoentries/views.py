@@ -21,7 +21,6 @@ from django.views.generic import (
     ListView,
     TemplateView,
     UpdateView,
-    View,
 )
 from rest_framework import mixins, viewsets
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
@@ -78,6 +77,12 @@ class EntryListView(ListView):
     context_object_name = "entries"
     model = Entry
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+
+        queryset = queryset.filter(published=True)
+        return queryset
+
 
 class EntryUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "geoentries/update.html"
@@ -85,6 +90,7 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
     fields = [
         "category",
         "status",
+        "published",
         "title",
         "description",
         "latitude",

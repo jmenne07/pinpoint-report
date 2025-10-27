@@ -24,6 +24,7 @@ class EntryAdmin(admin.ModelAdmin):
         ("title", "category"),
         ("creation_time", "update_time"),
         "status",
+        "published",
         "description",
         "email",
         ("latitude", "longitude"),

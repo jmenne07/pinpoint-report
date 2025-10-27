@@ -74,6 +74,7 @@ class Entry(models.Model):
     # Time based fields
     creation_time = models.DateTimeField(auto_now=True)
     update_time = models.DateTimeField(auto_now_add=True)
+    published = models.BooleanField(default=settings.DEBUG)
 
     title = models.CharField(max_length=100)
     category = models.ForeignKey(
@@ -81,8 +82,6 @@ class Entry(models.Model):
     )
 
     status = models.IntegerField(choices=Status, default=0)  # type: ignore
-    # _old_status = models.IntegerField(choices=Status, default=0)  # type: ignore
-    # NOTE: The old_status is used to check, if the status gets changed.
 
     description = models.TextField(null=True, blank=True)
 
