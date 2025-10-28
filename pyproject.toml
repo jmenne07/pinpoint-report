@@ -9,7 +9,7 @@ description = "A Django app for managing and categorizing entries, built as part
 authors = [{ name = "Jörn Menne", email = "jmenne@posteo.de" }]
 license = "Apache-2.0"
 license-files = ["LICENSE"]
-requires-python = ">=3.13"
+requires-python = ">=3.13,<3.14"
 dependencies = [
   # Core runtime dependencies
   "django",
