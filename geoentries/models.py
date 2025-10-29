@@ -13,7 +13,7 @@ from typing import override
 
 from Crypto.Cipher import ChaCha20
 from django.conf import settings
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 from django.core.mail import send_mail
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
@@ -40,11 +40,12 @@ class Category(models.Model):
 
     description = models.TextField(null=True, blank=True)
 
-    users = models.ManyToManyField(User, related_name="owner", blank=True)
-    groups = models.ManyToManyField(Group, related_name="group_owner", blank=True)
+    #  users = models.ManyToManyField(User, related_name="owner", blank=True)
+    #  groups = models.ManyToManyField(Group, related_name="group_owner", blank=True)
 
     class Meta:
         verbose_name_plural = "Categories"
+        permissions = [("object_view", "object_view")]
 
     @override
     def __str__(self) -> str:
@@ -109,7 +110,7 @@ class Entry(models.Model):
     def __str__(self) -> str:
         return str(self.title)
 
-    def save(self, **kwargs):
+    def save(self, **kwargs) -> None:
         try:
             old_status = Entry.objects.get(pk=self.id).status
             if old_status == 0 and self.status == 1:
@@ -117,6 +118,18 @@ class Entry(models.Model):
         except Entry.DoesNotExist:
             pass
         super().save(**kwargs)
+
+
+class GroupProfile(models.Model):
+    """
+    A small model to expand the groups
+    """
+
+    group = models.OneToOneField(Group, on_delete=models.CASCADE)
+    categories = models.ManyToManyField(Category)
+
+    def __str__(self) -> str:
+        return "Categories"
 
 
 def send_close_link(entry) -> None:
