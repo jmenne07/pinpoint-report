@@ -8,6 +8,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import GroupAdmin
 from django.contrib.auth.models import Group
+from django.db.models import QuerySet
 from django.utils.html import format_html
 
 from .models import Category, Entry, GroupProfile
@@ -20,11 +21,41 @@ class CategoryAdmin(admin.ModelAdmin):
     exlude = None
 
     def get_queryset(self, request):
+        qs = super().get_queryset(request)
         if request.user.is_superuser:
-            return super().get_queryset(request)
+            return qs
         # TODO: Make sure, this works also without groups
         # TODO: Better queryset
-        return request.user.groups.first().groupprofile.categories.all()
+        branchqs = request.user.groups.first().groupprofile.categories.all()
+        import pdb
+
+        pdb.set_trace()
+        branch = get_categorybranch(branchqs)
+        qs = qs.filter(id__in=branch)
+        return qs
+
+
+def get_categorybranch(queryset: QuerySet[Category]) -> set[int]:
+    """
+    A function to get all ids of Category branches
+
+    Arguments:
+
+        queryset: QuerySet[Category]
+            A set of Categories, for which the subcategories should be known
+
+    Returns: Set[int]
+        A set of integer, which contains every id of categories in the initial queryset and their subcategories.
+    """
+    pks = set()
+    # TODO: Refactor the warning
+    if queryset.model != Category:
+        print("Warning")
+    for cat in queryset:
+        pks.add(cat.id)
+        subcats = get_categorybranch(cat.subcategories.all())
+        pks = pks.union(subcats)
+    return pks
 
 
 @admin.register(Entry)
