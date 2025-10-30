@@ -11,7 +11,10 @@ from django.contrib.auth.models import Group
 from django.db.models import QuerySet
 from django.utils.html import format_html
 
+from geoentries.types import AdminRequest
+
 from .models import Category, Entry, GroupProfile
+from .types import UserLike
 
 # Register your models here.
 
@@ -20,19 +23,26 @@ from .models import Category, Entry, GroupProfile
 class CategoryAdmin(admin.ModelAdmin):
     exlude = None
 
-    def get_queryset(self, request):
+    def get_queryset(self, request: AdminRequest) -> QuerySet[Category]:
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
         # TODO: Make sure, this works also without groups
         # TODO: Better queryset
-        branchqs = request.user.groups.first().groupprofile.categories.all()
-        import pdb
+        return get_allowed_categories(request.user, qs)
 
-        pdb.set_trace()
-        branch = get_categorybranch(branchqs)
-        qs = qs.filter(id__in=branch)
-        return qs
+
+def get_allowed_categories(
+    user: UserLike, queryset: QuerySet[Category] | None = None
+) -> QuerySet[Category]:
+    branchqs = Category.objects.none()
+    for group in user.groups.all():
+        branchqs = branchqs.union(group.groupprofile.categories.all())
+
+    cats = get_categorybranch(branchqs)
+    if not queryset:
+        queryset = Category.objects.all()
+    return queryset.filter(id__in=cats)
 
 
 def get_categorybranch(queryset: QuerySet[Category]) -> set[int]:
@@ -76,7 +86,7 @@ class EntryAdmin(admin.ModelAdmin):
         "update_time",
     ]
 
-    def image_preview(self, obj):
+    def image_preview(self, obj: Entry) -> str:
         if obj.image:
             return format_html(
                 '<img src="{}" style="max-height: 100px;"/>', obj.image.url
@@ -85,14 +95,14 @@ class EntryAdmin(admin.ModelAdmin):
 
     image_preview.short_description = "Preview"
 
-    def get_queryset(self, request):
+    def get_queryset(self, request: AdminRequest) -> QuerySet[Entry]:
         # TODO: Make sure this works without groups
         # TODO: Better queryset
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
 
-        cats = request.user.groups.first().groupprofile.categories.all()
+        cats = get_allowed_categories(request.user)
 
         return qs.filter(category__in=cats)
 

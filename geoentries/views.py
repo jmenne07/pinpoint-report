@@ -11,7 +11,8 @@ from Crypto.Cipher import ChaCha20
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
-from django.http import JsonResponse
+from django.db.models import QuerySet
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.decorators.http import require_GET
@@ -25,6 +26,8 @@ from django.views.generic import (
 from rest_framework import mixins, viewsets
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework_xml.renderers import XMLRenderer
+
+from geoentries.forms import EntryForm
 
 from .models import Category, Entry
 from .serializers import CategorySerializer, EntrySerializer
@@ -41,7 +44,7 @@ class IndexView(TemplateView):
         return context
 
 
-def get_location_data(request):
+def get_location_data(request: HttpRequest):
     locations = Entry.objects.all().values("id", "latitude", "longitude")
     return JsonResponse(list(locations), safe=False)
 
@@ -60,7 +63,7 @@ class EntryCreateView(CreateView):
     ]
     success_url = reverse_lazy("geoentries:index")
 
-    def form_valid(self, form):
+    def form_valid(self, form: EntryForm):
         response = super().form_valid(form)
         # TODO: Test
         send_mail(
@@ -77,7 +80,7 @@ class EntryListView(ListView):
     context_object_name = "entries"
     model = Entry
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Any]:
         queryset = super().get_queryset()
 
         queryset = queryset.filter(published=True)
@@ -106,7 +109,7 @@ class EntryDetailView(DetailView):
     model = Entry
     template_name = "geoentries/detail.html"
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         self.object = self.get_object()
         if request.user.is_authenticated:
             return redirect("geoentries:update", pk=self.object.pk)
@@ -135,7 +138,7 @@ class CategoryAPIViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 @require_GET
-def close_with_link_view(request, b64nonce, b64ct):  # type: ignore
+def close_with_link_view(request: HttpRequest, b64nonce: str, b64ct: str):  # type: ignore
     # TODO: Test
     """
     A view which acceprts an nonce and a ciphertext.

@@ -132,7 +132,7 @@ class GroupProfile(models.Model):
         return "Categories"
 
 
-def send_close_link(entry) -> None:
+def send_close_link(entry: Entry) -> None:
     """
     Sends a link, which sets the status of an entry from "In progress" to "Closed"
     """
