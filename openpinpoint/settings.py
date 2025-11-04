@@ -20,6 +20,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 import sys
 from pathlib import Path
+from minio_storage.policy import Policy
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -186,3 +187,21 @@ if not TESTING:
         "debug_toolbar.middleware.DebugToolbarMiddleware",
         *MIDDLEWARE,
     ]
+
+
+# Minio
+MINIO_STORAGE_ENDPOINT = "localhost:9000"
+MINIO_STORAGE_ACCESS_KEY = "minio"
+MINIO_STORAGE_SECRET_KEY = "minio123"
+MINIO_STORAGE_USE_HTTPS = False
+MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
+MINIO_STORAGE_AUTO_CREATE_MEDIA_POLICY = "GET_ONLY"
+MINIO_STORAGE_MEDIA_BUCKET_NAME = "media"
+STORAGES = {
+    "default": {
+        "BACKEND": "minio_storage.storage.MinioMediaStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+}

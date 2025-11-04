@@ -11,35 +11,37 @@ license = "Apache-2.0"
 license-files = ["LICENSE"]
 requires-python = ">=3.13"
 dependencies = [
-  # Core runtime dependencies
-  "django",
-  "djangorestframework",
-  "djangorestframework-xml",
-  "drf-spectacular",
-  "django-filter",
+    # Core runtime dependencies
+    "django",
+    "djangorestframework",
+    "djangorestframework-xml",
+    "drf-spectacular",
+    "django-filter",
 
-  "pycryptodome",
-  "Pillow",
+    "pycryptodome",
+    "Pillow",
+
+    "django-minio-storage",
 ]
 
 [project.optional-dependencies]
 dev = [
-  # Development / code quality
-  "black",
-  "ruff",
-  "isort",
-  "pyright",
-  "django-stubs",
-  "django-cors-headers",
+    # Development / code quality
+    "black",
+    "ruff",
+    "isort",
+    "pyright",
+    "django-stubs",
+    "django-cors-headers",
 ]
 test = [
-  # Testing / debugging
-  "pytest",
-  "pytest-django",
-  "selenium",
-  "pytest-selenium",
-  "django-debug-toolbar",
-  "aiosmtpd",
+    # Testing / debugging
+    "pytest",
+    "pytest-django",
+    "selenium",
+    "pytest-selenium",
+    "django-debug-toolbar",
+    "aiosmtpd",
 ]
 
 [tool.setuptools.packages.find]

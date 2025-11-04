@@ -31,6 +31,7 @@ from geoentries.forms import EntryForm
 
 from .models import Category, Entry
 from .serializers import CategorySerializer, EntrySerializer
+from django.core.files.storage import default_storage
 
 
 class IndexView(TemplateView):
