@@ -11,10 +11,8 @@ from django.contrib.auth.models import Group
 from django.db.models import QuerySet
 from django.utils.html import format_html
 
-from geoentries.types import AdminRequest
 
 from .models import Category, Entry, GroupProfile
-from .types import UserLike
 
 # Register your models here.
 
@@ -23,7 +21,7 @@ from .types import UserLike
 class CategoryAdmin(admin.ModelAdmin):
     exlude = None
 
-    def get_queryset(self, request: AdminRequest) -> QuerySet[Category]:
+    def get_queryset(self, request) -> QuerySet[Category]:
         qs = super().get_queryset(request)
         if request.user.is_superuser:
             return qs
@@ -33,7 +31,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 def get_allowed_categories(
-    user: UserLike, queryset: QuerySet[Category] | None = None
+    user, queryset: QuerySet[Category] | None = None
 ) -> QuerySet[Category]:
     branchqs = Category.objects.none()
     for group in user.groups.all():
@@ -95,7 +93,7 @@ class EntryAdmin(admin.ModelAdmin):
 
     image_preview.short_description = "Preview"
 
-    def get_queryset(self, request: AdminRequest) -> QuerySet[Entry]:
+    def get_queryset(self, request) -> QuerySet[Entry]:
         # TODO: Make sure this works without groups
         # TODO: Better queryset
         qs = super().get_queryset(request)
