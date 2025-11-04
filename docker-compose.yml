@@ -9,3 +9,19 @@ services:
       MINIO_ROOT_USER: "minio"
       MINIO_ROOT_PASSWORD: "minio123"
     command: server /data --console-address ":9001"
+
+  db:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: pg123
+      POSTGRES_USER: open
+      POSTGRES_DB: pinpoint
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    restart: unless-stopped
+    ports:
+      - 8080:8080

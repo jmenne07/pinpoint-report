@@ -11,7 +11,6 @@ from django.contrib.auth.models import Group
 from django.db.models import QuerySet
 from django.utils.html import format_html
 
-
 from .models import Category, Entry, GroupProfile
 
 # Register your models here.

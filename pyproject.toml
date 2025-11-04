@@ -17,11 +17,12 @@ dependencies = [
     "djangorestframework-xml",
     "drf-spectacular",
     "django-filter",
+    "django-minio-storage",
 
     "pycryptodome",
     "Pillow",
 
-    "django-minio-storage",
+    "psycopg2-binary",
 ]
 
 [project.optional-dependencies]
