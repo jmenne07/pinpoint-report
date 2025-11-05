@@ -94,20 +94,24 @@ WSGI_APPLICATION = "openpinpoint.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#    "default": {
-#        "ENGINE": "django.db.backends.sqlite3",
-#        "NAME": BASE_DIR / "db.sqlite3",
-#    }
-# }
+USE_POSTGRES = False
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "OPTIONS": {
-            "service": "geoentries",
-        },
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
+
+if USE_POSTGRES:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "OPTIONS": {
+                "service": "geoentries",
+            },
+        }
+    }
 
 
 # Password validation
@@ -197,18 +201,20 @@ if not TESTING:
 
 
 # Minio as File-Storage
-MINIO_STORAGE_ENDPOINT = "localhost:9000"
-MINIO_STORAGE_ACCESS_KEY = "minio"
-MINIO_STORAGE_SECRET_KEY = "minio123"
-MINIO_STORAGE_USE_HTTPS = False
-MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
-MINIO_STORAGE_AUTO_CREATE_MEDIA_POLICY = "GET_ONLY"
-MINIO_STORAGE_MEDIA_BUCKET_NAME = "media"
-STORAGES = {
-    "default": {
-        "BACKEND": "minio_storage.storage.MinioMediaStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-    },
-}
+USE_MINIO = False
+if USE_MINIO:
+    MINIO_STORAGE_ENDPOINT = "localhost:9000"
+    MINIO_STORAGE_ACCESS_KEY = "minio"
+    MINIO_STORAGE_SECRET_KEY = "minio123"
+    MINIO_STORAGE_USE_HTTPS = False
+    MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
+    MINIO_STORAGE_AUTO_CREATE_MEDIA_POLICY = "GET_ONLY"
+    MINIO_STORAGE_MEDIA_BUCKET_NAME = "media"
+    STORAGES = {
+        "default": {
+            "BACKEND": "minio_storage.storage.MinioMediaStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
