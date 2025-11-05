@@ -94,8 +94,8 @@ WSGI_APPLICATION = "openpinpoint.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-USE_POSTGRES = False
 
+USE_POSTGRES = True
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -104,12 +104,22 @@ DATABASES = {
 }
 
 if USE_POSTGRES:
+    # DATABASES = {
+    #    "default": {
+    #        "ENGINE": "django.db.backends.postgresql",
+    #        "OPTIONS": {
+    #            "service": "geoentries",
+    #        },
+    #    }
+    # }
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "OPTIONS": {
-                "service": "geoentries",
-            },
+            "NAME": "pinpoint",
+            "USER": "open",
+            "PASSWORD": "pg123",
+            "HOST": "db",
+            "PORT": 5432,
         }
     }
 
@@ -201,7 +211,7 @@ if not TESTING:
 
 
 # Minio as File-Storage
-USE_MINIO = False
+USE_MINIO = True
 if USE_MINIO:
     MINIO_STORAGE_ENDPOINT = "localhost:9000"
     MINIO_STORAGE_ACCESS_KEY = "minio"

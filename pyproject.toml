@@ -18,11 +18,13 @@ dependencies = [
     "drf-spectacular",
     "django-filter",
     "django-minio-storage",
+    "django-debug-toolbar",
 
     "pycryptodome",
     "Pillow",
 
     "psycopg2-binary",
+    "django-cors-headers",
 ]
 
 [project.optional-dependencies]
@@ -33,7 +35,6 @@ dev = [
     "isort",
     "pyright",
     "django-stubs",
-    "django-cors-headers",
 ]
 test = [
     # Testing / debugging
@@ -41,7 +42,6 @@ test = [
     "pytest-django",
     "selenium",
     "pytest-selenium",
-    "django-debug-toolbar",
     "aiosmtpd",
 ]
 
