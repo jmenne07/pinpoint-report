@@ -11,7 +11,7 @@ from django.contrib.auth.models import Group
 from django.db.models import QuerySet
 from django.utils.html import format_html
 
-from .models import Category, Entry, GroupProfile
+from .models import Category, Entry, GroupProfile, Mail
 
 # Register your models here.
 
@@ -117,3 +117,8 @@ class GroupInline(admin.StackedInline):
 class MyGroupAdmin(GroupAdmin):
     exclude = None
     inlines = [GroupInline]
+
+
+@admin.register(Mail)
+class MailAdmin(admin.ModelAdmin):
+    exlcude = None

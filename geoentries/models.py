@@ -132,6 +132,20 @@ class GroupProfile(models.Model):
         return "Categories"
 
 
+class Mail(models.Model):
+    """
+    Database entries for mails
+    """
+
+    title = models.CharField(max_length=50, unique=True)
+    subject = models.CharField(max_length=80)
+    body = models.TextField(blank=False, null=False, default="")
+
+    @override
+    def __str__(self):
+        return self.title
+
+
 def send_close_link(entry: Entry) -> None:
     """
     Sends a link, which sets the status of an entry from "In progress" to "Closed"
@@ -153,6 +167,20 @@ def send_close_link(entry: Entry) -> None:
 
     host = "localhost:8000"
     url = reverse("geoentries:index")
-    message = f"{host}{url}{b64nonce}/{b64ct}"
-    send_mail("Link", message, settings.DEFAULT_FROM_EMAIL, ["test@pinpoint.de"])
+    link = f"{host}{url}{b64nonce}/{b64ct}"
+
+    subject = "Close link"
+    message = link
+
+    mail_object = Mail.objects.filter(title="closelink").first()
+    if mail_object:
+        subject = mail_object.subject
+        message = mail_object.body
+        message = message.replace("{{id}}", str(entry.id))
+        message = message.replace("{{link}}", link)
+
+    else:
+        print("Warngin")
+        # WARNING: Error handling has to be improved
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ["test@pinpoint.de"])
     print(message)

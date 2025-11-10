@@ -29,7 +29,7 @@ from rest_framework_xml.renderers import XMLRenderer
 
 from geoentries.forms import EntryForm
 
-from .models import Category, Entry
+from .models import Category, Entry, Mail
 from .serializers import CategorySerializer, EntrySerializer
 
 
@@ -66,9 +66,19 @@ class EntryCreateView(CreateView):
     def form_valid(self, form: EntryForm):
         response = super().form_valid(form)
         # TODO: Test
+        subject = "Confirmation"
+        message = f"Das Anliegen wurde mit der ID {self.object.id} erstellt."
+
+        mail_object = Mail.objects.filter(title="creation").first()
+        if mail_object:
+            subject = mail_object.subject
+            message = mail_object.body.replace("{{id}}", str(self.object.id))
+        else:
+            print("warning, mail not found")
+        # WARNING: Error handling has to be improved
         send_mail(
-            "Confirmation",
-            f"Das Anliegen wurde mit der ID {self.object.id} erstellt.",  # type:ignore
+            subject,
+            message,
             settings.DEFAULT_FROM_EMAIL,
             [self.object.email],  # type: ignore
         )
