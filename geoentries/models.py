@@ -28,7 +28,7 @@ class Category(models.Model):
     Groups define who can work on an entry.
     """
 
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100, unique=True, primary_key=True)
     # TODO: Prevent circles
     parent = models.ForeignKey(
         "self",
@@ -45,7 +45,6 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "Categories"
-        permissions = [("object_view", "object_view")]
 
     @override
     def __str__(self) -> str:

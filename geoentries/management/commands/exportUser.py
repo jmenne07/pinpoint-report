@@ -3,10 +3,10 @@
 # See NOTICE file for details.
 import json
 
+from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
-from ...models import Category
-from ...serializers import CategorySerializer
+from ...serializers import UserSerializer
 
 
 class Command(BaseCommand):
@@ -14,8 +14,9 @@ class Command(BaseCommand):
         parser.add_argument("path", type=str)
 
     def handle(self, *args, **kwargs):
-        cats = Category.objects.all()
-        ser = CategorySerializer(cats, many=True)
+        users = User.objects.all()
+
+        ser = UserSerializer(users, many=True)
 
         path = kwargs["path"]
         with open(path, "w") as f:
