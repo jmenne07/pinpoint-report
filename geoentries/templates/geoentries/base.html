@@ -32,7 +32,7 @@ See NOTICE file for details.
             <button type="submit">Logout</button>
         </form>
         {% else %}
-        <a href="{% url 'geoentries:login' %}">login</a>
+        <a href="{% url 'admin:login' %}">login</a>
         {% endif %}
         <a href="{% url 'geoentries:list'%}">Alle Anliegen</a>
     </header>

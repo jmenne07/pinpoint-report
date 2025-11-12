@@ -119,11 +119,13 @@ class EntryDetailView(DetailView):
     model = Entry
     template_name = "geoentries/detail.html"
 
-    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        self.object = self.get_object()
-        if request.user.is_authenticated:
-            return redirect("geoentries:update", pk=self.object.pk)
-        return super().get(request, *args, **kwargs)
+
+#    NOTE: Outcommented since, right now the admin interface shall be used to modify entries
+#    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+#        self.object = self.get_object()
+#        if request.user.is_authenticated:
+#            return redirect("geoentries:update", pk=self.object.pk)
+#        return super().get(request, *args, **kwargs)
 
 
 class EntryAPIViewSet(
@@ -137,6 +139,8 @@ class EntryAPIViewSet(
     serializer_class = EntrySerializer
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer, XMLRenderer]
     filterset_fields = ["id", "category", "status"]
+
+    # TODO: Check if the link is set correct
 
 
 class CategoryAPIViewSet(viewsets.ReadOnlyModelViewSet):
