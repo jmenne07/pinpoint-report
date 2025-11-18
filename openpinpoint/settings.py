@@ -34,7 +34,7 @@ SECRET_KEY = "django-insecure-loc#%lq_3s($un1$y#eh1%q(biw#0@ow6&7#ut$p0rufb*&dnl
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]"]
+ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "192.168.49.2"]
 
 
 INTERNAL_IPS = ["127.0.0.1"]
@@ -119,6 +119,7 @@ if USE_POSTGRES:
             "USER": "open",
             "PASSWORD": "pg123",
             "HOST": "db",
+            # "HOST": "localhost",
             "PORT": 5432,
         }
     }
@@ -228,3 +229,6 @@ if USE_MINIO:
             "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
         },
     }
+
+STATIC_URL = "static/"
+STATIC_ROOT = "./static/"
