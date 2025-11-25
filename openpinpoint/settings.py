@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "django_filters",
     "geoentries",
+    "mptt",
 ]
 
 MIDDLEWARE = [
@@ -95,7 +96,7 @@ WSGI_APPLICATION = "openpinpoint.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 
-USE_POSTGRES = True
+USE_POSTGRES = False
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -212,7 +213,7 @@ if not TESTING:
 
 
 # Minio as File-Storage
-USE_MINIO = True
+USE_MINIO = False
 if USE_MINIO:
     MINIO_STORAGE_ENDPOINT = "localhost:9000"
     MINIO_STORAGE_ACCESS_KEY = "minio"

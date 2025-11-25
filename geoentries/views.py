@@ -10,7 +10,6 @@ from typing import Any
 from Crypto.Cipher import ChaCha20
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse, JsonResponse
@@ -31,7 +30,7 @@ from rest_framework_xml.renderers import XMLRenderer
 from geoentries.forms import EntryForm
 
 from .models import Category, Entry, Mail
-from .serializers import CategorySerializer, EntrySerializer, UserSerializer
+from .serializers import CategorySerializer, EntrySerializer
 
 
 class IndexView(TemplateView):

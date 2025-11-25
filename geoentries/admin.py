@@ -10,6 +10,7 @@ from django.contrib.auth.admin import GroupAdmin
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
 from django.utils.html import format_html
+from mptt.admin import MPTTModelAdmin
 
 from .models import Category, Entry, GroupProfile, Mail
 
@@ -17,8 +18,9 @@ from .models import Category, Entry, GroupProfile, Mail
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(MPTTModelAdmin):
     exlude = None
+    mptt_level_indent = 20
 
     def get_queryset(self, request) -> QuerySet[Category]:
         qs = super().get_queryset(request)

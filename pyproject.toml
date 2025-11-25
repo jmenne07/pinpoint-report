@@ -3,13 +3,6 @@ requires = ["setuptools>=68.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "openpinpoint"
-version = "0.2.0"
-description = "A Django app for managing and categorizing entries, built as part of the OpenPinpoint project."
-authors = [{ name = "Jörn Menne", email = "jmenne@posteo.de" }]
-license = "Apache-2.0"
-license-files = ["LICENSE"]
-requires-python = ">=3.13"
 dependencies = [
     # Core runtime dependencies
     "django",
@@ -19,6 +12,7 @@ dependencies = [
     "django-filter",
     "django-minio-storage",
     "django-debug-toolbar",
+    "djanog-mptt",
 
     "pycryptodome",
     "Pillow",
@@ -26,6 +20,13 @@ dependencies = [
     "psycopg2-binary",
     "django-cors-headers",
 ]
+name = "openpinpoint"
+version = "0.2.0"
+description = "A Django app for managing and categorizing entries, built as part of the OpenPinpoint project."
+authors = [{ name = "Jörn Menne", email = "jmenne@posteo.de" }]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+requires-python = ">=3.13"
 
 [project.optional-dependencies]
 dev = [

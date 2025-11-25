@@ -18,11 +18,12 @@ from django.core.mail import send_mail
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
+from mptt.models import MPTTModel, TreeForeignKey
 
 # Create your models here.
 
 
-class Category(models.Model):
+class Category(MPTTModel):
     """
     A class defining a Category for the database.
     Groups define who can work on an entry.
@@ -30,7 +31,7 @@ class Category(models.Model):
 
     name = models.CharField(max_length=100, unique=True, primary_key=True)
     # TODO: Prevent circles
-    parent = models.ForeignKey(
+    parent = TreeForeignKey(
         "self",
         on_delete=models.CASCADE,
         related_name="subcategories",
@@ -40,11 +41,13 @@ class Category(models.Model):
 
     description = models.TextField(null=True, blank=True)
 
-    #  users = models.ManyToManyField(User, related_name="owner", blank=True)
-    #  groups = models.ManyToManyField(Group, related_name="group_owner", blank=True)
+    email = models.EmailField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Categories"
+
+    class MPTTMeta:
+        order_insertion_by = ["name"]
 
     @override
     def __str__(self) -> str:
