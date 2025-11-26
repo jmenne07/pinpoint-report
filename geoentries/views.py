@@ -39,13 +39,17 @@ class IndexView(TemplateView):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         context = super().get_context_data(**kwargs)
-        context["locations"] = Entry.objects.all()
-        context["entries"] = Entry.objects.order_by("-creation_time")[:2]
+        entries = Entry.objects.filter(published=True)
+
+        context["locations"] = entries
+        context["entries"] = entries.order_by("-creation_time")[:2]
         return context
 
 
 def get_location_data(request: HttpRequest):
-    locations = Entry.objects.all().values("id", "latitude", "longitude")
+    locations = Entry.objects.filter(published=True).values(
+        "id", "latitude", "longitude"
+    )
     return JsonResponse(list(locations), safe=False)
 
 
