@@ -12,7 +12,7 @@ dependencies = [
     "django-filter",
     "django-minio-storage",
     "django-debug-toolbar",
-    "djanog-mptt",
+    "django-mptt",
 
     "pycryptodome",
     "Pillow",

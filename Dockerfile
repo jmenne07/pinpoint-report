@@ -10,3 +10,4 @@ RUN pip install --upgrade pip && pip install -e . --no-cache
 COPY . /app/
 #RUN python manage.py migrate
 
+CMD ["python", "manage.py", "runserver"]
