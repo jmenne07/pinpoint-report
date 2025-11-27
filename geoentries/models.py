@@ -110,7 +110,15 @@ class Entry(models.Model):
 
     @override
     def __str__(self) -> str:
-        return str(self.title)
+        return (
+            "#"
+            + str(self.id)
+            + ": "
+            + str(self.category)
+            + " ("
+            + str(self.title)
+            + ")"
+        )
 
     def save(self, **kwargs) -> None:
         try:

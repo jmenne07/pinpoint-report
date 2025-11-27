@@ -10,7 +10,7 @@ from django.contrib.auth.admin import GroupAdmin
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
 from django.utils.html import format_html
-from mptt.admin import MPTTModelAdmin
+from mptt.admin import MPTTModelAdmin, TreeRelatedFieldListFilter
 
 from .models import Category, Entry, GroupProfile, Mail
 
@@ -41,7 +41,7 @@ def get_allowed_categories(
     cats = get_categorybranch(branchqs)
     if not queryset:
         queryset = Category.objects.all()
-    return queryset.filter(id__in=cats)
+    return queryset.filter(name__in=cats)
 
 
 def get_categorybranch(queryset: QuerySet[Category]) -> set[int]:
@@ -61,7 +61,8 @@ def get_categorybranch(queryset: QuerySet[Category]) -> set[int]:
     if queryset.model != Category:
         print("Warning")
     for cat in queryset:
-        pks.add(cat.id)
+        # pks.add(cat.id)
+        pks.add(cat.name)
         subcats = get_categorybranch(cat.subcategories.all())
         pks = pks.union(subcats)
     return pks
@@ -84,6 +85,14 @@ class EntryAdmin(admin.ModelAdmin):
         "creation_time",
         "update_time",
     ]
+
+    list_filter = [
+        "status",
+        ("category", TreeRelatedFieldListFilter),
+        "creation_time",
+        "published",
+    ]
+    list_display = ["__str__", "status", "published", "creation_time", "category"]
 
     def image_preview(self, obj: Entry) -> str:
         if obj.image:
