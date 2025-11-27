@@ -68,6 +68,28 @@ def get_categorybranch(queryset: QuerySet[Category]) -> set[int]:
     return pks
 
 
+class CategoryFilter(TreeRelatedFieldListFilter):
+    """
+    Custom filter, which modifies the field_choices of a TreeRelatedFieldListFilter
+
+    The modification makes it so, that only Category are shown, which the user can access
+    """
+
+    def field_choices(self, field, request, model_admin):
+        sfc = super().field_choices(field, request, model_admin)
+        if request.user.is_superuser:
+            return sfc
+        cats = get_allowed_categories(request.user)
+        fc = []
+        catnames = set()
+        for cat in cats:
+            catnames.add(cat.name)
+        for x in sfc:
+            if x[0] in catnames:
+                fc.append(x)
+        return fc
+
+
 @admin.register(Entry)
 class EntryAdmin(admin.ModelAdmin):
     fields = [
@@ -88,7 +110,7 @@ class EntryAdmin(admin.ModelAdmin):
 
     list_filter = [
         "status",
-        ("category", TreeRelatedFieldListFilter),
+        ("category", CategoryFilter),
         "creation_time",
         "published",
     ]
