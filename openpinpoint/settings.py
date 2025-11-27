@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "django_filters",
     "geoentries",
     "mptt",
+    "simple_history",
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
 ]
 
 # Corsheader config
@@ -119,7 +121,7 @@ if USE_POSTGRES:
             "NAME": "pinpoint",
             "USER": "open",
             "PASSWORD": "pg123",
-            "HOST": "db",
+            # "HOST": "db",
             # "HOST": "localhost",
             "PORT": 5432,
         }
@@ -185,7 +187,7 @@ REST_FRAMEWORK = {
 }
 
 # E-Mail configuration. Emails will only be sent, if SEND_MAIL is set to request
-SEND_MAIL = True
+SEND_MAIL = False
 EMAIL_HOST = "localhost"
 EMAIL_PORT = "8025"
 DEFAULT_FROM_EMAIL = "example@pinpoint-report.de"  # Setup for ciphers

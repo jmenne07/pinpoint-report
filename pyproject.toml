@@ -13,6 +13,7 @@ dependencies = [
     "django-minio-storage",
     "django-debug-toolbar",
     "django-mptt",
+    "django-simple-history",
 
     "pycryptodome",
     "Pillow",

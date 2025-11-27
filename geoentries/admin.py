@@ -13,6 +13,7 @@ from django.utils.html import format_html
 from mptt.admin import MPTTModelAdmin, TreeRelatedFieldListFilter
 
 from .models import Category, Entry, GroupProfile, Mail
+from simple_history.admin import SimpleHistoryAdmin
 
 # Register your models here.
 
@@ -91,7 +92,7 @@ class CategoryFilter(TreeRelatedFieldListFilter):
 
 
 @admin.register(Entry)
-class EntryAdmin(admin.ModelAdmin):
+class EntryAdmin(SimpleHistoryAdmin):
     fields = [
         ("title", "category"),
         ("creation_time", "update_time"),
@@ -115,6 +116,8 @@ class EntryAdmin(admin.ModelAdmin):
         "published",
     ]
     list_display = ["__str__", "status", "published", "creation_time", "category"]
+
+    history_list_display = ["status"]
 
     def image_preview(self, obj: Entry) -> str:
         if obj.image:
