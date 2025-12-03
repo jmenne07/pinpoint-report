@@ -11,9 +11,9 @@ from django.contrib.auth.models import Group
 from django.db.models import QuerySet
 from django.utils.html import format_html
 from mptt.admin import MPTTModelAdmin, TreeRelatedFieldListFilter
+from simple_history.admin import SimpleHistoryAdmin
 
 from .models import Category, Entry, GroupProfile, Mail
-from simple_history.admin import SimpleHistoryAdmin
 
 # Register your models here.
 
