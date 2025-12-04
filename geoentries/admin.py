@@ -37,7 +37,10 @@ def get_allowed_categories(
 ) -> QuerySet[Category]:
     branchqs = Category.objects.none()
     for group in user.groups.all():
-        branchqs = branchqs.union(group.groupprofile.categories.all())
+        try:
+            branchqs = branchqs.union(group.groupprofile.categories.all())
+        except Exception as e:
+            print(e)
 
     cats = get_categorybranch(branchqs)
     if not queryset:
