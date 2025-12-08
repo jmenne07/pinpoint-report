@@ -12,6 +12,7 @@ from django.db.models import QuerySet
 from django.utils.html import format_html
 from mptt.admin import MPTTModelAdmin, TreeRelatedFieldListFilter
 from simple_history.admin import SimpleHistoryAdmin
+from django.utils.safestring import mark_safe
 
 from .models import Category, Entry, GroupProfile, Mail
 
@@ -103,13 +104,14 @@ class EntryAdmin(SimpleHistoryAdmin):
         "published",
         "description",
         "email",
-        ("latitude", "longitude"),
+        ("latitude", "longitude", "map"),
         ("image", "image_preview"),
     ]
     readonly_fields = [
         "image_preview",
         "creation_time",
         "update_time",
+        "map",
     ]
 
     list_filter = [
@@ -130,6 +132,57 @@ class EntryAdmin(SimpleHistoryAdmin):
         return ""
 
     image_preview.short_description = "Preview"
+
+    def map(self, obj):
+        if not obj.latitude or not obj.longitude:
+            return "No location available."
+
+        div_id = f"map_{obj.pk}"
+
+        return mark_safe(f"""
+            <div id="{div_id}" style="height: 300px; width: 300px; border:1px solid #ccc;"></div>
+
+            <script>
+            (function() {{
+
+                function initLeafletMap() {{
+                    // Ensure Leaflet is loaded
+                    if (typeof L === "undefined") {{
+                        return setTimeout(initLeafletMap, 100);
+                    }}
+
+                    var container = L.DomUtil.get("{div_id}");
+
+                    // Prevent double initialization
+                    if (container._leaflet_id) {{
+                        return;
+                    }}
+
+                    var map = L.map("{div_id}").setView([{obj.latitude}, {obj.longitude}], 13);
+
+                    L.tileLayer("https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png", {{
+                        maxZoom: 19
+                    }}).addTo(map);
+
+                    L.marker([{obj.latitude}, {obj.longitude}]).addTo(map);
+                }}
+
+                // Run once after page load
+                window.addEventListener("load", initLeafletMap);
+
+                // Run again after Django admin inline/fieldset interactions
+                document.addEventListener("DOMContentLoaded", initLeafletMap);
+
+                // Admin sometimes triggers re-renders; check again after 500ms
+                setTimeout(initLeafletMap, 500);
+
+            }})();
+            </script>
+        """)
+
+    class Media:
+        css = {"all": ("https://unpkg.com/leaflet/dist/leaflet.css",)}
+        js = ("https://unpkg.com/leaflet/dist/leaflet.js",)
 
     def get_queryset(self, request) -> QuerySet[Entry]:
         # TODO: Make sure this works without groups
