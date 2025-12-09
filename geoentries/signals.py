@@ -63,11 +63,12 @@ def presave_entry_handler(sender, instance, **kwargs):
         return
 
     def send_mails_on_commit():
-        old_status = old_entry.status
-        if old_status == 0 and instance.status == 1:
+        if old_entry.status == 0 and instance.status == 1:
             send_close_link(instance)
             send_external_mail("info_allocation", instance)
 
+        if old_entry.category != instance.category:
+            send_internal_mail("allocation", instance)
         if instance.status == 2:
             send_external_mail("finished", instance)
 
