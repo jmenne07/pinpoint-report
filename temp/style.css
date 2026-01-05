@@ -1,0 +1,160 @@
+/*
+ * Copyright 2025 Jörn Menne
+ * Licensed under the Apache License, Version 2.0
+ * See NOTICE file for details.
+ */
+
+
+:root {
+    --radius: 0.5rem;
+    --transition-duration: 1s;
+
+    --rotation: 0deg;
+    --border-radius: 8px;
+
+
+    /* Colors for light theme */
+    --color-bg: lightblue;
+    --color-card-bg: aliceblue;
+
+    --color-accent: orange;
+
+    --color-entry-open: salmon;
+    --color-entry-in-progress: royalblue;
+    --color-entry-finished: green;
+
+
+    --color-shadow: gray;
+}
+
+:root:has(#dark:checked) {
+    --rotation: 180deg;
+    --position-right: var(--radius);
+
+
+    /* Colors for dark theme */
+}
+
+/*Creating some kind of theme-toggle button*/
+.circle {
+    width: calc(var(--radius) * 2);
+    height: calc(var(--radius) *2);
+    background: gray;
+    border-radius: 100%;
+    position: relative;
+}
+
+.semicircle {
+    width: var(--radius);
+    height: calc(var(--radius)*2);
+    background: lightgray;
+    border-radius: var(--radius) 0 0 var(--radius);
+    position: absolute;
+    transform: rotate(var(--rotation));
+    translate: var(--position-right);
+
+    transition: all var(--transition-duration);
+}
+
+#dark {
+    display: none;
+}
+
+/* Actual style description */
+
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    background-color: var(--color-bg);
+}
+
+header {
+    padding: 5px 10px;
+    margin: auto;
+    background-color: var(--color-card-bg);
+
+    transition: background-color var(--transition-duration);
+
+    a {
+        float: right;
+        padding: 0rem 0.5rem;
+        margin: auto;
+        border-radius: var(--border-radius);
+
+        &:hover {
+            box-shadow: 1px 1px 2px 2px var(--color-shadow);
+        }
+
+        &:active {
+            box-shadow: inset 1px 1px 2px 2px var(--color-shadow);
+        }
+    }
+
+    .circle {
+        float: right;
+    }
+
+
+}
+
+
+
+section {
+    padding: 1rem;
+}
+
+.card {
+    background-color: var(--color-card-bg);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    box-shadow: 1px 1px 3px 1px var(--color-shadow);
+
+
+    img {
+        max-width: 100%;
+        max-height: 25rem;
+    }
+}
+
+
+
+.entry {
+    border: 5px solid var(--color-entry-open);
+    border-style: none solid none solid;
+    margin-bottom: 0.5rem;
+}
+
+.s0 {
+    border-color: var(--color-entry-open);
+}
+
+.s1 {
+    border-color: var(--color-entry-in-progress);
+}
+
+.s2 {
+    border-color: var(--color-entry-finished);
+}
+
+#hero-section {
+    text-align: center;
+
+    a {
+        background: var(--color-accent);
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        box-shadow: 1px 1px 3px 1px var(--color-shadow);
+    }
+
+    a:active {
+        box-shadow: inset 1px 1px 3px 1px var(--color-shadow);
+    }
+}
+
+#icon {
+    width: calc(var(--radius)*3.5);
+}
+
+#map {
+    height: 25rem;
+    border-radius: var(--border-radius);
+}
