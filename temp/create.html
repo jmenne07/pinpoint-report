@@ -30,11 +30,17 @@ See NOTICE file for details.
         </label>
         <a href="">Login</a>
         <a>alle Anliegen</a>
+        <a href="./index.html">Startseite</a>
     </header>
     <h2>Neues Anliegen</h2>
     <div id="map-container">
         <div id="map"></div>
         <script src="map.js"></script>
+        <form id="nomi-form" action="/submit">
+            <!--             <label for="address">Adresse: </label> -->
+            <input type="type" name="adresse" id="address" placeholder="Adresse">
+            <!--             <input type="submit"> -->
+            </from>
     </div>
 
     <section id="hero-section">
@@ -59,17 +65,10 @@ See NOTICE file for details.
             <input type="number" name="lng" id="lng">
 
         </form>
+        <script src="create.js"></script>
 
-        <form id="nomi-form">
-            <label for="address">Adresse: </label>
-            <input type="type" name="adresse" id="address">
-            <input type="submit">
-        </from>
-    </section>
-    <script src="create.js"></script>
-
-    <footer>
-    </footer>
+        <footer>
+        </footer>
 
 
 

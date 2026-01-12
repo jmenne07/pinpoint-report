@@ -1,0 +1,112 @@
+/*
+Copyright: (c) 2026 Jörn Menne
+Licensed under the Apache License, Version 2.0
+See NOTICE file for details.
+*/
+
+:root{
+
+    /* General variables */
+    --border-radius: 8px;
+
+    --transition-duration: 1s;
+
+    /* Colors */
+    --color-card-bg: snow;
+    --color-bg: lightblue;
+    --color-border: black;
+    --color-shadow: black;
+    --color-accent: orange;
+
+
+    /* Info for the darkmode-toogle */
+    --radius: 0.75rem;
+    --rotation: 0deg;  
+}
+
+:root:has(#dark:checked){
+    /* Dark Colors */
+    --color-bg: navy;
+    --color-card-bg: dimgray;
+    --color-txt: lightgray;
+
+    --rotation: 180deg;
+    --position-right: var(--radius);
+}
+
+
+body{
+    background: var(--color-bg);
+    margin: 0px 0px 1rem 0px;
+    color: var(--color-txt);
+
+    transition: all var(--transition-duration);
+}
+
+header{
+    background: var(--color-card-bg);
+    color: var(--color-txt);
+
+    img{
+        width: var(--radius)*2;
+    }
+
+
+
+    label{
+        float:right;
+        padding: 1rem;
+    }
+
+    a{
+        float:right;
+        padding: 0.5rem;
+        margin: 0.5rem;
+        border-radius: var(--border-radius);
+       
+        
+        &:hover{
+            box-shadow: 1px 1px 2px 2px var(--color-shadow);
+        }
+
+        &:active{
+            box-shadow: inset 1px 1px 2px 2px var(--color-shadow);
+        }
+    }
+
+    transition: all var(--transition-duration)
+
+}
+
+.circle{
+    width: calc(var(--radius)*2);
+    height: calc(var(--radius)*2);
+    border-radius: 100%;
+    background: rgb(36, 34, 34);
+    position: relative;
+}
+
+.semicircle{
+    width: var(--radius);
+    height: calc(var(--radius)*2);
+    background: rgb(140, 139, 139);
+    position: absolute;
+    border-radius:  var(--radius) 0 0 var(--radius);    
+    transform: rotate(var(--rotation));
+    translate: var(--position-right);
+
+    transition: all var(--transition-duration);
+}
+
+#dark{
+    display: none;
+}
+
+#hero-section{
+    a {
+        background: var(--color-accent);
+        padding: 1rem;
+        border: 2px solid black;
+        border-radius: var(--border-radius);
+    }
+}

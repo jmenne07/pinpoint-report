@@ -1,64 +1,59 @@
 <!--
-Copyright: (c) 2025 Jörn Menne
+Copyright: (c) 2026 Jörn Menne
 Licensed under the Apache License, Version 2.0
 See NOTICE file for details.
 -->
+
 <!DOCTYPE html>
+
+<!-- {% load static %} -->
 <html>
-<title>Pinpoint</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <head>
+        <title>Pinpoint</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+             integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-<!-- Make sure you put this AFTER Leaflet's CSS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="">
-    </script>
-<link rel="stylesheet" href="style.css" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="UTF-8">
-</head>
+        <!-- Make sure you put this AFTER Leaflet's CSS -->
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="">
+        </script>
 
-<body>
-    <header class="header">
-        <img src="icon.svg" alt="icon" id="icon" />
+        <link rel="stylesheet" href="base.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+    </head>
 
-        <input id="dark" type="checkbox">
-        <label id="toggle" for="dark">
-            <div class="circle">
-                <div class="semicircle"></div>
+    <body>
+        <!-- base.html -->
+        <header>
+            <img src="icon.svg" alt="Icon" id="icon">
+            <input id="dark" type="checkbox"/>
+            <label id="toggle" for="dark">
+                <div class="circle">
+                    <div class="semicircle"></div>
+                </div>
+            </label>
+            <a href="">Login</a>
+            <a href="">Alle Anliegen</a>
+
+        </header>
+
+        <!-- Index.html -->
+        <section id="hero-section">
+            <h2>Pinpoint</h2>
+            <p>Beschreibung der Anwendung</p>
+            <a href="">Anliegen melden</a>
+            <a href="">Alle Anliegen</a>
+
+        </section>
+        <section id="main-section">
+            <div id="map-container">
+                <div id="map"></div>
             </div>
-        </label>
-        <a href="">Login</a>
-        <a>alle Anliegen</a>
-    </header>
-    <section id="hero-section">
-        <h2> Pinpoint</h2>
-        <p> Beschreibung der Anwendung</p>
-        <a href="create.html">Anliegen melden</a>
-    </section>
-    <section id="main-section">
-        <h3>Orte der Anliegen</h3>
-        <div id="map-container">
-            <div id="map"></div>
-            <script src="map.js"></script>
-        </div>
-        <h3>Anliegen</h3>
-        <div class="card entry s0">
-            <h4>Title (#id-Category)</h4>
-            <p>Status: offen</p>
-            <img class="fit-picture" src="PXL_20250115_172141602.jpg" alt="Image not loaded" />
-        </div>
-        <div class="card entry s1">
-            <h4>Title (#id-Category)</h4>
-            <p>Status: in Bearbeitung</p>
-            <img class="fit-picture" src="PXL_20250309_161429236_exported_0_1741536903014~3.jpg"
-                alt="Image not loaded" />
-        </div>
-    </section>
-    <footer>
-    </footer>
 
-</body>
+        </section>
+        <footer>
 
-
+        </footer>
+    </body>
 </html>

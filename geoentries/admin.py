@@ -214,3 +214,8 @@ class MyGroupAdmin(GroupAdmin):
 @admin.register(Mail)
 class MailAdmin(admin.ModelAdmin):
     exlcude = None
+
+
+admin.site.site_header = "Pinpoint-Admin"
+admin.site.site_title = "Pinpoint Administration"
+admin.site.index_title = "Wilkommen zum Admin-Dashboard"
