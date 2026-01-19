@@ -41,19 +41,31 @@ See NOTICE file for details.
         <!-- Index.html -->
         <section id="hero-section">
             <h2>Pinpoint</h2>
-            <p>Beschreibung der Anwendung</p>
-            <a href="">Anliegen melden</a>
-            <a href="">Alle Anliegen</a>
-
-        </section>
-        <section id="main-section">
             <div id="map-container">
                 <div id="map"></div>
             </div>
+            <div id="links">
+                <a class="cta" href="">Anliegen melden</a>
+                <a href="">Alle Anliegen</a>
+            </div>
 
         </section>
+        <section id="main-section">
+            <div class="card entry s0">
+                <h4>Title (#id-Category)</h4>
+                <p>Status: offen</p>
+            </div>
+            <div class="card entry s2">
+                <h4>Title (#id-Category)</h4>
+                <p>Status: in Bearbeitung</p>
+            </div>
+
+        </section>
+
+        <!-- base.html -->
         <footer>
 
         </footer>
+        <script src="./map.js"></script>
     </body>
 </html>

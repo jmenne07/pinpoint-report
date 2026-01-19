@@ -13,25 +13,45 @@ See NOTICE file for details.
 
     /* Colors */
     --color-card-bg: snow;
-    --color-bg: lightblue;
+    --color-bg: #cfeaf3;
     --color-border: black;
     --color-shadow: black;
     --color-accent: orange;
+    --color-button: #9ed0d2;
+
+    --color-entry-open: salmon;
+    --color-entry-in-progress: royalblue;
+    --color-entry-finished: #3ec73e;
 
 
     /* Info for the darkmode-toogle */
     --radius: 0.75rem;
     --rotation: 0deg;  
+
+    --invert: 0%;
+    --brightness: 100%;
+    --contrast: 100%;
+
+
+    transition: all var(--transition-duration);
+
 }
 
 :root:has(#dark:checked){
     /* Dark Colors */
     --color-bg: navy;
-    --color-card-bg: dimgray;
+    --color-card-bg: darkgray;
     --color-txt: lightgray;
+    --color-button: #5f9ea0;
+
 
     --rotation: 180deg;
     --position-right: var(--radius);
+
+    /* Color-change for the map */
+    --invert: 100%;
+    --brightness: 90%;
+    --contract: 90%;
 }
 
 
@@ -42,6 +62,7 @@ body{
 
     transition: all var(--transition-duration);
 }
+
 
 header{
     background: var(--color-card-bg);
@@ -74,7 +95,7 @@ header{
         }
     }
 
-    transition: all var(--transition-duration)
+    transition: all var(--transition-duration);
 
 }
 
@@ -103,10 +124,102 @@ header{
 }
 
 #hero-section{
+    position: relative;
+    
+    h2{
+        display: none;
+    }
+
+    display: flex;
+    flex-direction: column;
+
+    *{
+        flex: 1;
+    }
+}
+
+#links {
+    position: absolute;
+    top: 30vh;
+    left: 15vw;
+    width: 70vw;
+    z-index: 10;
+
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+ 
     a {
-        background: var(--color-accent);
+             
+        background: var(--color-button);
         padding: 1rem;
         border: 2px solid black;
         border-radius: var(--border-radius);
+        margin: 0.5rem;
     }
+    p{
+        width: 100vw;
+    }
+
+
+    .cta{
+    background: var(--color-accent);
+}
+}
+
+#map-container{
+    flex: 1 1 auto;
+    width: 100vw;
+    position: relative;
+    z-index: 0;
+}
+
+
+
+/* Map Settings */
+.leaflet-layer,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-control-attribution {
+    filter: invert(var(--invert)) hue-rotate(var(--rotation)) brightness(var(--brightness)) contrast(var(--contrast));
+    transition: filter var(--transition-duration);
+}
+
+#map{
+    height: 80vh;
+}
+
+
+#main-section{
+    margin: 1rem;
+}
+
+.card{
+    background-color: var(--color-card-bg);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    box-shadow: 1px 1px 3px 1px var(--color-shadow);
+
+    img{
+        max-width: 100%;
+        max-height: 25rem;
+    }
+}
+
+.entry{
+    border: 10px solid var(--color-entry-open);
+    border-style: none none none solid;
+    margin-bottom: 0.5rem;
+}
+
+.s0 {
+    border-color: var(--color-entry-open);
+}
+
+.s1 {
+    border-color: var(--color-entry-in-progress);
+}
+
+.s2 {
+    border-color: var(--color-entry-finished);
 }
