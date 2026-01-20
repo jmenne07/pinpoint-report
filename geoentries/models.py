@@ -39,6 +39,7 @@ class Category(MPTTModel):
     description = models.TextField(null=True, blank=True)
 
     email = models.EmailField(blank=True, null=True)
+    extern = models.EmailField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Categories"

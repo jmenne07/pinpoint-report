@@ -10,9 +10,9 @@ from django.contrib.auth.admin import GroupAdmin
 from django.contrib.auth.models import Group
 from django.db.models import QuerySet
 from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin, TreeRelatedFieldListFilter
 from simple_history.admin import SimpleHistoryAdmin
-from django.utils.safestring import mark_safe
 
 from .models import Category, Entry, GroupProfile, Mail
 
@@ -31,6 +31,13 @@ class CategoryAdmin(MPTTModelAdmin):
         # TODO: Make sure, this works also without groups
         # TODO: Better queryset
         return get_allowed_categories(request.user, qs)
+
+    def get_fields(self, request, obj=None):
+        fields = super().get_fields(request, obj)
+
+        if obj and not obj.email and not request.user.is_superuser:
+            fields = [f for f in fields if f != "extern"]
+        return fields
 
 
 def get_allowed_categories(

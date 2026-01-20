@@ -3,13 +3,12 @@
 # See NOTICE file for details.
 
 
-from django.core.management.base import BaseCommand
-from django.core.mail import send_mail
-
-from ...models import Entry, Category
-from ...signals import send_internal_mail
-from django.urls import reverse
 from django.conf import settings
+from django.core.mail import send_mail
+from django.core.management.base import BaseCommand
+from django.urls import reverse
+
+from ...models import Category
 
 
 class Command(BaseCommand):

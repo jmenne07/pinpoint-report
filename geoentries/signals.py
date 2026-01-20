@@ -3,6 +3,7 @@
 # See NOTICE file for details.
 
 
+import logging
 from base64 import urlsafe_b64encode
 
 from Crypto.Cipher import ChaCha20
@@ -15,6 +16,8 @@ from django.dispatch import receiver
 from django.urls import reverse
 
 from .models import Entry, Mail
+
+logger = logging.getLogger(__name__)
 
 default_perms = [
     "view_category",
@@ -49,7 +52,9 @@ def add_default_group_permissions(sender, instance, created, **kwargs):
 def send_confirmation_mail_on_create(sender, instance, created, **kwargs):
     if created:
         send_external_mail("creation", instance)
+        logger.info("Creation mail send")
         send_internal_mail("allocation", instance)
+        logger.info("allocation mail send")
 
 
 @receiver(pre_save, sender=Entry)
@@ -100,8 +105,16 @@ def send_entry_mail(title: str, entry, mail_receiver):
                 continue  # object does not have the attribute
             message = message.replace(placeholder, str(value))
 
-        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, mail_receiver)
+        send_mail(
+            subject,
+            message,
+            settings.DEFAULT_FROM_EMAIL,
+            mail_receiver,
+            fail_silently=False,
+        )
+        logger.info(f"Mail with title {title} send")
     else:
+        logger.warning(f"Mail with title {title} not found\nNo Mail will be send")
         print("warning, mail not found")
         print("no mail will be sent")
 
@@ -142,5 +155,6 @@ def send_close_link(entry: Entry) -> None:
     else:
         print("Warning")
         # WARNING: Error handling has to be improved
+    # TODO: Get Mail-receiver from category
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ["test@pinpoint.de"])
-    print(message)
+    # print(message)

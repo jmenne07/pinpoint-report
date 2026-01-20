@@ -187,7 +187,7 @@ REST_FRAMEWORK = {
 }
 
 # E-Mail configuration. Emails will only be sent, if SEND_MAIL is set to request
-SEND_MAIL = False
+SEND_MAIL = True
 EMAIL_HOST = "localhost"
 EMAIL_PORT = "8025"
 DEFAULT_FROM_EMAIL = "example@pinpoint-report.de"  # Setup for ciphers
@@ -235,3 +235,33 @@ if USE_MINIO:
 
 STATIC_URL = "static/"
 STATIC_ROOT = "./static/"
+
+
+# Logging
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{asctime} {levelname} {message} {module}",
+            # "datefmt": "%Y-%m-%d %H:%M:%S",
+            "datefmt": "[%d/%b/%Y %H:%M:%S]",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{asctime} {levelname} {message}",
+            "datefmt": "[%d/%b/%Y %H:%M:%S]",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "verbose",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "ERROR",
+    },
+}
