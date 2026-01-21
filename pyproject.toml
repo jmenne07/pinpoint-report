@@ -4,22 +4,25 @@ build-backend = "setuptools.build_meta"
 
 [project]
 dependencies = [
-    # Core runtime dependencies
-    "django",
-    "djangorestframework",
-    "djangorestframework-xml",
-    "drf-spectacular",
-    "django-filter",
-    "django-minio-storage",
-    "django-debug-toolbar",
-    "django-mptt",
-    "django-simple-history",
+  # Core runtime dependencies
+  "django",
+  "djangorestframework",
+  "djangorestframework-xml",
+  "drf-spectacular",
+  "django-filter",
+  "django-minio-storage",
+  "django-debug-toolbar",
+  "django-mptt",
+  "django-simple-history",
+  "uvicorn",
+  "gunicorn",
+  "whitenoise",
 
-    "pycryptodome",
-    "Pillow",
+  "pycryptodome",
+  "Pillow",
 
-    "psycopg2-binary",
-    "django-cors-headers",
+  "psycopg2-binary",
+  "django-cors-headers",
 ]
 name = "openpinpoint"
 version = "0.2.0"
@@ -31,20 +34,20 @@ requires-python = ">=3.13"
 
 [project.optional-dependencies]
 dev = [
-    # Development / code quality
-    "black",
-    "ruff",
-    "isort",
-    "pyright",
-    "django-stubs",
+  # Development / code quality
+  "black",
+  "ruff",
+  "isort",
+  "pyright",
+  "django-stubs",
 ]
 test = [
-    # Testing / debugging
-    "pytest",
-    "pytest-django",
-    "selenium",
-    "pytest-selenium",
-    "aiosmtpd",
+  # Testing / debugging
+  "pytest",
+  "pytest-django",
+  "selenium",
+  "pytest-selenium",
+  "aiosmtpd",
 ]
 
 [tool.setuptools.packages.find]

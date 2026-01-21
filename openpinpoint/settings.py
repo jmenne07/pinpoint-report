@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -98,7 +99,7 @@ WSGI_APPLICATION = "openpinpoint.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 
-USE_POSTGRES = False
+USE_POSTGRES = True
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -121,7 +122,7 @@ if USE_POSTGRES:
             "NAME": "pinpoint",
             "USER": "open",
             "PASSWORD": "pg123",
-            # "HOST": "db",
+            "HOST": "db",
             # "HOST": "localhost",
             "PORT": 5432,
         }
@@ -163,6 +164,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = "static/"
+
+# STATIC_ROOT = "./static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFileStorage"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -215,7 +221,7 @@ if not TESTING:
 
 
 # Minio as File-Storage
-USE_MINIO = False
+USE_MINIO = True
 if USE_MINIO:
     MINIO_STORAGE_ENDPOINT = "localhost:9000"
     MINIO_STORAGE_ACCESS_KEY = "minio"
@@ -232,9 +238,6 @@ if USE_MINIO:
             "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
         },
     }
-
-STATIC_URL = "static/"
-STATIC_ROOT = "./static/"
 
 
 # Logging
