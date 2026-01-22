@@ -14,10 +14,13 @@ dependencies = [
   "django-debug-toolbar",
   "django-mptt",
   "django-simple-history",
+
   "uvicorn",
   "gunicorn",
+
   "whitenoise",
 
+  "dotenv",
   "pycryptodome",
   "Pillow",
 

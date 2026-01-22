@@ -29,12 +29,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-loc#%lq_3s($un1$y#eh1%q(biw#0@ow6&7#ut$p0rufb*&dnl"
+SECRET_KEY = os.getenv(
+    "SECRET_KEY", "django-insecure-loc#%lq_3s($un1$y#eh1%q(biw#0@ow6&7#ut$p0rufb*&dnl"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", True)
 
-ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "192.168.49.2"]
+# ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "192.168.49.2"]
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv(
+        "ALLOWED_HOSTS", ".localhost, 127.0.0.1, [::1], 192.168.49.2"
+    ).split(",")
+]
 
 
 INTERNAL_IPS = ["127.0.0.1"]
@@ -119,12 +127,11 @@ if USE_POSTGRES:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": "pinpoint",
-            "USER": "open",
-            "PASSWORD": "pg123",
-            "HOST": "db",
-            # "HOST": "localhost",
-            "PORT": 5432,
+            "NAME": os.getenv("DB_NAME", "pinpoint"),
+            "USER": os.getenv("DB_USER", "open"),
+            "PASSWORD": os.getenv("DB_PASSWORD", "pg123"),
+            "HOST": os.getenv("DB_HOST", "localhost"),
+            "PORT": os.getenv("DB_PORT", 5432),
         }
     }
 
@@ -194,13 +201,14 @@ REST_FRAMEWORK = {
 
 # E-Mail configuration. Emails will only be sent, if SEND_MAIL is set to request
 SEND_MAIL = True
-EMAIL_HOST = "localhost"
-EMAIL_PORT = "8025"
-DEFAULT_FROM_EMAIL = "example@pinpoint-report.de"  # Setup for ciphers
+EMAIL_HOST = os.getenv("MAIL_HOST", "localhost")
+EMAIL_PORT = os.getenv("MAIL_PORT", "8025")
+DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "example@pinpoint-report.de")
 
+# Setup for ciphers
 # WARNING: It is advised to use a fixed 32 byte string in production
 # KEY = get_random_bytes(32)
-KEY = b"0123456789abcdef0123456789abcdef"
+KEY = os.getenv("KEY", "0123456789abcdef0123456789abcdef").encode()
 
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
@@ -223,9 +231,9 @@ if not TESTING:
 # Minio as File-Storage
 USE_MINIO = True
 if USE_MINIO:
-    MINIO_STORAGE_ENDPOINT = "localhost:9000"
-    MINIO_STORAGE_ACCESS_KEY = "minio"
-    MINIO_STORAGE_SECRET_KEY = "minio123"
+    MINIO_STORAGE_ENDPOINT = os.getenv("MINIO_ENDPOINT", "localhost:9000")
+    MINIO_STORAGE_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minio")
+    MINIO_STORAGE_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minio123")
     MINIO_STORAGE_USE_HTTPS = False
     MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
     MINIO_STORAGE_AUTO_CREATE_MEDIA_POLICY = "GET_ONLY"
