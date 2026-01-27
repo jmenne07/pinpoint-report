@@ -10,5 +10,6 @@ class ServiceRequestsConfig(AppConfig):
     name = "geoentries"
 
     def ready(self) -> None:
+        from . import signals
 
         return super().ready()

@@ -34,7 +34,7 @@ SECRET_KEY = os.getenv(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", True)
+DEBUG = os.getenv("DEBUG").lower() == "true"
 
 # ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "192.168.49.2"]
 ALLOWED_HOSTS = [
@@ -200,9 +200,12 @@ REST_FRAMEWORK = {
 }
 
 # E-Mail configuration. Emails will only be sent, if SEND_MAIL is set to request
-SEND_MAIL = True
-EMAIL_HOST = os.getenv("MAIL_HOST", "localhost")
-EMAIL_PORT = os.getenv("MAIL_PORT", "8025")
+SEND_MAIL = False
+EMAIL_HOST = os.getenv("EMAIL_HOST", "localhost")
+EMAIL_PORT = os.getenv("EMAIL_PORT", "8025")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "").lower() == "true"
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "example@pinpoint-report.de")
 
 # Setup for ciphers
