@@ -1,92 +1,124 @@
-:root {
+/*
+Copyright: (c) 2026 Jörn Menne
+Licensed under the Apache License, Version 2.0
+See NOTICE file for details.
+*/
 
-    --color-card-bg: aliceblue;
-    --color-bg: lightblue;
+:root{
 
-    --color-accent: orange;
-
-    --color-shadow: gray;
-
-    /* Entry colors */
-    --color-entry-open: salmon;
-
+    /* General variables */
     --border-radius: 8px;
+
+    --transition-duration: 1s;
+
+    /* Colors */
+    --color-card-bg: snow;
+    --color-bg: #cfeaf3;
+    --color-border: black;
+    --color-shadow: black;
+    --color-accent: orange;
+    --color-button: #9ed0d2;
+
+    --color-entry-open: salmon;
+    --color-entry-in-progress: royalblue;
+    --color-entry-finished: #3ec73e;
+
+
+    /* Info for the darkmode-toogle */
+    --radius: 0.75rem;
+    --rotation: 0deg;  
+
+    --invert: 0%;
+    --brightness: 100%;
+    --contrast: 100%;
+
+
+    transition: all var(--transition-duration);
+
+}
+
+:root:has(#dark:checked){
+    /* Dark Colors */
+    --color-bg: navy;
+    /* --color-card-bg: darkgray; */
+    --color-card-bg: hsl(from snow h 0% 70%);
+    --color-txt: lightgray;
+    --color-button: #5f9ea0;
+
+
+    --rotation: 180deg;
+    --position-right: var(--radius);
+
+    /* Color-change for the map */
+    --invert: 100%;
+    --brightness: 90%;
+    --contract: 90%;
 }
 
 body {
     font-family: Helvetica, Arial, sans-serif;
     background-color: var(--color-bg);
-    color: var(--color-text);
-    margin: auto;
+    color: var(--color-txt);
+    margin: 0px 0px 1rem 0px;
+
+    transition: all var(--transition-duration);
 }
 
-/* Remove all prestyling of buttons*/
-/* TODO: Find a better way to style the header button, but right now it does not hurt*/
-button {
-    all: unset;
-}
+header{
+    background: var(--color-card-bg);
+    color: var(--color-txt);
 
-header {
-    background-color: var(--color-card-bg);
-    padding: 5px 10px;
-    margin: auto;
+    img{
+        width: var(--radius)*2;
+    }
 
-    a {
-        float: right;
-        padding: 0rem 0.5rem;
-        margin: auto;
+
+
+    label{
+        float:right;
+        padding: 1rem;
+    }
+
+    a{
+        float:right;
+        padding: 0.5rem;
+        margin: 0.5rem;
         border-radius: var(--border-radius);
-
-        &:hover {
+       
+        
+        &:hover{
             box-shadow: 1px 1px 2px 2px var(--color-shadow);
         }
 
-        &:active {
+        &:active{
             box-shadow: inset 1px 1px 2px 2px var(--color-shadow);
         }
     }
 
-
-    form {
-        float: right;
-
-        button {
-
-            float: right;
-            padding: 0rem 0.5rem;
-            margin: auto;
-            border-radius: var(--border-radius);
-
-            &:hover {
-                box-shadow: 1px 1px 2px 2px var(--color-shadow);
-            }
-
-            &:active {
-                box-shadow: inset 1px 1px 2px 2px var(--color-shadow);
-            }
-
-        }
-    }
-
-    img {
-        max-height: 20px;
-    }
-
+    transition: all var(--transition-duration);
 
 }
 
-section {
-    padding: 1rem
+.circle{
+    width: calc(var(--radius)*2);
+    height: calc(var(--radius)*2);
+    border-radius: 100%;
+    background: rgb(36, 34, 34);
+    position: relative;
 }
 
-.card {
-    background: var(--color-card-bg);
-    border-radius: var(--border-radius);
-    padding: 1rem;
-    box-shadow: 1px 1px 3px 1px var(--color-shadow);
+.semicircle{
+    width: var(--radius);
+    height: calc(var(--radius)*2);
+    background: rgb(140, 139, 139);
+    position: absolute;
+    border-radius:  var(--radius) 0 0 var(--radius);    
+    transform: rotate(var(--rotation));
+    translate: var(--position-right);
 
-    img {
-        max-width: 100%;
-        max-height: 25rem;
-    }
+    transition: all var(--transition-duration);
+}
+
+#dark{
+    display: none;
 }

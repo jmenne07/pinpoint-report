@@ -1,38 +1,100 @@
+/*
+Copyright: (c) 2026 Jörn Menne
+Licensed under the Apache License, Version 2.0
+See NOTICE file for details.
+*/
+
 h2{
-  padding-left: 1rem;
+  text-align: center;
 }
 
-label{
-  display: block;
-  margin: 0.2rem auto;
-  padding-left: 1rem;
+#map-container {
+    position: relative;
+    margin: 0 auto 2rem auto;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-input, textarea, select{
-  width: 75%;
-  padding: 0.25rem;
-  border-radius: var(--border-radius);
-  margin: 0 auto;;
-  display: block;
+
+#map {
+    height: 400px;
+    width: 100%;
+    z-index: 1;
+    filter: invert(var(--invert)) brightness(var(--brightness)) contrast(var(--contrast));
 }
 
-textarea{
-  max-height:5rem;
+#nomi-form {
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75%;
+    z-index: 1000; /* Über der Karte */
 }
 
-select{
-  width: 80%;
+#adresse {
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    font-size: 1rem;
+    box-sizing: border-box;
 }
 
-.card{
-  padding: 0.3rem;
-  margin: 1rem;
+
+#hero-section{
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--color-card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-#map{
-  height: 10rem;
-  border-radius: var(--border-radius);
+#form{
+    display: flex;
+    flex-direction: column;
+
+    label{
+        font-weight: bold;
+        margin: 10px 0 5px 0;
+    }
+
+    input, select, textarea{
+        box-sizing: border-box;
+        padding: 10px;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    textarea{
+        height: 120px;
+        resize: vertical;
+    }
 }
+
+.coordinates-group{
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+
 .submit{
-  background-color: var(--color-accent);
+    margin-top: 25px;
+    padding: 15px;
+    background-color: var(--color-button);
+    border: none;
+    border-radius: var(--border-radius);
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: filter 0.3s;
+
+    &:hover{
+        filter: brightness(0.9);
+    }
 }

@@ -1,5 +1,5 @@
 <!--
-Copyright: (c) 2025 Jörn Menne
+Copyright: (c) 2026 Jörn Menne
 Licensed under the Apache License, Version 2.0
 See NOTICE file for details.
 -->
@@ -14,8 +14,38 @@ See NOTICE file for details.
 {% endblock %}
 {% block content %}
 
+<section id="hero-section">
+    <h2>Pinpoint</h2>
+    <div id ="map-container">
+        <div id="map"></div>
+        <script src="{% static 'geoentries/mapsetup.js' %}"></script>
+    </div>
+    <div id="links">
+        <a class="cta" href="{% url 'geoentries:create' %}">Anliegen melden</a>
+        <a href="">Alle Anliegen</a>
+    </div>
+</section>
 
 <section id="main-section">
+    {% if entries %} 
+        {% for entry in entries %}
+            <div class="card entry s{{entry.status}}">
+                <h4>{{entry.title}}</h4>
+                <p>Status: {{entry.get_status_display}}</p>
+                {% if entry.image %}
+                    <img src ="{{ entry.image.url }}" alt="Bild konnte nicht geladen werden" /> 
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <div>
+            <h4>Es gibt keine Anliegen</h4>
+        </div>
+    {% endif %}
+</section>
+
+</section>
+<!-- <section id="main-section">
     <h2>Pinpoint</h2>
     <a href="{% url 'geoentries:create' %}">Anliegen melden</a>
 </section>
@@ -51,6 +81,6 @@ See NOTICE file for details.
         <h3>Some Stats</h3>
     </div>
 
-</section>
+</section> -->
 <script src="{% static 'geoentries/locationcluster.js' %}"></script>
 {% endblock %}

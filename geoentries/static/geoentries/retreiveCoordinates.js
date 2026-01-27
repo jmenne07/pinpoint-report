@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 Jörn Menne
+ * Copyright 2026 Jörn Menne
  * Licensed under the Apache License, Version 2.0
  * See NOTICE file for details.
  */
@@ -11,18 +11,20 @@
 // Specify all needed elements
 var lat_element = document.getElementById("latitude") || document.getElementById("id_latitude");
 var lng_element = document.getElementById("longitude") || document.getElementById("id_longitude");
+var nomi = document.getElementById("nomi-form")
+var adress_element = document.getElementById("adresse");
 let marker = L.marker();
 
 
 // Add change listener to the input-elements
-lat_element.addEventListener("change", () => {
-  marker.setLatLng([lat_element.value, lng_element.value])
-    .addTo(map);
-});
-lng_element.addEventListener("change", () => {
-  marker.setLatLng([lat_element.value, lng_element.value])
-    .addTo(map);
-});
+    lat_element.addEventListener("change", () => {
+    marker.setLatLng([lat_element.value, lng_element.value])
+        .addTo(map);
+    });
+    lng_element.addEventListener("change", () => {
+    marker.setLatLng([lat_element.value, lng_element.value])
+        .addTo(map);
+    });
 
 
 /*
@@ -32,13 +34,56 @@ lng_element.addEventListener("change", () => {
  * The precirsion is accorcding to https://en.wikipedia.org/wiki/Decimal_degrees
  */
 function onMapClick(e, decimal_precision = 6) {
-  marker.setLatLng(e.latlng).addTo(map);
+    marker.setLatLng(e.latlng).addTo(map);
 
-  lat_element.value = e.latlng.lat.toFixed(decimal_precision);
-  lng_element.value = e.latlng.lng.toFixed(decimal_precision);
+    lat_element.value = e.latlng.lat.toFixed(decimal_precision);
+    lng_element.value = e.latlng.lng.toFixed(decimal_precision);
+
+    reverseGeocode(e.latlng.lat, e.latlng.lng);
 
 }
 
 map.on("click", onMapClick);
+
+nomi.addEventListener("submit", async(e) => {
+    //prevent pagereload 
+    e.preventDefault();
+    e.stopPropagation();
+
+    const formdata = new FormData(e.target);
+    var value = formdata.values().next().value;
+    value = value.replaceAll(" ", "+");
+
+    url = "https://nominatim.openstreetmap.org/search?q=";
+    url = url.concat(value);
+    url = url.concat("&format=jsonv2");
+    console.log(url);
+    // fetch("https://nominatim.openstreetmap.org/search?${result}")
+    fetch(url)
+        .then(res => res.json())
+        .then(json => {
+            console.log(json[0]);
+            let position = [json[0].lat, json[0].lon];
+            marker.setLatLng(position);
+            marker.addTo(map)
+            // L.marker(position).addTo(markerLayer);
+            reverse_address_element.value = json[0].display_name;
+            lat_element.value = json[0].lat;
+            lng_element.value = json[0].lon;
+
+            map.setView(position, map.getZoom());
+     });
+
+});
+
+function reverseGeocode(lat, lon){
+  var url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
+    fetch(url)
+        .then(res => res.json())
+        .then(json => {
+            adress_element.value = json.display_name;
+        });
+}
+
 
 

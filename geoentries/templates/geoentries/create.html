@@ -12,32 +12,37 @@ See NOTICE file for details.
 
 {% block content %}
 <h2>Neues Anliegen</h2>
-
-<div class=card>
+<div id="map-container">
     <div id="map"></div>
+    <script src="{% static 'geoentries/mapsetup.js' %}"></script>
+    <form id="nomi-form" action="/submit">
+        <input type="type" name="adresse" id="adresse" placeholder="Adresse">
+    </form>
 </div>
 
-<form method="post" enctype="multipart/form-data" action="">
-    {% csrf_token %}
-    <label for="{{ form.category.id_for_label }}">Category:</label>
-    {{ form.category }}</br>
-    <label for="{{ form.title.id_for_label }}">Title:</label>
-    {{ form.title }} </br>
-    <label for="{{ form.description.id_for_label }}">Description:</label>
-    {{ form.description }} </br>
-    <label for="{{ form.email.id_for_label }}">Email:</label>
-    {{ form.email }} </br>
-    <label for="{{ form.image.id_for_label }}">Image:</label>
-    {{ form.image }} </br>
-    <input type="submit" value="Submit" class="submit" /> </br>
-    <label for="{{ form.latitude.id_for_label }}">Latitude:</label>
-    {{ form.latitude }} </br>
-    <label for="{{ form.longitude.id_for_label }}">Longitude:</label>
-    {{ form.longitude }} </br>
+<section id="hero-section">
+    <form method="post" enctype="multipart/form-data" action="" id="form">
+         {% csrf_token %}
+        <label for="{{ form.category.id_for_label }}">Category:</label>
+        {{ form.category }}
+        <label for="{{ form.description.id_for_label }}">Description:</label>
+        {{ form.description }} </br>
+        <label for="{{ form.email.id_for_label }}">Email:</label>
+        {{ form.email }} </br>
+        <label for="{{ form.image.id_for_label }}">Image:</label>
+        {{ form.image }} </br>
+        <input type="submit" value="Submit" class="submit" /> </br> 
+        <div class="coordinates-group">
+            <label for="{{ form.latitude.id_for_label }}">Lat:</label>
+            {{ form.latitude }} </br>
+            <label for="{{ form.longitude.id_for_label }}">Lng:</label>
+            {{ form.longitude }} </br>
+        </div>
+    </form>
+    
 
-
-</form>
-<script src="{% static 'geoentries/mapsetup.js' %}"></script>
+</section>
+<!-- <script src="{% static 'geoentries/mapsetup.js' %}"></script> -->
 <script src="{% static 'geoentries/retreiveCoordinates.js' %}"></script>
 
 {% endblock %}

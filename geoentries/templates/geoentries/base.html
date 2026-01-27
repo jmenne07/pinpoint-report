@@ -1,5 +1,5 @@
 <!--
-Copyright: (c) 2025 Jörn Menne
+Copyright: (c) 2026 Jörn Menne
 Licensed under the Apache License, Version 2.0
 See NOTICE file for details.
 -->
@@ -8,14 +8,14 @@ See NOTICE file for details.
 <html>
 
 <head>
-    <title>{% block title %}Pinpoint-Geoentries{% endblock %}</title>
+    <title>{% block title %}Pinpoint{% endblock %}</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="">
-        </script>
+    </script>
     <link rel="stylesheet" href="{% static 'geoentries/base-style.css' %}" />
     {% block stylesheets %}
     {% endblock %}
@@ -25,15 +25,22 @@ See NOTICE file for details.
 
 <body>
     <header>
-        <img src="{% static 'geoentries/icon.svg' %}" alt="Icon" />
+        <img src="{% static 'geoentries/icon.svg' %}" alt="Icon" id="icon"/>
+        <input id="dark" type="checkbox">
+        <label id="toggle" for="dark">
+            <div class="circle">
+                <div class="semicircle"></div>
+            </div>
+        </label>
         {% if user.is_authenticated %}
         <form method="post" action="{% url 'geoentries:logout' %}">
             {% csrf_token %}
             <button type="submit">Logout</button>
         </form>
         {% else %}
-        <a href="{% url 'admin:login' %}">login</a>
+            <a href="{% url 'admin:login' %}">Login</a>
         {% endif %}
+
         <a href="{% url 'geoentries:list'%}">Alle Anliegen</a>
     </header>
     {% block content %}
