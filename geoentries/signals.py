@@ -52,9 +52,7 @@ def add_default_group_permissions(sender, instance, created, **kwargs):
 def send_confirmation_mail_on_create(sender, instance, created, **kwargs):
     if created:
         send_external_mail("creation", instance)
-        logger.info("Creation mail send")
         send_internal_mail("allocation", instance)
-        logger.info("allocation mail send")
 
 
 @receiver(pre_save, sender=Entry)
@@ -69,7 +67,8 @@ def presave_entry_handler(sender, instance, **kwargs):
 
     def send_mails_on_commit():
         if old_entry.status == 0 and instance.status == 1:
-            send_close_link(instance)
+            if instance.send_closelink and instance.category.extern:
+                send_close_link(instance)
             send_external_mail("info_allocation", instance)
 
         if old_entry.category != instance.category:
@@ -138,12 +137,14 @@ def send_close_link(entry: Entry) -> None:
     b64nonce = urlsafe_b64encode(nonce).decode("utf-8")
     b64ct = urlsafe_b64encode(ciphertext).decode("utf-8")
 
-    host = "localhost:8000"
+    host = settings.HOST
     url = reverse("geoentries:index")
     link = f"{host}{url}{b64nonce}/{b64ct}"
 
     subject = "Close link"
     message = link
+    receipient = []
+    receipient.append(entry.category.extern)
 
     mail_object = Mail.objects.filter(title="closelink").first()
     if mail_object:
@@ -156,5 +157,6 @@ def send_close_link(entry: Entry) -> None:
         print("Warning")
         # WARNING: Error handling has to be improved
     # TODO: Get Mail-receiver from category
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ["test@pinpoint.de"])
+    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, receipient)
+    logger.info(f"Mail with closelink sent")
     # print(message)

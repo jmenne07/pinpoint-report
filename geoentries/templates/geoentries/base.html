@@ -32,6 +32,7 @@ See NOTICE file for details.
                 <div class="semicircle"></div>
             </div>
         </label>
+        <div class="header-nav">
         {% if user.is_authenticated %}
         <form method="post" action="{% url 'geoentries:logout' %}">
             {% csrf_token %}
@@ -42,6 +43,7 @@ See NOTICE file for details.
         {% endif %}
 
         <a href="{% url 'geoentries:list'%}">Alle Anliegen</a>
+        </div>
     </header>
     {% block content %}
     {% endblock %}

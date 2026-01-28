@@ -13,6 +13,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin, TreeRelatedFieldListFilter
 from simple_history.admin import SimpleHistoryAdmin
+from django.http import HttpRequest
 
 from .models import Category, Entry, GroupProfile, Mail
 
@@ -35,8 +36,8 @@ class CategoryAdmin(MPTTModelAdmin):
     def get_fields(self, request, obj=None):
         fields = super().get_fields(request, obj)
 
-        if obj and not obj.email and not request.user.is_superuser:
-            fields = [f for f in fields if f != "extern"]
+        if obj and not obj.extern and not request.user.is_superuser:
+            fields = remove_element_from_fields(fields, "extern")
         return fields
 
 
@@ -106,13 +107,15 @@ class CategoryFilter(TreeRelatedFieldListFilter):
 class EntryAdmin(SimpleHistoryAdmin):
     fields = [
         ("title", "category"),
-        ("creation_time", "update_time"),
+        ("creation_time", "update_time", "done_date"),
         "status",
         "published",
+        "send_closelink",
         "description",
         "email",
         ("latitude", "longitude", "map"),
         ("image", "image_preview"),
+        "notes",
     ]
     readonly_fields = [
         "image_preview",
@@ -187,6 +190,14 @@ class EntryAdmin(SimpleHistoryAdmin):
             </script>
         """)
 
+    def get_fields(self, request, obj):
+        fields = super().get_fields(request, obj)
+        if not obj.category.extern:
+            fields = remove_element_from_fields(fields, "send_closelink")
+        else:
+            fields = remove_element_from_fields(fields, "done_date")
+        return fields
+
     class Media:
         css = {"all": ("https://unpkg.com/leaflet/dist/leaflet.css",)}
         js = ("https://unpkg.com/leaflet/dist/leaflet.js",)
@@ -221,6 +232,19 @@ class MyGroupAdmin(GroupAdmin):
 @admin.register(Mail)
 class MailAdmin(admin.ModelAdmin):
     exlcude = None
+
+
+def remove_element_from_fields(fields, element):
+    if element in fields:
+        return [f for f in fields if f != element]
+    else:
+        result = []
+        for f in fields:
+            if element in f:
+                result.append(tuple(e for e in f if e != element))
+            else:
+                result.append(f)
+        return result
 
 
 admin.site.site_header = "Pinpoint-Admin"

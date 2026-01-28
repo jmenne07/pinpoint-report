@@ -199,19 +199,21 @@ REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
-# E-Mail configuration. Emails will only be sent, if SEND_MAIL is set to request
-SEND_MAIL = False
+# E-Mail configuration. Emails will only be sent, if SEND_MAIL is set to True
+SEND_MAIL = True
 EMAIL_HOST = os.getenv("EMAIL_HOST", "localhost")
 EMAIL_PORT = os.getenv("EMAIL_PORT", "8025")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "").lower() == "true"
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "False").lower() == "true"
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False").lower() == "true"
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "example@pinpoint-report.de")
 
 # Setup for ciphers
 # WARNING: It is advised to use a fixed 32 byte string in production
 # KEY = get_random_bytes(32)
 KEY = os.getenv("KEY", "0123456789abcdef0123456789abcdef").encode()
+HOST = os.getenv("HOST", "localhost:8000")
 
 MEDIA_ROOT = BASE_DIR / "media"
 MEDIA_URL = "/media/"
@@ -276,6 +278,6 @@ LOGGING = {
     },
     "root": {
         "handlers": ["console"],
-        "level": "ERROR",
+        "level": "INFO",
     },
 }

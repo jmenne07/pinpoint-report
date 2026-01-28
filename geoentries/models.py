@@ -107,10 +107,13 @@ class Entry(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to="images/")
     history = HistoricalRecords()
 
+    notes = models.TextField(null=True, blank=True)
+    done_date = models.DateField(blank=True, null=True)
+
+    send_closelink = models.BooleanField(default=False)
+
     @override
     def save(self, *args, **kwargs) -> None:
-        __import__("pdb").set_trace()
-
         super().save(*args, **kwargs)
         if self.title is None or self.title == "":
             self.title = f"#{self.id}-{self.category.name}"  #

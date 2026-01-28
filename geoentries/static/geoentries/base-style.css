@@ -79,19 +79,36 @@ header{
         padding: 1rem;
     }
 
-    a{
-        float:right;
-        padding: 0.5rem;
-        margin: 0.5rem;
-        border-radius: var(--border-radius);
-       
+    .header-nav {
+        float: right;
         
-        &:hover{
-            box-shadow: 1px 1px 2px 2px var(--color-shadow);
+        a, button {
+            display: inline-block;
+            padding: 0.5rem;
+            margin: 0.5rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            color: var(--color-txt);
+
+            &:hover {
+                box-shadow: 1px 1px 2px 2px var(--color-shadow);
+            }
+
+            &:active {
+                box-shadow: inset 1px 1px 2px 2px var(--color-shadow);
+            }
         }
 
-        &:active{
-            box-shadow: inset 1px 1px 2px 2px var(--color-shadow);
+        button {
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: inherit;
+            cursor: pointer;
+        }
+
+        form {
+            display: inline-block;
         }
     }
 
