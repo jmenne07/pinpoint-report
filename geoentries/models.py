@@ -116,7 +116,7 @@ class Entry(models.Model):
     def save(self, *args, **kwargs) -> None:
         super().save(*args, **kwargs)
         if self.title is None or self.title == "":
-            self.title = f"#{self.id}-{self.category.name}"  #
+            self.title = f"#{self.pk}-{self.category.name}"
             super().save(*args, **kwargs)
         return
 
@@ -124,7 +124,7 @@ class Entry(models.Model):
     def __str__(self) -> str:
         return (
             "#"
-            + str(self.id)
+            + str(self.pk)
             + ": "
             + str(self.category)
             + " ("

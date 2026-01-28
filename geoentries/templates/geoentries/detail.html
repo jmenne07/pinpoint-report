@@ -1,5 +1,5 @@
 <!--
-Copyright: (c) 2025 Jörn Menne
+Copyright: (c) 2026 Jörn Menne
 Licensed under the Apache License, Version 2.0
 See NOTICE file for details.
 -->
@@ -7,8 +7,7 @@ See NOTICE file for details.
 {% load static %}
 
 {% block content %}
-<h2> Entry {{entry.id}}</h2>
-<p>Title: {{entry.title}}</p>
+<h2>{{entry.title}}</h2>
 <p>Description: {{entry.description}}</p>
 {% if entry.image %}
 <img src="{{ entry.image.url }}" alt="{{entry.name}}" style=" width:400px">

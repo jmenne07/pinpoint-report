@@ -29,6 +29,7 @@ See NOTICE file for details.
 <section id="main-section">
     {% if entries %} 
         {% for entry in entries %}
+            <a href="{% url 'geoentries:detail' entry.pk   %}">
             <div class="card entry s{{entry.status}}">
                 <h4>{{entry.title}}</h4>
                 <p>Status: {{entry.get_status_display}}</p>
@@ -36,6 +37,7 @@ See NOTICE file for details.
                     <img src ="{{ entry.image.url }}" alt="Bild konnte nicht geladen werden" /> 
                 {% endif %}
             </div>
+            </a>
         {% endfor %}
     {% else %}
         <div>
