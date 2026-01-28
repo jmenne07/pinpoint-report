@@ -55,7 +55,7 @@ class EntryCreateView(CreateView):
     model = Entry
     fields = [
         "category",
-        "title",
+        # "title",
         "description",
         "latitude",
         "longitude",

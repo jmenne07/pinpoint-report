@@ -108,6 +108,16 @@ class Entry(models.Model):
     history = HistoricalRecords()
 
     @override
+    def save(self, *args, **kwargs) -> None:
+        __import__("pdb").set_trace()
+
+        super().save(*args, **kwargs)
+        if self.title is None or self.title == "":
+            self.title = f"#{self.id}-{self.category.name}"  #
+            super().save(*args, **kwargs)
+        return
+
+    @override
     def __str__(self) -> str:
         return (
             "#"
