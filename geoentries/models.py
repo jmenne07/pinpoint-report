@@ -40,6 +40,7 @@ class Category(MPTTModel):
 
     email = models.EmailField(blank=True, null=True)
     extern = models.EmailField(blank=True, null=True)
+    monitoring_mail = models.EmailField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = "Categories"
@@ -75,6 +76,8 @@ class Entry(models.Model):
     # Time based fields
     creation_time = models.DateTimeField(auto_now=True)
     update_time = models.DateTimeField(auto_now_add=True)
+    done_date = models.DateField(blank=True, null=True)
+
     published = models.BooleanField(default=settings.DEBUG)
 
     title = models.CharField(max_length=100)
@@ -108,7 +111,7 @@ class Entry(models.Model):
     history = HistoricalRecords()
 
     notes = models.TextField(null=True, blank=True)
-    done_date = models.DateField(blank=True, null=True)
+    remark = models.TextField(null=True, blank=True)
 
     send_closelink = models.BooleanField(default=False)
 

@@ -38,6 +38,8 @@ class CategoryAdmin(MPTTModelAdmin):
 
         if obj and not obj.extern and not request.user.is_superuser:
             fields = remove_element_from_fields(fields, "extern")
+        if not request.user.is_superuser:
+            fields = remove_element_from_fields(fields, "monitoring_mail")
         return fields
 
 
@@ -108,7 +110,7 @@ class EntryAdmin(SimpleHistoryAdmin):
     fields = [
         ("title", "category"),
         ("creation_time", "update_time", "done_date"),
-        "status",
+        ("status", "remark"),
         "published",
         "send_closelink",
         "description",

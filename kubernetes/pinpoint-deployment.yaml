@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pinpoint-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pinpoint
+  template:
+    metadata:
+      labels:
+        app: pinpoint
+    spec:
+      initContainers:
+        - name: init-pinpoint
+          image: busybox
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Waitin for database..."
+              until nc -z postgres-postgresql.anliegen-ii.svc.cluster.local 5432; do
+                echo "Database not ready; sleeping..."
+              done
+              echo "Database is up"
+          env:
+            - name: DB_HOST
+              value: "postgres-postgresql.anliegen-ii.svc.cluster.local"
+            - name: DB_PORT
+              value: "5432"
+        - name: wait-for-postgres
+          image: postgres:15
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for PostgreSQL..."
+              RETRIES=10
+              until pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER"; do
+                RETRIES=$((RETRIES-1))
+                if [ $RETRIES -le 0 ]; then
+                  echo "PostgreSQL is still unavailable after multiple attempts, exiting."
+                  exit 1
+                fi
+                echo "Postgres is unavailable - sleeping 5s"
+                sleep 5
+              done
+              echo "PostgreSQL is up - continuing"
+          env:
+            - name: DB_HOST
+              value: "postgres-postgresql.anliegen-ii.svc.cluster.local"
+            - name: DB_PORT
+              value: "5432"
+
+        - name: django-migrate
+          image: pinpoint:latest # Local image name
+          imagePullPolicy: Never
+          command:
+            - python
+            - manage.py
+            - migrate
+
+      containers:
+        - name: pinpoint
+          image: pinpoint:latest # Local image name
+          imagePullPolicy: Never # Prevents image pull errors
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DEBUG
+              value: "True"
+            - name: DB_HOST
+              value: "postgres-postgresql.anliegen-ii.svc.cluster.local"
+            - name: DB_PORT
+              value: "5432"

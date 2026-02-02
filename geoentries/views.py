@@ -99,15 +99,6 @@ class EntryDetailView(DetailView):
     model = Entry
     template_name = "geoentries/detail.html"
 
-
-#    NOTE: Outcommented since, right now the admin interface shall be used to modify entries
-#    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-#        self.object = self.get_object()
-#        if request.user.is_authenticated:
-#            return redirect("geoentries:update", pk=self.object.pk)
-#        return super().get(request, *args, **kwargs)
-
-
 class EntryAPIViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
@@ -129,6 +120,12 @@ class CategoryAPIViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CategorySerializer
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer, XMLRenderer]
     filterset_fields = ["name"]
+
+
+class StatsView(ListView):
+    model = Category
+    template_name = "geoentries/stats.html"
+    context_object_name = "categories"
 
 
 @require_GET

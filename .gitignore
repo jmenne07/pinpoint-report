@@ -3,6 +3,7 @@ __pycache__/
 db.sqlite3
 config.json
 .env
+staticfiles
 
 doc/_build
 doc/build
