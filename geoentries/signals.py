@@ -8,7 +8,7 @@ from base64 import urlsafe_b64encode
 
 from Crypto.Cipher import ChaCha20
 from django.conf import settings
-from django.contrib.auth.models import Group, Permission
+from django.contrib.auth.models import Group, Permission, User
 from django.core.mail import send_mail
 from django.db import transaction
 from django.db.models.signals import post_save, pre_save
@@ -46,6 +46,20 @@ def add_default_group_permissions(sender, instance, created, **kwargs):
             print(perms)
 
         transaction.on_commit(add_permission_on_commit)
+
+
+@receiver(post_save, sender=User)
+def add_staff_status(sender, instance, created, **kwargs):
+    """
+    Modifies the users, such that the staff-status is default
+    """
+    if created:
+
+        def default_staff_status():
+            instance.is_staff = True
+            instance.save()
+
+        transaction.on_commit(default_staff_status)
 
 
 @receiver(post_save, sender=Entry)

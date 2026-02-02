@@ -107,7 +107,7 @@ WSGI_APPLICATION = "openpinpoint.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 
-USE_POSTGRES = True
+USE_POSTGRES = os.getenv("USE_POSTGRES").lower() == "true"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
@@ -200,7 +200,7 @@ REST_FRAMEWORK = {
 }
 
 # E-Mail configuration. Emails will only be sent, if SEND_MAIL is set to True
-SEND_MAIL = True
+SEND_MAIL = os.getenv("SEND_MAIL").lower() == "true"
 EMAIL_HOST = os.getenv("EMAIL_HOST", "localhost")
 EMAIL_PORT = os.getenv("EMAIL_PORT", "8025")
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER", "")
@@ -234,11 +234,12 @@ if not TESTING:
 
 
 # Minio as File-Storage
-USE_MINIO = True
+USE_MINIO = os.getenv("USE_MINIO").lower() == "true"
 if USE_MINIO:
     MINIO_STORAGE_ENDPOINT = os.getenv("MINIO_ENDPOINT", "localhost:9000")
     MINIO_STORAGE_ACCESS_KEY = os.getenv("MINIO_ACCESS_KEY", "minio")
     MINIO_STORAGE_SECRET_KEY = os.getenv("MINIO_SECRET_KEY", "minio123")
+    MINIO_STORAGE_MEDIA_URL = os.getenv("MINIO_STORAGE_MEDIA_URL", "http://localhost:9000/media")
     MINIO_STORAGE_USE_HTTPS = False
     MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
     MINIO_STORAGE_AUTO_CREATE_MEDIA_POLICY = "GET_ONLY"
