@@ -78,7 +78,7 @@ class Entry(models.Model):
     update_time = models.DateTimeField(auto_now_add=True)
     done_date = models.DateField(blank=True, null=True)
 
-    published = models.BooleanField(default=settings.DEBUG)
+    published = models.BooleanField(default=settings.AUTO_PUBLISH)
 
     title = models.CharField(max_length=100)
     category = models.ForeignKey(
