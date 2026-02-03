@@ -10,7 +10,8 @@ from typing import Any
 from Crypto.Cipher import ChaCha20
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import QuerySet
+from django.db.models import Count, IntegerField, OuterRef, QuerySet, Subquery
+from django.db.models.functions import Coalesce
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -130,6 +131,26 @@ class StatsView(ListView):
     model = Category
     template_name = "geoentries/stats.html"
     context_object_name = "categories"
+
+    def get_queryset(self) -> QuerySet[Category]:
+        subquery = (
+            Entry.objects.filter(
+                category__tree_id=OuterRef("tree_id"),
+                category__lft__gte=OuterRef("lft"),
+                category__rght__lte=OuterRef("rght"),
+            )
+            .values("category")
+            .annotate(count=Count("id"))
+            .values("count")
+        )
+
+        return Category.objects.annotate(
+            count=Coalesce(
+                Subquery(subquery),
+                0,
+                output_field=IntegerField(),
+            )
+        ).order_by("tree_id", "lft")
 
 
 @require_GET
