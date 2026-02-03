@@ -255,8 +255,7 @@ if USE_MINIO:
         },
     }
 
-
-AUTO_PUBLISH = os.getenv("AUTO_PUBLISH", "false").lower == "true"
+AUTO_PUBLISH = os.getenv("AUTO_PUBLISH", "false").lower() == "true"
 
 # Logging
 LOGGING = {
