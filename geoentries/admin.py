@@ -13,7 +13,6 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin, TreeRelatedFieldListFilter
 from simple_history.admin import SimpleHistoryAdmin
-from django.http import HttpRequest
 
 from .models import Category, Entry, GroupProfile, Mail
 

@@ -24,7 +24,7 @@ urlpatterns = [
     path("entries", views.EntryListView.as_view(), name="list"),
     path("entry/<int:pk>", views.EntryDetailView.as_view(), name="detail"),
     path("update/<int:pk>", views.EntryUpdateView.as_view(), name="update"),
-    path("stats", views.StatsView.as_view(),name="stats"),
+    path("stats", views.StatsView.as_view(), name="stats"),
     path("locations", views.get_location_data, name="locations"),
     path("open311/v2/", include(router.urls)),
     path("<str:b64nonce>/<str:b64ct>", views.close_with_link_view, name="finish"),

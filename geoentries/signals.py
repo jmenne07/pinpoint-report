@@ -172,5 +172,5 @@ def send_close_link(entry: Entry) -> None:
         # WARNING: Error handling has to be improved
     # TODO: Get Mail-receiver from category
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, receipient)
-    logger.info(f"Mail with closelink sent")
+    logger.info("Mail with closelink sent")
     # print(message)

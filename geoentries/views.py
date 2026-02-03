@@ -26,6 +26,8 @@ from rest_framework import mixins, viewsets
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework_xml.renderers import XMLRenderer
 
+from geoentries.forms import EntryForm
+
 from .models import Category, Entry
 from .serializers import CategorySerializer, EntrySerializer
 
@@ -53,16 +55,17 @@ def get_location_data(request: HttpRequest):
 class EntryCreateView(CreateView):
     template_name = "geoentries/create.html"
     model = Entry
-    fields = [
-        "category",
-        # "title",
-        "description",
-        "latitude",
-        "longitude",
-        "email",
-        "image",
-    ]
+    form_class = EntryForm
     success_url = reverse_lazy("geoentries:index")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        form = context["form"]
+        print("CATEGORY FIELD CLASS:", type(form.fields["category"]))
+        print("CHOICES SAMPLE:", list(form.fields["category"].choices)[:5])
+
+        return context
 
 
 class EntryListView(ListView):
@@ -98,6 +101,7 @@ class EntryUpdateView(LoginRequiredMixin, UpdateView):
 class EntryDetailView(DetailView):
     model = Entry
     template_name = "geoentries/detail.html"
+
 
 class EntryAPIViewSet(
     mixins.CreateModelMixin,
