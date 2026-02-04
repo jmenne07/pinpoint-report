@@ -8,7 +8,16 @@ See NOTICE file for details.
 {% block stylesheets %}
 {% endblock %}
 {% block content %}
-    {% for cat in categories %}
-        {{ cat }}: {{ cat.count }} </br>
-    {% endfor %}
+    <table>
+        <tr>
+            <th>Kategorie</th>
+            <th>Anzahl</th>
+        </tr>
+        {% for cat in categories %}
+            <tr>
+                <th>{{ cat }}</th>
+                <th>{{ cat.count }} </th>
+            </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
