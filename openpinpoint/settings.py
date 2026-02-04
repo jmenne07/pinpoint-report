@@ -200,6 +200,7 @@ REST_FRAMEWORK = {
 }
 
 # E-Mail configuration. Emails will only be sent, if SEND_MAIL is set to True
+
 SEND_MAIL = os.getenv("SEND_MAIL", "true").lower() == "true"
 EMAIL_HOST = os.getenv("EMAIL_HOST", "localhost")
 EMAIL_PORT = os.getenv("EMAIL_PORT", "8025")
@@ -221,6 +222,9 @@ MEDIA_URL = "/media/"
 
 # Debug Toolbar settings
 TESTING = "test" in sys.argv or "PYTEST_VERSION" in os.environ
+
+if TESTING:
+    SEND_MAIL = False
 
 if not TESTING:
     INSTALLED_APPS = [

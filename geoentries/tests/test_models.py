@@ -6,7 +6,7 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from geoentries.models import Category, Entry
+from geoentries.models import Category, Entry, Mail
 
 # Test category models
 
@@ -55,7 +55,7 @@ def test_create_entry(cat):
 
     assert before <= entry.creation_time <= after
 
-    assert str(entry) == "Test"
+    assert str(entry) == f"#1: {cat.name} ({entry.title})"
 
 
 def test_category_not_null():

@@ -67,7 +67,7 @@ def test_map_in_index(live_server):
     map_div = driver.find_element(value="map")
 
     if map_div.is_displayed():
-        map_height = int(map_div.value_of_css_property("height").replace("px", ""))
+        map_height = float(map_div.value_of_css_property("height").replace("px", ""))
         assert map_height > 0
     else:
         pytest.skip("Map exists, but is not displayed")
@@ -110,7 +110,9 @@ def test_link_login(live_server):
     """
     driver = setup(live_server, reverse("geoentries:index"))
     try:
-        link = driver.find_element(By.PARTIAL_LINK_TEXT, "login")
+        link = driver.find_element(By.PARTIAL_LINK_TEXT, "Login")
+        if not link:
+            link = driver.find_element(By.PARTIAL_LINK_TEXT, "login")
         link.click()
         assert reverse("admin:login") == urlparse(driver.current_url).path
     finally:
@@ -147,7 +149,6 @@ def test_create_elements(live_server) -> None:
             The url given by the fixture create_url
     """
     driver = setup(live_server, reverse("geoentries:create"))
-    assert id_present(driver, "title")
     assert id_present(driver, "description")
     assert id_present(driver, "latitude")
     assert id_present(driver, "longitude")

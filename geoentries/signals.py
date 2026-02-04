@@ -64,7 +64,7 @@ def add_staff_status(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=Entry)
 def send_confirmation_mail_on_create(sender, instance, created, **kwargs):
-    if created:
+    if created and settings.SEND_MAIL:
         send_external_mail("creation", instance)
         send_internal_mail("allocation", instance)
 
@@ -80,6 +80,8 @@ def presave_entry_handler(sender, instance, **kwargs):
         return
 
     def send_mails_on_commit():
+        if not settings.SEND_MAIL:
+            pass
         if old_entry.status == 0 and instance.status == 1:
             if instance.send_closelink and instance.category.extern:
                 send_close_link(instance)
