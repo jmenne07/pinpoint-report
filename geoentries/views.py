@@ -139,11 +139,10 @@ class StatsView(ListView):
                 category__lft__gte=OuterRef("lft"),
                 category__rght__lte=OuterRef("rght"),
             )
-            .values("category")
+            .values("category__tree_id")
             .annotate(count=Count("id"))
             .values("count")
         )
-
         return Category.objects.annotate(
             count=Coalesce(
                 Subquery(subquery),

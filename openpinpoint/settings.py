@@ -246,10 +246,12 @@ if USE_MINIO:
     MINIO_STORAGE_MEDIA_URL = os.getenv(
         "MINIO_STORAGE_MEDIA_URL", "http://localhost:9000/media"
     )
-    MINIO_STORAGE_USE_HTTPS = False
+    MINIO_STORAGE_USE_HTTPS = (
+        os.getenv("MINIO_STORAGE_USE_HTTPS", "false").lower() == "true"
+    )
     MINIO_STORAGE_AUTO_CREATE_MEDIA_BUCKET = True
     MINIO_STORAGE_AUTO_CREATE_MEDIA_POLICY = "GET_ONLY"
-    MINIO_STORAGE_MEDIA_BUCKET_NAME = "media"
+    MINIO_STORAGE_MEDIA_BUCKET_NAME = os.getenv("MINIO_MEDIA_BUCKET_NAME", "media")
     STORAGES = {
         "default": {
             "BACKEND": "minio_storage.storage.MinioMediaStorage",
