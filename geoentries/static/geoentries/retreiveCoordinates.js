@@ -13,6 +13,7 @@ var lat_element = document.getElementById("latitude") || document.getElementById
 var lng_element = document.getElementById("longitude") || document.getElementById("id_longitude");
 var nomi = document.getElementById("nomi-form")
 var adress_element = document.getElementById("adresse");
+var ad_element = document.getElementById("id_formated_adress")
 let marker = L.marker();
 
 
@@ -82,6 +83,7 @@ function reverseGeocode(lat, lon){
         .then(res => res.json())
         .then(json => {
             adress_element.value = json.display_name;
+            ad_element.value = adress_element.value;
         });
 }
 

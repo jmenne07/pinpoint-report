@@ -28,6 +28,7 @@ class EntryForm(ModelForm):
             "category",
             "email",
             "image",
+            "formated_adress",
         ]
 
 

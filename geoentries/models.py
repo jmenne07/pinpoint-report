@@ -115,6 +115,8 @@ class Entry(models.Model):
 
     send_closelink = models.BooleanField(default=False)
 
+    formated_adress = models.CharField(max_length=1000, blank=True, null=True)
+
     @override
     def save(self, *args, **kwargs) -> None:
         super().save(*args, **kwargs)

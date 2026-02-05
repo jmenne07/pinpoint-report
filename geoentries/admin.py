@@ -114,7 +114,7 @@ class EntryAdmin(SimpleHistoryAdmin):
         "send_closelink",
         "description",
         "email",
-        ("latitude", "longitude", "map"),
+        ("latitude", "longitude", "formated_adress", "map"),
         ("image", "image_preview"),
         "notes",
     ]
