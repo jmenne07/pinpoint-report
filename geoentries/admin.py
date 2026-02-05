@@ -135,6 +135,10 @@ class EntryAdmin(SimpleHistoryAdmin):
 
     history_list_display = ["status"]
 
+    def has_view_history_permission(self, request, obj=None):
+        return request.user.is_superuser
+        # return super().has_view_history_permission(request, obj)
+
     def image_preview(self, obj: Entry) -> str:
         if obj.image:
             return format_html(
