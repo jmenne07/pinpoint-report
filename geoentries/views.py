@@ -175,6 +175,24 @@ class StatsView(ListView):
             )
         ).order_by("tree_id", "lft")
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        status_counts = (
+            Entry.objects.values("status")
+            .annotate(count=Count("id"))
+            .order_by("status")
+        )
+
+        status_map = dict(Entry.Status.choices)
+
+        context["status_counts"] = [
+            {"status": status_map[s["status"]], "count": s["count"]}
+            for s in status_counts
+        ]
+
+        return context
+
 
 @require_GET
 def close_with_link_view(request: HttpRequest, b64nonce: str, b64ct: str):  # type: ignore

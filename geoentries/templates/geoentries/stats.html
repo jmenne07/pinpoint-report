@@ -8,6 +8,7 @@ See NOTICE file for details.
 {% block stylesheets %}
 {% endblock %}
 {% block content %}
+    <h2>Kategorien-Statistiken</h2>
     <table>
         <tr>
             <th>Kategorie</th>
@@ -17,6 +18,19 @@ See NOTICE file for details.
             <tr>
                 <th>{{ cat }}</th>
                 <th>{{ cat.count }} </th>
+            </tr>
+        {% endfor %}
+    </table>
+    <h2>Status-Statistiken</h2>
+    <table>
+        <tr>
+            <th>Status</th>
+            <th>Anzahl</th>
+        </tr>
+        {% for s in status_counts %}
+            <tr>
+                <th>{{ s.status }} </th>
+                <th>{{ s.count }}</th>
             </tr>
         {% endfor %}
     </table>
