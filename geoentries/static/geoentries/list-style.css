@@ -17,15 +17,26 @@
 }
 
 .container {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 
     * {
-        flex: 1;
         max-height: 50vh;
     }
 }
 
+.card{
+    background-color: var(--color-card-bg);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    box-shadow: 1px 1px 3px 1px var(--color-shadow);
+
+    img{
+        max-width: 100%;
+        max-height: 25rem;
+    }
+    overflow: auto;
+}
 
 #main-section {
     text-align: center;

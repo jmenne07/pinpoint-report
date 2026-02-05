@@ -3,7 +3,7 @@
 # See NOTICE file for details.
 
 
-from django.forms import ModelForm
+from django.forms import ModelForm, Form, CharField, ChoiceField
 from mptt.forms import TreeNodeChoiceField
 
 from .models import Category, Entry
@@ -29,3 +29,12 @@ class EntryForm(ModelForm):
             "email",
             "image",
         ]
+
+
+class EntryFilterForm(Form):
+    q = CharField(required=False, label="Search")
+    category = TreeNodeChoiceField(
+        queryset=Category.objects.all(), level_indicator="--", required=False
+    )
+
+    # status = ChoiceField(choices=[("", "All")] + list(Entry.Status), required=False)

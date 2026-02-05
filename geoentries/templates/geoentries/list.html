@@ -10,22 +10,28 @@ See NOTICE file for details.
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
 <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-
 <link rel="stylesheet" href="{% static 'geoentries/list-style.css' %}" />
 {% endblock %}
+
 {% block content %}
 <h2>Alle Anliegen</h2>
 <div id="map-container" class="card">
     <div id="map"></div>
     <script src="{% static 'geoentries/mapsetup.js' %}"></script>
 </div>
+<form method = "GET">
+    {{ filter_form.q }}
+    {{ filter_form.category }}
+    <!-- {{ filter_form.status }} -->
+    <button type="submit">Search</button>
+</form>
 <div class="container">
     {% for entry in entries %}
     <div class="card entry s{{entry.status}}">
         <a href="{% url 'geoentries:detail' entry.id%}">
             <h4>{{ entry.title }} </h4>
             <p>Status: {{ entry.get_status_display }} </p>
-            <p>Beschreibung</p>
+            <p>Beschreibung: {{ entry.description }}</p>
             {% if entry.image %}
             <img src="{{ entry.image.url }}" alt="Bild konnte nicht geladen werden" />
             {% endif %}
@@ -34,6 +40,7 @@ See NOTICE file for details.
     </div>
     {% endfor %}
 </div>
+Dies ist einer einfacher Test
 
 <a href="{% url 'geoentries:index' %}">Back</a>
 <script src="{% static 'geoentries/locationcluster.js' %}"></script>

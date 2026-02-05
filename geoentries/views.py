@@ -10,7 +10,7 @@ from typing import Any
 from Crypto.Cipher import ChaCha20
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, IntegerField, OuterRef, QuerySet, Subquery
+from django.db.models import Count, IntegerField, OuterRef, QuerySet, Subquery, Q
 from django.db.models.functions import Coalesce
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
@@ -27,7 +27,7 @@ from rest_framework import mixins, viewsets
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 from rest_framework_xml.renderers import XMLRenderer
 
-from geoentries.forms import EntryForm
+from geoentries.forms import EntryFilterForm, EntryForm
 
 from .models import Category, Entry
 from .serializers import CategorySerializer, EntrySerializer
@@ -76,9 +76,33 @@ class EntryListView(ListView):
 
     def get_queryset(self) -> QuerySet[Any]:
         queryset = super().get_queryset()
+        form = EntryFilterForm(self.request.GET)
+
+        if form.is_valid():
+            q = form.cleaned_data["q"]
+            category = form.cleaned_data["category"]
+            # status= form.cleaned_data["status"]
+            status = False
+            if q:
+                queryset = queryset.objects.filter(
+                    Q(title__icontains=q) | Q(description__icontains=q),
+                )
+
+                # Catfilter
+            if category:
+                queryset = queryset.filter(category=category)
+
+            # statusfilter
+            if status:
+                queryset = queryset.filter(status=status)
 
         queryset = queryset.filter(published=True)
         return queryset
+
+    def get_context_data(self, **kwargs: Any):
+        contextdata = super().get_context_data(**kwargs)
+        contextdata["filter_form"] = EntryFilterForm(self.request.GET)
+        return contextdata
 
 
 class EntryUpdateView(LoginRequiredMixin, UpdateView):
