@@ -34,7 +34,7 @@ SECRET_KEY = os.getenv(
 )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+DEBUG = os.getenv("DEBUG", "true").lower() == "true"
 
 # ALLOWED_HOSTS = [".localhost", "127.0.0.1", "[::1]", "192.168.49.2"]
 ALLOWED_HOSTS = [
@@ -107,7 +107,7 @@ WSGI_APPLICATION = "openpinpoint.wsgi.application"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 
-USE_POSTGRES = os.getenv("USE_POSTGRES", "True").lower() == "true"
+USE_POSTGRES = os.getenv("USE_POSTGRES", "fals").lower() == "true"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",

@@ -15,6 +15,8 @@ from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.urls import reverse
 
+from django.template import TemplateSyntaxError, engines
+
 from .models import Entry, Mail
 
 logger = logging.getLogger(__name__)
@@ -31,6 +33,8 @@ default_perms = [
 mail_replacements = {
     "{{id}}": lambda entry: entry.id,
 }
+
+django_engine = engines["django"]
 
 
 @receiver(post_save, sender=Group)
@@ -110,24 +114,29 @@ def send_entry_mail(title: str, entry, mail_receiver):
     subject = ""
     message = ""
     mail_object = Mail.objects.get(title=title)
+    context = {"entry": entry, "anliegen": entry}
     if mail_object:
-        subject = mail_object.subject
-        message = mail_object.body
-        for placeholder, func in mail_replacements.items():
-            try:
-                value = func(entry)
-            except AttributeError:
-                continue  # object does not have the attribute
-            message = message.replace(placeholder, str(value))
+        __import__("pdb").set_trace()
 
-        send_mail(
-            subject,
-            message,
-            settings.DEFAULT_FROM_EMAIL,
-            mail_receiver,
-            fail_silently=False,
-        )
-        logger.info(f"Mail with title {title} send")
+        subject_template = django_engine.from_string(mail_object.subject)
+        message_template = django_engine.from_string(mail_object.body)
+
+        try:
+            subject = subject_template.render(context)
+            message = message_template.render(context)
+
+            send_mail(
+                subject,
+                message,
+                settings.DEFAULT_FROM_EMAIL,
+                mail_receiver,
+                fail_silently=False,
+            )
+            logger.info(f"Mail with title {title} send")
+        except TemplateSyntaxError as e:
+            logger.error(
+                f"Email with title {title} could not be sent because of error {e}"
+            )
     else:
         logger.warning(f"Mail with title {title} not found\nNo Mail will be send")
         print("warning, mail not found")
