@@ -10,7 +10,7 @@ from typing import Any
 from Crypto.Cipher import ChaCha20
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, IntegerField, OuterRef, QuerySet, Subquery, Q
+from django.db.models import Count, IntegerField, OuterRef, Q, QuerySet, Subquery
 from django.db.models.functions import Coalesce
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import get_object_or_404, redirect

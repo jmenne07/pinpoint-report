@@ -8,15 +8,23 @@ of the project.
 
 # TODO: Testing
 
+import logging
+from base64 import urlsafe_b64encode
 from typing import override
 
+from Crypto.Cipher import ChaCha20
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.core.mail import send_mail
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.template import engines
+from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 from simple_history.models import HistoricalRecords
 
+django_engine = engines["django"]
+logger = logging.getLogger(__name__)
 # Create your models here.
 
 
@@ -137,6 +145,22 @@ class Entry(models.Model):
             + ")"
         )
 
+    def create_finish_link(self):
+        padded_id = str(self.id).zfill(6)
+        cipher = ChaCha20.new(key=settings.KEY)
+        byte_text = bytes(padded_id, "UTF-8")
+        ciphertext = cipher.encrypt(byte_text)
+        nonce = cipher.nonce
+
+        b64nonce = urlsafe_b64encode(nonce).decode("utf-8")
+        b64ct = urlsafe_b64encode(ciphertext).decode("utf-8")
+
+        host = settings.HOST
+        url = reverse("geoentries:index")
+        link = f"{host}{url}{b64nonce}/{b64ct}"
+
+        return link
+
 
 class GroupProfile(models.Model):
     """
@@ -162,3 +186,16 @@ class Mail(models.Model):
     @override
     def __str__(self):
         return self.title
+
+    def render_and_send(self, context, receipient_list):
+        __import__("pdb").set_trace()
+        subject_template = django_engine.from_string(self.subject)
+        message_template = django_engine.from_string(self.body)
+
+        try:
+            subject = subject_template.render(context)
+            message = message_template.render(context)
+
+            send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, receipient_list)
+        except Exception as e:
+            logger.error(f"Could not send mail {self.title} because of error {e}")

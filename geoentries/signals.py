@@ -4,18 +4,12 @@
 
 
 import logging
-from base64 import urlsafe_b64encode
 
-from Crypto.Cipher import ChaCha20
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission, User
-from django.core.mail import send_mail
 from django.db import transaction
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
-from django.urls import reverse
-
-from django.template import TemplateSyntaxError, engines
 
 from .models import Entry, Mail
 
@@ -29,12 +23,6 @@ default_perms = [
     "delete_entry",
     "view_entry",
 ]
-
-mail_replacements = {
-    "{{id}}": lambda entry: entry.id,
-}
-
-django_engine = engines["django"]
 
 
 @receiver(post_save, sender=Group)
@@ -69,6 +57,7 @@ def add_staff_status(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Entry)
 def send_confirmation_mail_on_create(sender, instance, created, **kwargs):
     if created and settings.SEND_MAIL:
+        __import__("pdb").set_trace()
         send_external_mail("creation", instance)
         send_internal_mail("allocation", instance)
 
@@ -111,36 +100,12 @@ def send_internal_mail(title, entry):
 
 
 def send_entry_mail(title: str, entry, mail_receiver):
-    subject = ""
-    message = ""
     mail_object = Mail.objects.get(title=title)
     context = {"entry": entry, "anliegen": entry}
     if mail_object:
-        __import__("pdb").set_trace()
-
-        subject_template = django_engine.from_string(mail_object.subject)
-        message_template = django_engine.from_string(mail_object.body)
-
-        try:
-            subject = subject_template.render(context)
-            message = message_template.render(context)
-
-            send_mail(
-                subject,
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                mail_receiver,
-                fail_silently=False,
-            )
-            logger.info(f"Mail with title {title} send")
-        except TemplateSyntaxError as e:
-            logger.error(
-                f"Email with title {title} could not be sent because of error {e}"
-            )
+        mail_object.render_and_send(context, mail_receiver)
     else:
         logger.warning(f"Mail with title {title} not found\nNo Mail will be send")
-        print("warning, mail not found")
-        print("no mail will be sent")
 
 
 def send_close_link(entry: Entry) -> None:
@@ -148,40 +113,24 @@ def send_close_link(entry: Entry) -> None:
     Sends a link, which sets the status of an entry from "In progress" to "Closed"
     """
 
+    __import__("pdb").set_trace()
     # TODO: Test
     if not settings.SEND_MAIL:
         # TODO: Probably should raise an Error, since to work emails have to be send
         return
 
-    padded_id = str(entry.id).zfill(6)
-    cipher = ChaCha20.new(key=settings.KEY)
-    byte_text = bytes(padded_id, "utf-8")
-    ciphertext = cipher.encrypt(byte_text)
-    nonce = cipher.nonce
-
-    b64nonce = urlsafe_b64encode(nonce).decode("utf-8")
-    b64ct = urlsafe_b64encode(ciphertext).decode("utf-8")
-
-    host = settings.HOST
-    url = reverse("geoentries:index")
-    link = f"{host}{url}{b64nonce}/{b64ct}"
-
-    subject = "Close link"
-    message = link
     receipient = []
     receipient.append(entry.category.extern)
 
     mail_object = Mail.objects.filter(title="closelink").first()
     if mail_object:
-        subject = mail_object.subject
-        message = mail_object.body
-        message = message.replace("{{id}}", str(entry.id))
-        message = message.replace("{{link}}", link)
+        link = entry.create_finish_link()
+        context = {"entry": entry, "anliegen": entry, "link": link}
+        mail_object.render_and_send(context, receipient)
 
     else:
         print("Warning")
         # WARNING: Error handling has to be improved
     # TODO: Get Mail-receiver from category
-    send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, receipient)
     logger.info("Mail with closelink sent")
     # print(message)
