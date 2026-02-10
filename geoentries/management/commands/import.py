@@ -10,7 +10,7 @@ from ...serializers import (
     EntrySerializer,
     GroupProfileSerializer,
     GroupSerializer,
-    MailSerializer,
+    MailTemplateSerializer,
     UserSerializer,
 )
 
@@ -19,7 +19,7 @@ SERIALIZER_MAPPING = {
     "user": UserSerializer,
     "cat": CategorySerializer,
     "gps": GroupProfileSerializer,
-    "mail": MailSerializer,
+    "mail": MailTemplateSerializer,
     "entry": EntrySerializer,
 }
 

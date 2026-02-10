@@ -11,7 +11,7 @@ from django.db import transaction
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
-from .models import Entry, Mail
+from .models import Entry, MailTemplate, MailTrigger
 
 logger = logging.getLogger(__name__)
 
@@ -54,58 +54,63 @@ def add_staff_status(sender, instance, created, **kwargs):
         transaction.on_commit(default_staff_status)
 
 
-@receiver(post_save, sender=Entry)
-def send_confirmation_mail_on_create(sender, instance, created, **kwargs):
-    if created and settings.SEND_MAIL:
-        __import__("pdb").set_trace()
-        send_external_mail("creation", instance)
-        send_internal_mail("allocation", instance)
-
-
 @receiver(pre_save, sender=Entry)
-def presave_entry_handler(sender, instance, **kwargs):
-    """
-    Function receiving a pre_save signal when an entry is modified to send mails accordingly
-    """
-    try:
-        old_entry = Entry.objects.get(pk=instance.id)
-    except Entry.DoesNotExist:
-        return
-
-    def send_mails_on_commit():
-        if not settings.SEND_MAIL:
-            pass
-        if old_entry.status == 0 and instance.status == 1:
-            if instance.send_closelink and instance.category.extern:
-                send_close_link(instance)
-            send_external_mail("info_allocation", instance)
-
-        if old_entry.category != instance.category:
-            send_internal_mail("allocation", instance)
-        if instance.status == 2:
-            send_external_mail("finished", instance)
-
-        pass
-
-    transaction.on_commit(send_mails_on_commit)
-
-
-def send_external_mail(title: str, entry):
-    send_entry_mail(title, entry, [entry.email])
-
-
-def send_internal_mail(title, entry):
-    mail_receiver = [entry.category.email]
-    send_entry_mail(title, entry, mail_receiver)
-
-
-def send_entry_mail(title: str, entry, mail_receiver):
-    mail_object = Mail.objects.get(title=title)
-    context = {"entry": entry, "anliegen": entry}
-    if mail_object:
-        mail_object.render_and_send(context, mail_receiver)
+def capture_old_instance(sender, instance, **kwargs):
+    if instance.pk:
+        try:
+            instance._old_instance = sender.objects.get(pk=instance.pk)
+        except sender.DoesNotExist:
+            instance._old_instance = None
     else:
-        logger.warning(f"Mail with title {title} not found\nNo Mail will be send")
+        instance._old_instance = None
+
+
+@receiver(post_save, sender=Entry)
+def evalute_mail_trigger(sender, instance, created, **kwargs):
+    __import__("pdb").set_trace()
+    model_name = sender.__name__
+    active_triggers = MailTrigger.objects.filter(
+        model_name=model_name, is_active=True
+    ).prefetch_related("conditions")
+
+    for trigger in active_triggers:
+        all_met = True
+        for condition in trigger.conditions.all():
+            if created and not condition.trigger_on_create:
+                all_met = False
+                break
+            if not created and not condition.trigger_on_update:
+                all_met = False
+                break
+
+            if condition.field_name:
+                look_up = f"{condition.field_name}__{condition.lookup_type}"
+                matches = sender.objects.filter(
+                    id=instance.id, **{look_up: condition.expected_value}
+                ).exists()
+
+                if not matches:
+                    all_met = False
+                    break
+
+            if not created and condition.previous_value:
+                old_instance = getattr(instance, "_old_instance", None)
+                if old_instance:
+                    old_value = str(getattr(old_instance, condition.field_name))
+                    if old_value != condition.previous_value:
+                        all_met = False
+                        break
+                else:
+                    all_met = False
+                    break
+
+        if all_met:
+            for template in trigger.mails.all():
+                context = {f"{model_name}": instance}
+                if template.title == "closelink":
+                    if not context["Entry"].send_closelink:
+                        break
+                template.render_and_send(context)
 
 
 def send_close_link(entry: Entry) -> None:
@@ -113,7 +118,6 @@ def send_close_link(entry: Entry) -> None:
     Sends a link, which sets the status of an entry from "In progress" to "Closed"
     """
 
-    __import__("pdb").set_trace()
     # TODO: Test
     if not settings.SEND_MAIL:
         # TODO: Probably should raise an Error, since to work emails have to be send
@@ -122,7 +126,7 @@ def send_close_link(entry: Entry) -> None:
     receipient = []
     receipient.append(entry.category.extern)
 
-    mail_object = Mail.objects.filter(title="closelink").first()
+    mail_object = MailTemplate.objects.filter(title="closelink").first()
     if mail_object:
         link = entry.create_finish_link()
         context = {"entry": entry, "anliegen": entry, "link": link}

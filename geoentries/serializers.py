@@ -8,7 +8,14 @@
 from django.contrib.auth.models import Group, User
 from rest_framework import serializers
 
-from geoentries.models import Category, Entry, GroupProfile, Mail
+from geoentries.models import (
+    Category,
+    Condition,
+    Entry,
+    GroupProfile,
+    MailTemplate,
+    MailTrigger,
+)
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -38,9 +45,21 @@ class GroupSerializer(serializers.ModelSerializer):
         exclude = []
 
 
-class MailSerializer(serializers.ModelSerializer):
+class MailTemplateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Mail
+        model = MailTemplate
+        exclude = []
+
+
+class MailTriggerSerialier(serializers.ModelSerializer):
+    class Meta:
+        model = MailTrigger
+        exclude = []
+
+
+class ConditionSerizalizer(serializers.ModelSerializer):
+    class Meta:
+        model = Condition
         exclude = []
 
 

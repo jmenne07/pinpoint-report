@@ -3,7 +3,7 @@
 # See NOTICE file for details.
 
 
-from django.forms import ModelForm, Form, CharField, ChoiceField
+from django.forms import CharField, Form, ModelForm
 from mptt.forms import TreeNodeChoiceField
 
 from .models import Category, Entry

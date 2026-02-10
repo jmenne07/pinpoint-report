@@ -174,25 +174,102 @@ class GroupProfile(models.Model):
         return "Categories"
 
 
-class Mail(models.Model):
+class Condition(models.Model):
+    LOOKUP_CHOICES = [
+        ("exact", "Equals (==)"),
+        ("iexact", "Equals (Case-Insensitive)"),
+        ("contains", "Contains"),
+        ("gt", "Greater Than (>)"),
+        ("gte", "Greater Than or Equal (>=)"),
+        ("lt", "Less Than (<)"),
+        ("lte", "Less Than or Equal (<=)"),
+        ("in", "Is in (comma-separated list)"),
+    ]
+
+    name = models.CharField(max_length=50)
+    field_name = models.CharField(max_length=100, blank=True, null=True)
+
+    lookup_type = models.CharField(
+        max_length=32, choices=LOOKUP_CHOICES, default="exact"
+    )
+    # new value
+    expected_value = models.CharField(max_length=100, blank=True, null=True)
+
+    previous_value = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        help_text="Only needed for a transition change",
+    )
+
+    trigger_on_create = models.BooleanField(default=True)
+    trigger_on_update = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+
+class MailTrigger(models.Model):
+    event = models.CharField(max_length=128, unique=True)
+    model_name = models.CharField(max_length=50, null=True)
+
+    is_active = models.BooleanField(default=True)
+    conditions = models.ManyToManyField(Condition)
+
+    def __str__(self):
+        return f"Event: {self.event}"
+
+
+class MailTemplate(models.Model):
     """
     Database entries for mails
     """
 
+    MAIL_TYPE_CHOICES = [
+        ("info", "info"),
+        ("intern", "intern"),
+        ("extern", "extern"),
+    ]
     title = models.CharField(max_length=50, unique=True)
     subject = models.CharField(max_length=80)
     body = models.TextField(blank=False, null=False, default="")
+    mail_type = models.CharField(
+        max_length=32, choices=MAIL_TYPE_CHOICES, default="info"
+    )
+
+    triggers = models.ManyToManyField(
+        MailTrigger,
+        related_name="mails",
+        blank=True,
+    )
 
     @override
     def __str__(self):
         return self.title
 
-    def render_and_send(self, context, receipient_list):
+    def render_and_send(self, context, receipient_list=None):
         __import__("pdb").set_trace()
+        # TODO: Get receipient_list
         subject_template = django_engine.from_string(self.subject)
         message_template = django_engine.from_string(self.body)
+        # WARNING: context explicitly calles Entry
+        # TODO: Find a better solution
+        if not receipient_list:
+            receipient_list = []
+            if self.mail_type == "info":
+                receipient_list.append(context["Entry"].email)
+            if self.mail_type == "intern":
+                receipient_list.append(context["Entry"].category.email)
+            if self.mail_type == "extern":
+                receipient_list.append(context["Entry"].catgegory.extern)
+
+            monitoring_mail = context["Entry"].category.monitoring_mail
+            if monitoring_mail:
+                receipient_list.append(monitoring_mail)
 
         try:
+            if self.title == "closelink":
+                context["link"] = context["Entry"].create_finish_link()
             subject = subject_template.render(context)
             message = message_template.render(context)
 

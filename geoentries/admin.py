@@ -14,7 +14,7 @@ from django.utils.safestring import mark_safe
 from mptt.admin import MPTTModelAdmin, TreeRelatedFieldListFilter
 from simple_history.admin import SimpleHistoryAdmin
 
-from .models import Category, Entry, GroupProfile, Mail
+from .models import Category, Condition, Entry, GroupProfile, MailTemplate, MailTrigger
 
 # Register your models here.
 
@@ -234,9 +234,26 @@ class MyGroupAdmin(GroupAdmin):
     inlines = [GroupInline]
 
 
-@admin.register(Mail)
-class MailAdmin(admin.ModelAdmin):
-    exlcude = None
+class ConditionInline(admin.StackedInline):
+    model = Condition
+
+
+@admin.register(MailTemplate)
+class MailTemplateAdmin(admin.ModelAdmin):
+    exclude = None
+    filter_horizontal = ("triggers",)
+
+
+@admin.register(MailTrigger)
+class MailTriggerAdmin(admin.ModelAdmin):
+    exclude = None
+    filter_horizontal = ("conditions",)
+    inines = [ConditionInline]
+
+
+@admin.register(Condition)
+class ConditionTrigger(admin.ModelAdmin):
+    exclude = None
 
 
 def remove_element_from_fields(fields, element):

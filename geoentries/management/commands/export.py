@@ -6,12 +6,14 @@ import json
 from django.contrib.auth.models import Group, User
 from django.core.management.base import BaseCommand
 
-from ...models import Category, GroupProfile, Mail
+from ...models import Category, Condition, GroupProfile, MailTemplate, MailTrigger
 from ...serializers import (
     CategorySerializer,
+    ConditionSerizalizer,
     GroupProfileSerializer,
     GroupSerializer,
-    MailSerializer,
+    MailTemplateSerializer,
+    MailTriggerSerialier,
     UserSerializer,
 )
 
@@ -36,14 +38,22 @@ class Command(BaseCommand):
         cats = Category.objects.all()
         catser = CategorySerializer(cats, many=True)
 
-        mails = Mail.objects.all()
-        mailser = MailSerializer(mails, many=True)
+        conds = Condition.objects.all()
+        condser = ConditionSerizalizer(conds, many=True)
+
+        triggers = MailTrigger.objects.all()
+        triggerser = MailTriggerSerialier(triggers, many=True)
+
+        mails = MailTemplate.objects.all()
+        mailser = MailTemplateSerializer(mails, many=True)
 
         data = {}
         data["group"] = groupser.data
         data["user"] = userser.data
         data["cat"] = catser.data
         data["gps"] = gpser.data
+        data["conds"] = condser.data
+        data["trigger"] = triggerser.data
         data["mail"] = mailser.data
 
         with open(path, "w") as f:
