@@ -5,29 +5,47 @@ See NOTICE file for details.
 -->
 {% extends "geoentries/base.html" %}
 {% load static %}
+{% block title %}Anliegen {{ entry.title }} {% endblock%}
 {% block stylesheets %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
 <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 
-<link rel="stylesheet" href="{% static 'geoentries/index-style.css' %}" />
+<!-- <link rel="stylesheet" href="{% static 'geoentries/index-style.css' %}" /> -->
 <link rel="stylesheet" href="{% static 'geoentries/detail-style.css' %}" />
 {% endblock %}
-
 {% block content %}
-<div class="card entry s{{ entry.status }}">
-    <h2>{{entry.title}}</h2>
-    <p>Beschreibung: {{entry.description}}</p>
-    <p>Status: {{entry.get_status_display}}</p>
-    {% if entry.remark %}
-    <p>Vermerk: {{ entry.remark }}</p>
-    {% endif %}
-    {% if entry.image %}
-    <img src="{{ entry.image.url }}" alt="{{entry.name}}" style=" width:400px">
-    {% endif %}
-    <a href="{% url 'geoentries:index' %}">Zurück</a>
-</div>
+<script>
+    window.APP_CONFIG = {
+        location: {
+            lat: "{{ entry.latitude }}",
+            lng: "{{ entry.longitude }}"
+        }
+    }
+</script>
+<div id="map"></div>
 
+    <script src="{% static 'geoentries/mapsetup.js' %}"></script>
+    <script src="{% static 'geoentries/simple_marker.js' %}"></script>
+
+<div class="card entry s{{ entry.status }} grid-card">
+
+     {% if entry.image and entry.show_image %}
+        <img src="{{ entry.image.url }}" alt="Bild konnte nicht geladen werden" />
+    {% else %}
+        <img src="{% static 'geoentries/icon.svg' %}" alt="Platzhalter"/>
+    {% endif %}
+    <div>
+        <h2>{{entry.title}}</h2>
+        <p><strong>Beschreibung:</strong> <br>{{entry.description}}</p>
+        <p><strong>Status:</strong><br> {{entry.get_status_display}}</p>
+        {% if entry.remark %}
+        <p><strong>Vermerk:</strong><br> {{ entry.remark }}</p>
+        {% endif %}
+        <p><strong>Adresse:</strong><br> {{ entry.formated_adress }} </p>
+    </div>
+    <a href="{% url 'geoentries:list' %}">Zurück</a>
+</div>
 
 
 {% endblock %}

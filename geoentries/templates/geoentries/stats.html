@@ -5,9 +5,12 @@ See NOTICE file for details.
 -->
 {% extends "geoentries/base.html" %}
 {% load static %}
+{% block title %}Statistik{% endblock%}
 {% block stylesheets %}
+<link rel="stylesheet" href="{% static 'geoentries/stats-style.css' %}" />
 {% endblock %}
 {% block content %}
+    <div clasS="table-div">
     <h2>Kategorien-Statistiken</h2>
     <table>
         <tr>
@@ -16,11 +19,13 @@ See NOTICE file for details.
         </tr>
         {% for cat in categories %}
             <tr>
-                <th>{{ cat }}</th>
-                <th>{{ cat.count }} </th>
+                <td>{{ cat }}</th>
+                <td>{{ cat.count }} </th>
             </tr>
         {% endfor %}
     </table>
+    </div>
+    <div class="table-div">
     <h2>Status-Statistiken</h2>
     <table>
         <tr>
@@ -29,9 +34,10 @@ See NOTICE file for details.
         </tr>
         {% for s in status_counts %}
             <tr>
-                <th>{{ s.status }} </th>
-                <th>{{ s.count }}</th>
+                <td>{{ s.status }} </th>
+                <td>{{ s.count }}</th>
             </tr>
         {% endfor %}
     </table>
+    </div>
 {% endblock %}

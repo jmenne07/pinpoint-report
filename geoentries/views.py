@@ -1,4 +1,4 @@
-# Copyright 2025 Jörn Menne
+# Copyright 2026 Jörn Menne
 # Licensed under the Apache License, Version 2.0
 # See NOTICE file for details.
 
@@ -24,13 +24,20 @@ from django.views.generic import (
     UpdateView,
 )
 from rest_framework import mixins, viewsets
+from rest_framework.decorators import action
 from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
+from rest_framework.response import Response
 from rest_framework_xml.renderers import XMLRenderer
 
 from geoentries.forms import EntryFilterForm, EntryForm
 
 from .models import Category, Entry
-from .serializers import CategorySerializer, EntrySerializer
+from .serializers import (
+    CategorySerializer,
+    EntrySerializer,
+    GroupSerializer,
+    serializers,
+)
 
 
 class IndexView(TemplateView):
@@ -62,9 +69,7 @@ class EntryCreateView(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        form = context["form"]
-        print("CATEGORY FIELD CLASS:", type(form.fields["category"]))
-        print("CHOICES SAMPLE:", list(form.fields["category"].choices)[:5])
+        context["categories"] = Category.objects.filter(level=0)
 
         return context
 
@@ -81,11 +86,10 @@ class EntryListView(ListView):
         if form.is_valid():
             q = form.cleaned_data["q"]
             category = form.cleaned_data["category"]
-            # status= form.cleaned_data["status"]
-            status = False
+            status = form.cleaned_data["status"]
             if q:
-                queryset = queryset.objects.filter(
-                    Q(title__icontains=q) | Q(description__icontains=q),
+                queryset = queryset.filter(
+                    Q(title__icontains=q) | Q(description__icontains=q)
                 )
 
                 # Catfilter
@@ -149,6 +153,16 @@ class CategoryAPIViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = CategorySerializer
     renderer_classes = [JSONRenderer, BrowsableAPIRenderer, XMLRenderer]
     filterset_fields = ["name"]
+
+    @action(detail=True)
+    def subcategories(self, request, pk=None):
+        if pk is None:
+            return Response("{}")
+
+        cat = Category.objects.get(pk=pk)
+        data = cat.get_children()
+        serializer = GroupSerializer(data, many=True)
+        return Response({"subcategories": serializer.data})
 
 
 class StatsView(ListView):

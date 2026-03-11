@@ -4,13 +4,14 @@ Licensed under the Apache License, Version 2.0
 See NOTICE file for details.
 */
 
-h2{
+
+main h2{
   text-align: center;
 }
 
 #map-container {
     position: relative;
-    margin: 0 auto 2rem auto;
+    margin: 0 auto ;
     border-radius: var(--border-radius);
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
@@ -18,7 +19,7 @@ h2{
 
 
 #map {
-    height: 400px;
+    height: var(--map-height);
     width: 100%;
     z-index: 1;
     filter: invert(var(--invert)) brightness(var(--brightness)) contrast(var(--contrast));
@@ -30,7 +31,7 @@ h2{
     left: 50%;
     transform: translateX(-50%);
     width: 75%;
-    z-index: 1000; /* Über der Karte */
+    z-index: 9; /* Über der Karte */
 }
 
 #adresse {
@@ -47,9 +48,8 @@ h2{
 #hero-section{
     margin: 0 auto;
     padding: 20px;
-    background: var(--color-card-bg);
-    border-radius: var(--border-radius);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    background: var(--color-bg);
+    /* box-shadow: 0 4px 6px rgba(0,0,0,0.1); */
 }
 
 #form{
@@ -61,7 +61,11 @@ h2{
         margin: 10px 0 5px 0;
     }
 
-    input, select, textarea{
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    select,
+    textarea{
         box-sizing: border-box;
         padding: 10px;
         border-radius: var(--border-radius);
@@ -82,10 +86,32 @@ h2{
     margin-top: 10px;
 }
 
+.checkbox-group{
+    display: flex;
+    align-items: center; /* vertically align checkbox and label */
+    gap: 20px;           /* space between checkbox and label */
+    margin: 10px 0 5px 0;      /* spacing from other fields */
+    width: auto;
+
+    input[type="checkbox"] {
+        margin: 0;
+        transform: scale(1.75);
+        transform-origin: left;
+        border-radius: var(--border-radius);
+    }
+
+    label{
+        margin: 0;
+    }
+}
+
+#dsgvo-text{
+    margin-top: 0;
+}
 
 .submit{
-    margin-top: 25px;
-    padding: 15px;
+    margin: 1rem auto;
+    padding: 2rem;
     background-color: var(--color-button);
     border: none;
     border-radius: var(--border-radius);
@@ -93,7 +119,7 @@ h2{
     font-weight: bold;
     cursor: pointer;
     transition: filter 0.3s;
-
+    width: 100%;
     &:hover{
         filter: brightness(0.9);
     }
@@ -101,4 +127,10 @@ h2{
 
 .hidden{
     display: none;
+}
+
+.catsel{
+    display: flex;
+    flex-grow: 1;
+    gap:10px;
 }

@@ -68,7 +68,7 @@ nomi.addEventListener("submit", async(e) => {
             marker.setLatLng(position);
             marker.addTo(map)
             // L.marker(position).addTo(markerLayer);
-            reverse_address_element.value = json[0].display_name;
+            adress_element.value = json[0].display_name;
             lat_element.value = json[0].lat;
             lng_element.value = json[0].lon;
 

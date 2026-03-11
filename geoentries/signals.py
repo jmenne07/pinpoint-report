@@ -1,4 +1,4 @@
-# Copyright 2025 Jörn Menne
+# Copyright 2026 Jörn Menne
 # Licensed under the Apache License, Version 2.0
 # See NOTICE file for details.
 
@@ -55,6 +55,11 @@ def add_staff_status(sender, instance, created, **kwargs):
 
 
 @receiver(pre_save, sender=Entry)
+def auto_publish_entry(sender, instance, **kwargs):
+    instance.published = True
+
+
+@receiver(pre_save, sender=Entry)
 def capture_old_instance(sender, instance, **kwargs):
     if instance.pk:
         try:
@@ -67,11 +72,12 @@ def capture_old_instance(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Entry)
 def evalute_mail_trigger(sender, instance, created, **kwargs):
-    __import__("pdb").set_trace()
     model_name = sender.__name__
     active_triggers = MailTrigger.objects.filter(
         model_name=model_name, is_active=True
     ).prefetch_related("conditions")
+
+    templates_to_send = set()
 
     for trigger in active_triggers:
         all_met = True
@@ -103,14 +109,17 @@ def evalute_mail_trigger(sender, instance, created, **kwargs):
                 else:
                     all_met = False
                     break
-
         if all_met:
             for template in trigger.mails.all():
                 context = {f"{model_name}": instance}
                 if template.title == "closelink":
                     if not context["Entry"].send_closelink:
                         break
-                template.render_and_send(context)
+                templates_to_send.add(template)
+
+    for template in templates_to_send:
+        context = {f"{model_name}": instance}
+        template.render_and_send(context)
 
 
 def send_close_link(entry: Entry) -> None:

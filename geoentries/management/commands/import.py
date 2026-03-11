@@ -7,10 +7,12 @@ from django.core.management.base import BaseCommand
 
 from ...serializers import (
     CategorySerializer,
+    ConditionSerizalizer,
     EntrySerializer,
     GroupProfileSerializer,
     GroupSerializer,
     MailTemplateSerializer,
+    MailTriggerSerialier,
     UserSerializer,
 )
 
@@ -19,6 +21,8 @@ SERIALIZER_MAPPING = {
     "user": UserSerializer,
     "cat": CategorySerializer,
     "gps": GroupProfileSerializer,
+    "conds": ConditionSerizalizer,
+    "trigger": MailTriggerSerialier,
     "mail": MailTemplateSerializer,
     "entry": EntrySerializer,
 }

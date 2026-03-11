@@ -41,7 +41,8 @@ urlpatterns = [
         name="swagger-ui",
     ),
     path("api/redoc", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
-    path("geoentries/", include("geoentries.urls")),
+    # path("geoentries/", include("geoentries.urls")),
+    path("", include("geoentries.urls")),
 ]
 
 if DEBUG:

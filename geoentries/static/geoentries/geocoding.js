@@ -1,3 +1,8 @@
+/*
+ * Copyright 2026 Jörn Menne
+ * Licensed under the Apache License, Version 2.0
+ * See NOTICE file for details.
+ */
 var nomi = document.getElementById("nomi-form").addEventListener("submit", async(e) =>{
     //prevent Pagereload
     e.preventDefault();

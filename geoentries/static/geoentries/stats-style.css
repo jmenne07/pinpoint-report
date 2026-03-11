@@ -1,0 +1,30 @@
+main h2{
+    padding: 10px;
+}
+
+.table-div{
+    margin: auto;
+    padding: 10px;
+}
+
+table{
+    padding: 10px;
+}
+
+table, th, td{
+    border: thin solid;
+    border-collapse: collapse;
+}
+
+th{
+    font-weight: bolder;
+    font-size: large;
+}
+
+tbody tr:nth-child(even){
+    background-color: lightgray;
+}
+
+tbody tr:hover, tfoot tr:hover { 
+  background-color:#fffbf0;
+}

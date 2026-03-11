@@ -21,32 +21,71 @@ See NOTICE file for details.
     {% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
+    <script>
+        window.APP_CONFIG = {
+            urls: {
+                locations:"{% url 'geoentries:locations' %}"
+            }
+        }
+    </script>
 </head>
 
 <body>
     <header>
-        <img src="{% static 'geoentries/icon.svg' %}" alt="Icon" id="icon"/>
-        <input id="dark" type="checkbox">
-        <label id="toggle" for="dark">
-            <div class="circle">
-                <div class="semicircle"></div>
+        <div class="left">
+            <a href="{% url 'geoentries:index' %}"><img src="{% static 'geoentries/icon.svg' %}" alt="Icon" id="icon"/></a>
+            <div class="header-title">
+                <h2>Pinpoint</h2>
             </div>
-        </label>
-        <div class="header-nav">
-        {% if user.is_authenticated %}
-        <form method="post" action="{% url 'geoentries:logout' %}">
-            {% csrf_token %}
-            <button type="submit">Logout</button>
-        </form>
-        {% else %}
-            <a href="{% url 'admin:login' %}">Login</a>
-        {% endif %}
-
-        <a href="{% url 'geoentries:list'%}">Alle Anliegen</a>
         </div>
+        <nav>
+            <input type="checkbox" id="menu-toggle">
+            <label for="menu-toggle" class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+
+            <ul class="nav-links">
+                {% if user.is_authenticated %}
+                    <li>
+                    <form method="post" action="{% url 'geoentries:logout' %}">
+                            {% csrf_token %}
+                            <button type="submit">Logout</button>
+                        </form>
+                    </li>
+                    <li><a href="{% url 'admin:index' %}">Admin-Bereich</a></li>
+                {% else %}
+                    <li><a href="{% url 'admin:login' %}">Login</a></li>
+                {% endif %}
+                <li><a href="{% url 'geoentries:index' %}">Startseite</a></li>
+                <li><a href="{% url 'geoentries:list'%}">Alle Anliegen</a></li>
+                <li><a href="{% url 'geoentries:create' %}">Anliegen melden</a></li>
+                <li><a href="{% url 'geoentries:stats'%}">Statistik</a></li>
+                <li> <input id="dark" type="checkbox">
+                    <label id="toggle" for="dark">
+                        <div class="circle">
+                            <div class="semicircle"></div>
+                        </div>
+                    </label>
+                </li>
+
+            </ul>
+        </nav>
     </header>
+    <main>
     {% block content %}
     {% endblock %}
+    </main>
+    <footer>
+
+        <script id="aioa-adawidget" src="{{ AIOA_URL }}"></script>
+        <div class="footer-links">
+            <a href="">Datenschutz</a>
+            <a href="">Impressum</a>
+            <a href="">Barrierefreiheit</a>
+        </div>
+    </footer>
 </body>
 
 </html>

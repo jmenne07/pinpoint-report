@@ -1,4 +1,4 @@
-# Copyright 2025 Jörn Menne
+# Copyright 2026 Jörn Menne
 # Licensed under the Apache License, Version 2.0
 # See NOTICE file for details.
 
@@ -11,6 +11,7 @@ from django.contrib.auth.models import Group
 from django.db.models import QuerySet
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 from mptt.admin import MPTTModelAdmin, TreeRelatedFieldListFilter
 from simple_history.admin import SimpleHistoryAdmin
 
@@ -109,16 +110,17 @@ class EntryAdmin(SimpleHistoryAdmin):
     fields = [
         ("title", "category"),
         ("creation_time", "update_time", "done_date"),
-        ("status", "remark"),
         "published",
+        ("status", "remark"),
         "send_closelink",
         "description",
         "email",
         ("latitude", "longitude", "formated_adress", "map"),
-        ("image", "image_preview"),
+        ("image", "image_preview", "show_image"),
         "notes",
     ]
     readonly_fields = [
+        "image",
         "image_preview",
         "creation_time",
         "update_time",
@@ -139,6 +141,9 @@ class EntryAdmin(SimpleHistoryAdmin):
         return request.user.is_superuser
         # return super().has_view_history_permission(request, obj)
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
     def image_preview(self, obj: Entry) -> str:
         if obj.image:
             return format_html(
@@ -146,7 +151,7 @@ class EntryAdmin(SimpleHistoryAdmin):
             )
         return ""
 
-    image_preview.short_description = "Preview"
+    image_preview.short_description = _("Preview")
 
     def map(self, obj):
         if not obj.latitude or not obj.longitude:
@@ -194,6 +199,8 @@ class EntryAdmin(SimpleHistoryAdmin):
             }})();
             </script>
         """)
+
+    map.short_description = _("map")
 
     def get_fields(self, request, obj):
         fields = super().get_fields(request, obj)
@@ -252,7 +259,7 @@ class MailTriggerAdmin(admin.ModelAdmin):
 
 
 @admin.register(Condition)
-class ConditionTrigger(admin.ModelAdmin):
+class ConditionAdmin(admin.ModelAdmin):
     exclude = None
 
 

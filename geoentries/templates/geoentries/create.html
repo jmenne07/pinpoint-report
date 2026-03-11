@@ -1,5 +1,5 @@
 <!--
-Copyright: (c) 2025 Jörn Menne
+Copyright: (c) 2026 Jörn Menne
 Licensed under the Apache License, Version 2.0
 See NOTICE file for details.
 -->
@@ -11,7 +11,6 @@ See NOTICE file for details.
 {% endblock %}
 
 {% block content %}
-<h2>Neues Anliegen</h2>
 <div id="map-container">
     <div id="map"></div>
     <script src="{% static 'geoentries/mapsetup.js' %}"></script>
@@ -23,15 +22,35 @@ See NOTICE file for details.
 <section id="hero-section">
     <form method="post" enctype="multipart/form-data" action="" id="form">
          {% csrf_token %}
-        <label for="{{ form.category.id_for_label }}">Category:</label>
-        {{ form.category }}
-        <label for="{{ form.description.id_for_label }}">Description:</label>
+         <label for="{{ form.category.id_for_label }}">Kategorie:</label><br>
+         <script src="{% static 'geoentries/categoryselection.js' %}"></script>
+        <div class="catsel" id="catsel">
+        <!-- {{ form.category }} -->
+        <select id="id_category" name="category", onchange="getsubcategories(this)" required>
+            <option value="" disabled selected>Bitte auswählen.</option>
+            {% for cat in categories %}
+                {% if cat.level == 0 %}
+                    <option value="{{ cat.pk }}">{{cat.name}}</option>
+                {% endif %}
+            {% endfor %}
+        </select></div><br>
+
+        <label for="{{ form.description.id_for_label }}">Beschreibung:</label>
         {{ form.description }} </br>
         <label for="{{ form.email.id_for_label }}">Email:</label>
-        {{ form.email }} </br>
-        <label for="{{ form.image.id_for_label }}">Image:</label>
+        {{ form.email }}
+        <p>Geben Sie uns eine gültige E-Mail-Adresse, benachrichtigen wir Sie bei Updates.</p>
+        <label for="{{ form.image.id_for_label }}">Bild:</label>
         {{ form.image }} </br>
-        <input type="submit" value="Submit" class="submit" /> </br> 
+
+        <div id="dsgvo-group" class="checkbox-group">
+            <input type="checkbox" id="dsgvo" required/>
+            <label for="dsgvo">Datenschutz-Grundverordnung</label><br>
+        </div>
+        <p id="dsgvo-text">Ich bin mit der Verwendung meiner Daten zur Bearbeitung dieses Anliegens einverstanden.
+        </p>
+
+        <input type="submit" value="Anliegen erstellen" class="submit" id="submit" /> </br>
         <div class="coordinates-group">
             <label for="{{ form.latitude.id_for_label }}">Lat:</label>
             {{ form.latitude }} </br>
@@ -42,7 +61,6 @@ See NOTICE file for details.
         {{form.formated_adress}}
         </div>
     </form>
-    
 
 </section>
 <!-- <script src="{% static 'geoentries/mapsetup.js' %}"></script> -->

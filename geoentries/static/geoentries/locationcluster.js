@@ -1,6 +1,6 @@
 const markers = L.markerClusterGroup();
 
-fetch("http://localhost:8000/geoentries/locations")
+fetch(window.APP_CONFIG.urls.locations)
     .then(response => response.json())
     .then(data => {
         data.forEach(location => {

@@ -1,9 +1,9 @@
-# Copyright 2025 Jörn Menne
+# Copyright 2026 Jörn Menne
 # Licensed under the Apache License, Version 2.0
 # See NOTICE file for details.
 
 
-from django.forms import CharField, Form, ModelForm
+from django.forms import CharField, ChoiceField, Form, ModelForm, TextInput
 from mptt.forms import TreeNodeChoiceField
 
 from .models import Category, Entry
@@ -15,7 +15,9 @@ class EntryForm(ModelForm):
     """
 
     category = TreeNodeChoiceField(
-        queryset=Category.objects.all(), level_indicator="-- "
+        queryset=Category.objects.all(),
+        level_indicator="-- ",
+        empty_label="Bitte auswählen.",
     )
 
     class Meta:
@@ -33,9 +35,18 @@ class EntryForm(ModelForm):
 
 
 class EntryFilterForm(Form):
-    q = CharField(required=False, label="Search")
+    q = CharField(
+        required=False,
+        label="Search",
+        widget=TextInput(attrs={"placeholder": "Volltextsuche hier eingeben"}),
+    )
     category = TreeNodeChoiceField(
-        queryset=Category.objects.all(), level_indicator="--", required=False
+        queryset=Category.objects.all(),
+        level_indicator="--",
+        required=False,
+        empty_label="Kategorie-Filter",
     )
 
-    # status = ChoiceField(choices=[("", "All")] + list(Entry.Status), required=False)
+    status = ChoiceField(
+        choices=[("", "Alle Status")] + Entry.Status.choices, required=False
+    )

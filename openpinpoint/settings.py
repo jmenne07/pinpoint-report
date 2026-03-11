@@ -40,12 +40,17 @@ DEBUG = os.getenv("DEBUG", "true").lower() == "true"
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv(
-        "ALLOWED_HOSTS", ".localhost, 127.0.0.1, [::1], 192.168.49.2"
+        "DJANGO_ALLOWED_HOSTS", ".localhost, 127.0.0.1, [::1], 192.168.49.2"
     ).split(",")
 ]
 
 
 INTERNAL_IPS = ["127.0.0.1"]
+
+CSRF_TRUSTED_ORIGINS = [
+    trusted_origin.strip()
+    for trusted_origin in os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
+]
 
 # Application definition
 
@@ -62,6 +67,7 @@ INSTALLED_APPS = [
     "geoentries",
     "mptt",
     "simple_history",
+    # "accessibility",
 ]
 
 MIDDLEWARE = [
@@ -95,6 +101,7 @@ TEMPLATES = [
                 "django.template.context_processors.media",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                # "accessibility.context_processors.admin_AIOA",
             ],
         },
     },
@@ -116,14 +123,6 @@ DATABASES = {
 }
 
 if USE_POSTGRES:
-    # DATABASES = {
-    #    "default": {
-    #        "ENGINE": "django.db.backends.postgresql",
-    #        "OPTIONS": {
-    #            "service": "geoentries",
-    #        },
-    #    }
-    # }
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -158,9 +157,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+# LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "de"
 
-TIME_ZONE = "UTC"
+LANGUAGES = [
+    ("en", "English"),
+    ("de", "German"),
+]
+
+TIME_ZONE = "Europe/Berlin"
 
 USE_I18N = True
 
@@ -209,6 +214,9 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD", "")
 EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS", "False").lower() == "true"
 EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL", "False").lower() == "true"
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "example@pinpoint-report.de")
+
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 # Setup for ciphers
 # WARNING: It is advised to use a fixed 32 byte string in production

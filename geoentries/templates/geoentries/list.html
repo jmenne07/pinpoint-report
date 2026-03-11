@@ -5,7 +5,7 @@ See NOTICE file for details.
 -->
 {% extends "geoentries/base.html" %}
 {% load static %}
-{% block title %}Pinpoint-Alle Anliegen{% endblock %}
+{% block title %}Anliegenübersicht{% endblock %}
 {% block stylesheets %}
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
@@ -14,34 +14,34 @@ See NOTICE file for details.
 {% endblock %}
 
 {% block content %}
-<h2>Alle Anliegen</h2>
-<div id="map-container" class="card">
+<!-- <h2>Alle Anliegen</h2> -->
+<div id="map-container" class=>
     <div id="map"></div>
     <script src="{% static 'geoentries/mapsetup.js' %}"></script>
 </div>
+<div id="search-container">
 <form method = "GET">
     {{ filter_form.q }}
     {{ filter_form.category }}
-    <!-- {{ filter_form.status }} -->
-    <button type="submit">Search</button>
+    {{ filter_form.status }}
+    <button type="submit" value="Suche" class="submit">Suche </button>
 </form>
+</div>
 <div class="container">
     {% for entry in entries %}
-    <div class="card entry s{{entry.status}}">
-        <a href="{% url 'geoentries:detail' entry.id%}">
-            <h4>{{ entry.title }} </h4>
-            <p>Status: {{ entry.get_status_display }} </p>
-            <p>Beschreibung: {{ entry.description }}</p>
-            {% if entry.image %}
-            <img src="{{ entry.image.url }}" alt="Bild konnte nicht geladen werden" />
-            {% endif %}
-
+        <a href="{% url 'geoentries:detail' entry.id%}" class="card entry s{{entry.status}} grid-card">  
+                {% if entry.image and entry.show_image %}
+                    <img src="{{ entry.image.url }}" alt="Bild konnte nicht geladen werden" />
+                {% else %}
+                    <img src="{% static 'geoentries/icon.svg' %}" alt="Platzhalter"/>
+                {% endif %}
+                <div>
+                    <h4>{{ entry.title }}</h4>
+                    <p><strong>Status:</strong><br> {{ entry.get_status_display }}</p>
+                    <p><strong>Beschreibung:</strong><br> {{entry.description}}</p>
+                </div>
         </a>
-    </div>
     {% endfor %}
 </div>
-Dies ist einer einfacher Test
-
-<a href="{% url 'geoentries:index' %}">Back</a>
 <script src="{% static 'geoentries/locationcluster.js' %}"></script>
 {% endblock %}

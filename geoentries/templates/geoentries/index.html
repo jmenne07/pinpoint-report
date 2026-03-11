@@ -21,12 +21,18 @@ See NOTICE file for details.
         <script src="{% static 'geoentries/mapsetup.js' %}"></script>
     </div>
     <div id="links">
-        <a class="cta" href="{% url 'geoentries:create' %}">Anliegen melden</a>
-        <a href="">Alle Anliegen</a>
+        <a class="red  " href="{% url 'geoentries:create' %}" >Anliegen melden</a>
+        <a class= "blue " href="{% url 'geoentries:list' %}">Alle Anliegen</a>
+        <a class = "cyan" href="{% url 'geoentries:stats' %}">Statistik</a>
     </div>
 </section>
 
 <section id="main-section">
+    <div id="explaination-container">
+        <p>
+            <h1>Pinpoint</h1>
+            <p>In Pinpoint kann man Orte markieren und eine Beschreibung zu dem Marker hinzufügen.</p>
+    </div>
     {% if entries %} 
         {% for entry in entries %}
             <a href="{% url 'geoentries:detail' entry.pk   %}">
@@ -45,44 +51,5 @@ See NOTICE file for details.
         </div>
     {% endif %}
 </section>
-
-</section>
-<!-- <section id="main-section">
-    <h2>Pinpoint</h2>
-    <a href="{% url 'geoentries:create' %}">Anliegen melden</a>
-</section>
-<section id="entry-section">
-    <h3>Orte der Anliegen</h3>
-    <div id="map-container" class="card">
-        <div id="map"></div>
-        <script src="{% static 'geoentries/mapsetup.js' %}"></script>
-    </div>
-    <h3>Anliegen</h3>
-    {% if entries %}{% for entry in entries %}
-    <div class="card entry s{{entry.status}}">
-        <a href="{% url 'geoentries:detail' entry.id%}">
-            <h4>{{ entry.title }} </h4>
-            <p>Status: {{ entry.get_status_display }} </p>
-            <p>Beschreibung</p>
-            {% if entry.image %}
-            <img src="{{ entry.image.url }}" alt="Bild konnte nicht geladen werden" />
-            {% endif %}
-
-        </a>
-    </div>
-    {% endfor %}
-    {% else %}
-    <div>
-        <h4> Es gibt keine Anliegen </h4>
-    </div>
-    {% endif %}
-
-</section>
-<section>
-    <div>
-        <h3>Some Stats</h3>
-    </div>
-
-</section> -->
 <script src="{% static 'geoentries/locationcluster.js' %}"></script>
 {% endblock %}

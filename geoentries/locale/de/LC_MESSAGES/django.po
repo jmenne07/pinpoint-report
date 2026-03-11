@@ -1,0 +1,191 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-03-05 13:17+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: geoentries/admin.py:154
+msgid "Preview"
+msgstr "Vorschau"
+
+#: geoentries/admin.py:203
+msgid "map"
+msgstr "Karte"
+
+#: geoentries/models.py:41
+msgid "Category"
+msgstr "Kategorie"
+
+#: geoentries/models.py:42
+msgid "Categories"
+msgstr "Kategorien"
+
+#: geoentries/models.py:55
+msgid "Parent"
+msgstr "Übergruppe"
+
+#: geoentries/models.py:58 geoentries/models.py:115
+msgid "Description"
+msgstr "Beschreibung vom Ersteller"
+
+#: geoentries/models.py:61
+msgid "External-Mail"
+msgstr "Externe Email"
+
+#: geoentries/models.py:67
+msgid "duration"
+msgstr "Bearbeitungsdauer"
+
+#: geoentries/models.py:81
+msgid "Entry"
+msgstr "Anliegen"
+
+#: geoentries/models.py:82
+msgid "Entries"
+msgstr "Anliegen"
+
+#: geoentries/models.py:89
+msgid "open"
+msgstr "Offen"
+
+#: geoentries/models.py:90
+msgid "in progress"
+msgstr "In Bearbeitung"
+
+#: geoentries/models.py:91
+msgid "closed"
+msgstr "Abgeschlossen"
+
+#: geoentries/models.py:92
+msgid "archived"
+msgstr "Archiviert"
+
+#: geoentries/models.py:98
+msgid "Creation-time"
+msgstr "Angelegt am"
+
+#: geoentries/models.py:100
+msgid "Update-time"
+msgstr "Letzte Änderung"
+
+#: geoentries/models.py:101
+msgid "Done-date"
+msgstr "Wiedervorlage"
+
+#: geoentries/models.py:103
+msgid "published"
+msgstr "Veröffentlicht"
+
+#: geoentries/models.py:105 geoentries/models.py:293
+msgid "Title"
+msgstr "Titel"
+
+#: geoentries/models.py:136
+msgid "Image"
+msgstr "Bild"
+
+#: geoentries/models.py:140
+msgid "Notes"
+msgstr "Fall-Notizen (intern)"
+
+#: geoentries/models.py:141
+msgid "Remark"
+msgstr "Vermerk (öffentlich einsehbar)"
+
+#: geoentries/models.py:144
+msgid "Send closelink"
+msgstr "Send Abschlusslink"
+
+#: geoentries/models.py:148
+msgid "Adress"
+msgstr "Adresse"
+
+#: geoentries/models.py:151
+msgid "show_image"
+msgstr "Foto anzeigen"
+
+#: geoentries/models.py:200
+msgid "Groupprofile"
+msgstr "Kategoriezuweisung"
+
+#: geoentries/models.py:201
+msgid "Groupprofiles"
+msgstr "Kategoriezuweisungen"
+
+#: geoentries/models.py:227
+msgid "Condition"
+msgstr "Bedingung"
+
+#: geoentries/models.py:228
+msgid "Conditions"
+msgstr "Bedingungen"
+
+#: geoentries/models.py:232
+msgid "Fieldname"
+msgstr "Feldname"
+
+#: geoentries/models.py:240
+msgid "Expected value"
+msgstr "Erwarteter Wert "
+
+#: geoentries/models.py:248
+msgid "Previous value"
+msgstr "Vorheriger Wert"
+
+#: geoentries/models.py:252
+msgid "trigger on create"
+msgstr "Beim Erstellen ausführen"
+
+#: geoentries/models.py:255
+msgid "trigger on update"
+msgstr "Beim Update ausführen"
+
+#: geoentries/models.py:264
+msgid "Email-Trigger"
+msgstr "Email-Auslöser"
+
+#: geoentries/models.py:265
+msgid "Email-Triggers"
+msgstr "Email-Auslöser"
+
+#: geoentries/models.py:270
+msgid "is active"
+msgstr "ist aktiviert"
+
+#: geoentries/models.py:285
+msgid "Email-Template"
+msgstr "Email-Vorlage"
+
+#: geoentries/models.py:286
+msgid "EMail-Templates"
+msgstr "Email-Vorlagen"
+
+#: geoentries/models.py:294
+msgid "Subject"
+msgstr "Betreff"
+
+#: geoentries/models.py:295
+msgid "body"
+msgstr "Nachricht"
+
+#: geoentries/models.py:300
+msgid "Mailtype"
+msgstr "E-Mailtyp"
+
+#: geoentries/models.py:307
+msgid "template_triggers"
+msgstr "Templatetrigger"

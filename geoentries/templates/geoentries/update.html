@@ -18,19 +18,19 @@ See NOTICE file for details.
 
 <form method="post" enctype="multipart/form-data" action="">
     {% csrf_token %}
-    <label for="{{ form.category.id_for_label }}">Category:</label>
+    <label for="{{ form.category.id_for_label }}">Kategorie:</label>
     {{ form.category }}</br>
     <label for="{{ form.status.id_for_label }}"" Status:</label>
     {{ form.status }}
-    <label for=" {{ form.title.id_for_label }}">Title:</label>
+    <label for=" {{ form.title.id_for_label }}">Titel:</label>
     {{ form.title }} </br>
-    <label for=" {{ form.published.id_for_label }}">Published</label>
+    <label for=" {{ form.published.id_for_label }}">Veröffentlichen</label>
     {{ form.published }} </br>
-    <label for="{{ form.description.id_for_label }}">Description:</label>
+    <label for="{{ form.description.id_for_label }}">Beschreibung:</label>
     {{ form.description }} </br>
     <label for="{{ form.email.id_for_label }}">Email:</label>
     {{ form.email }} </br>
-    <label for="{{ form.image.id_for_label }}">Image:</label>
+    <label for="{{ form.image.id_for_label }}">Bild:</label>
     {{ form.image }}
     {% if object.image %}
     <img href="{{ object.image.url }}" alt="Bild konnte nicht geladen werden." style="height:200px" />
