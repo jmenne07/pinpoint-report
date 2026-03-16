@@ -4,6 +4,7 @@
 
 
 import logging
+from threading import activeCount
 
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission, User
@@ -11,7 +12,7 @@ from django.db import transaction
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
-from .models import Entry, MailTemplate, MailTrigger
+from .models import ContentType, Disjunction, Entry, MailTemplate, MailTrigger
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +69,29 @@ def capture_old_instance(sender, instance, **kwargs):
             instance._old_instance = None
     else:
         instance._old_instance = None
+
+
+@receiver(post_save)
+def evaluate_disjunction(sender, instance, created, **kwargs):
+    if ContentType.objects.get_for_model(instance) == ContentType.objects.get_for_model(
+        Entry
+    ):
+        __import__("pdb").set_trace()
+
+    valid_disjunctions = None
+    if created:
+        valid_disjunctions = Disjunction.objects.filter(
+            is_active=True,
+            on_create=created,
+            model=ContentType.objects.get_for_model(instance),
+        ).prefetch_related("literals")
+    else:
+        valid_disjunctions = Disjunction.objects.filter(
+            is_active=True, model=ContentType.objects.get_for_model(instance)
+        ).prefetch_related("literals")
+
+    for disju in valid_disjunctions:
+        print(disju)
 
 
 @receiver(post_save, sender=Entry)

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-05 13:17+0100\n"
+"POT-Creation-Date: 2026-03-12 12:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,166 +26,224 @@ msgstr "Vorschau"
 msgid "map"
 msgstr "Karte"
 
-#: geoentries/models.py:41
+#: geoentries/models.py:42
 msgid "Category"
 msgstr "Kategorie"
 
-#: geoentries/models.py:42
+#: geoentries/models.py:43
 msgid "Categories"
 msgstr "Kategorien"
 
-#: geoentries/models.py:55
+#: geoentries/models.py:56
 msgid "Parent"
 msgstr "Übergruppe"
 
-#: geoentries/models.py:58 geoentries/models.py:115
+#: geoentries/models.py:59 geoentries/models.py:116
 msgid "Description"
 msgstr "Beschreibung vom Ersteller"
 
-#: geoentries/models.py:61
+#: geoentries/models.py:62
 msgid "External-Mail"
 msgstr "Externe Email"
 
-#: geoentries/models.py:67
+#: geoentries/models.py:68
 msgid "duration"
 msgstr "Bearbeitungsdauer"
 
-#: geoentries/models.py:81
+#: geoentries/models.py:82
 msgid "Entry"
 msgstr "Anliegen"
 
-#: geoentries/models.py:82
+#: geoentries/models.py:83
 msgid "Entries"
 msgstr "Anliegen"
 
-#: geoentries/models.py:89
+#: geoentries/models.py:90
 msgid "open"
 msgstr "Offen"
 
-#: geoentries/models.py:90
+#: geoentries/models.py:91
 msgid "in progress"
 msgstr "In Bearbeitung"
 
-#: geoentries/models.py:91
+#: geoentries/models.py:92
 msgid "closed"
 msgstr "Abgeschlossen"
 
-#: geoentries/models.py:92
+#: geoentries/models.py:93
 msgid "archived"
 msgstr "Archiviert"
 
-#: geoentries/models.py:98
+#: geoentries/models.py:99
 msgid "Creation-time"
 msgstr "Angelegt am"
 
-#: geoentries/models.py:100
+#: geoentries/models.py:101
 msgid "Update-time"
 msgstr "Letzte Änderung"
 
-#: geoentries/models.py:101
+#: geoentries/models.py:102
 msgid "Done-date"
 msgstr "Wiedervorlage"
 
-#: geoentries/models.py:103
+#: geoentries/models.py:104
 msgid "published"
 msgstr "Veröffentlicht"
 
-#: geoentries/models.py:105 geoentries/models.py:293
+#: geoentries/models.py:106 geoentries/models.py:344
 msgid "Title"
 msgstr "Titel"
 
-#: geoentries/models.py:136
+#: geoentries/models.py:137
 msgid "Image"
 msgstr "Bild"
 
-#: geoentries/models.py:140
+#: geoentries/models.py:141
 msgid "Notes"
 msgstr "Fall-Notizen (intern)"
 
-#: geoentries/models.py:141
+#: geoentries/models.py:142
 msgid "Remark"
 msgstr "Vermerk (öffentlich einsehbar)"
 
-#: geoentries/models.py:144
+#: geoentries/models.py:145
 msgid "Send closelink"
 msgstr "Send Abschlusslink"
 
-#: geoentries/models.py:148
+#: geoentries/models.py:149
 msgid "Adress"
 msgstr "Adresse"
 
-#: geoentries/models.py:151
+#: geoentries/models.py:152
 msgid "show_image"
 msgstr "Foto anzeigen"
 
-#: geoentries/models.py:200
+#: geoentries/models.py:201
 msgid "Groupprofile"
 msgstr "Kategoriezuweisung"
 
-#: geoentries/models.py:201
+#: geoentries/models.py:202
 msgid "Groupprofiles"
 msgstr "Kategoriezuweisungen"
 
-#: geoentries/models.py:227
+#: geoentries/models.py:228
 msgid "Condition"
 msgstr "Bedingung"
 
-#: geoentries/models.py:228
+#: geoentries/models.py:229
 msgid "Conditions"
 msgstr "Bedingungen"
 
-#: geoentries/models.py:232
+#: geoentries/models.py:233
 msgid "Fieldname"
 msgstr "Feldname"
 
-#: geoentries/models.py:240
+#: geoentries/models.py:241
 msgid "Expected value"
 msgstr "Erwarteter Wert "
 
-#: geoentries/models.py:248
+#: geoentries/models.py:249
 msgid "Previous value"
 msgstr "Vorheriger Wert"
 
-#: geoentries/models.py:252
+#: geoentries/models.py:253
 msgid "trigger on create"
 msgstr "Beim Erstellen ausführen"
 
-#: geoentries/models.py:255
+#: geoentries/models.py:256
 msgid "trigger on update"
 msgstr "Beim Update ausführen"
 
-#: geoentries/models.py:264
+#: geoentries/models.py:265
+msgid "Exact"
+msgstr "Exakt (=) "
+
+#: geoentries/models.py:266
+msgid "iexact"
+msgstr "Exakt (Case insensitive) "
+
+#: geoentries/models.py:267
+msgid "Contains"
+msgstr "Enthält"
+
+#: geoentries/models.py:268
+msgid "startswith"
+msgstr "Beginnt mit "
+
+#: geoentries/models.py:269
+msgid "istartswith"
+msgstr "Beginnt mit (Case-insensitive)"
+
+#: geoentries/models.py:270
+msgid "endwith"
+msgstr "Endet mit"
+
+#: geoentries/models.py:271
+msgid "iendwith"
+msgstr "Endet mit (Case-insensitive)"
+
+#: geoentries/models.py:272
+msgid "Greater than"
+msgstr "Größer als (>) "
+
+#: geoentries/models.py:273
+msgid "greater than or equal"
+msgstr "Gößer gleich (>=)"
+
+#: geoentries/models.py:274
+msgid "less than"
+msgstr "Kleiner als (<)"
+
+#: geoentries/models.py:275
+msgid "less then or equal"
+msgstr "Kleiner gleich (<=) "
+
+#: geoentries/models.py:285
+msgid "Literal"
+msgstr "Literal"
+
+#: geoentries/models.py:286
+msgid "Literals"
+msgstr "Literale"
+
+#: geoentries/models.py:291
+msgid "field"
+msgstr "Feld"
+
+
+
+#: geoentries/models.py:315
 msgid "Email-Trigger"
 msgstr "Email-Auslöser"
 
-#: geoentries/models.py:265
+#: geoentries/models.py:316
 msgid "Email-Triggers"
 msgstr "Email-Auslöser"
 
-#: geoentries/models.py:270
+#: geoentries/models.py:321
 msgid "is active"
 msgstr "ist aktiviert"
 
-#: geoentries/models.py:285
+#: geoentries/models.py:336
 msgid "Email-Template"
 msgstr "Email-Vorlage"
 
-#: geoentries/models.py:286
+#: geoentries/models.py:337
 msgid "EMail-Templates"
 msgstr "Email-Vorlagen"
 
-#: geoentries/models.py:294
+#: geoentries/models.py:345
 msgid "Subject"
 msgstr "Betreff"
 
-#: geoentries/models.py:295
+#: geoentries/models.py:346
 msgid "body"
 msgstr "Nachricht"
 
-#: geoentries/models.py:300
+#: geoentries/models.py:351
 msgid "Mailtype"
 msgstr "E-Mailtyp"
 
-#: geoentries/models.py:307
+#: geoentries/models.py:358
 msgid "template_triggers"
 msgstr "Templatetrigger"

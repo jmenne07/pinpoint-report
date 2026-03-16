@@ -10,20 +10,22 @@ of the project.
 
 import logging
 from base64 import urlsafe_b64encode
+from datetime import timedelta
 from typing import override
 
 from Crypto.Cipher import ChaCha20
 from django.conf import settings
 from django.contrib.auth.models import Group
+from django.contrib.contenttypes.models import ContentType
 from django.core.mail import send_mail
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.template import engines
 from django.urls import reverse
+from django.utils.html import MAX_URL_LENGTH
 from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 from simple_history.models import HistoricalRecords
-from datetime import timedelta
 
 django_engine = engines["django"]
 logger = logging.getLogger(__name__)
@@ -253,6 +255,84 @@ class Condition(models.Model):
     )
     trigger_on_update = models.BooleanField(
         default=True, verbose_name=_("trigger on update")
+    )
+
+    def __str__(self):
+        return self.name
+
+
+def limit_models_to_relevant_ones():
+    return {
+        # "app_label__in": ["geoentries"],
+        "model__in": ["entry"]
+    }
+
+
+class Literal(models.Model):
+    LOOKUPS = [
+        ("exact", _("Exact")),
+        ("iexact", _("iexact")),  # Case-Insensitive
+        ("contains", _("Contains")),
+        ("startswith", _("startswith")),
+        ("istartswith", _("istartswith")),  # Case-Insensitive
+        ("endwith", _("endwith")),
+        ("iendwith", _("iendwith")),  # Case-Insensitive
+        ("gt", _("Greater than")),
+        ("gte", _("greater than or equal")),
+        ("lt", _("less than")),
+        ("lte", _("less then or equal")),
+        # ("range", _("range")),
+        # ("date", _("date")),
+        # ("year", _("year")),
+        # ("month", _("month")),
+        # ("day", _("day")),
+        # ("week", _("week")),
+    ]
+
+    class Meta:
+        verbose_name = _("Literal")
+        verbose_name_plural = _("Literals")
+
+    name = models.CharField(max_length=100, unique=True)
+
+    model = models.ForeignKey(
+        ContentType,
+        on_delete=models.CASCADE,
+        limit_choices_to=limit_models_to_relevant_ones(),
+    )
+
+    # TODO: Restrict to only available fields
+    field = models.CharField(max_length=100, verbose_name=_("field"), null=True)
+    value = models.CharField(max_length=128, null=True)
+
+    lookup_type = models.CharField(max_length=50, choices=LOOKUPS, default="exact")
+    is_negated = models.BooleanField(default=False)
+    is_previous_value = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+
+class Disjunction(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
+    literals = models.ManyToManyField(
+        Literal,
+        verbose_name=Literal._meta.verbose_name_plural,
+        blank=True,
+    )
+
+    is_active = models.BooleanField(default=True)
+    on_create = models.BooleanField(default=False)
+    on_update = models.BooleanField(default=True)
+    on_manual = models.BooleanField(default=False)
+
+    model = models.ForeignKey(
+        ContentType,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        limit_choices_to=limit_models_to_relevant_ones(),
     )
 
     def __str__(self):

@@ -15,7 +15,16 @@ from django.utils.translation import gettext_lazy as _
 from mptt.admin import MPTTModelAdmin, TreeRelatedFieldListFilter
 from simple_history.admin import SimpleHistoryAdmin
 
-from .models import Category, Condition, Entry, GroupProfile, MailTemplate, MailTrigger
+from .models import (
+    Category,
+    Condition,
+    Entry,
+    GroupProfile,
+    MailTemplate,
+    MailTrigger,
+    Literal,
+    Disjunction,
+)
 
 # Register your models here.
 
@@ -279,3 +288,13 @@ def remove_element_from_fields(fields, element):
 admin.site.site_header = "Pinpoint-Admin"
 admin.site.site_title = "Pinpoint Administration"
 admin.site.index_title = "Wilkommen zum Admin-Dashboard"
+
+
+@admin.register(Literal)
+class LiteralAdmin(admin.ModelAdmin):
+    exclude = None
+
+
+@admin.register(Disjunction)
+class DisjunctionAdmin(admin.ModelAdmin):
+    exlude = None
