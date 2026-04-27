@@ -130,7 +130,7 @@ def test_map_in_create(live_server):
     map_div = driver.find_element(value="map")
 
     if map_div.is_displayed():
-        map_height = int(map_div.value_of_css_property("height").replace("px", ""))
+        map_height = float(map_div.value_of_css_property("height").replace("px", ""))
         assert map_height > 0
     else:
         pytest.skip("Map exists, but is not displayed")
