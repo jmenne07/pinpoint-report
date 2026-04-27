@@ -6,7 +6,7 @@ import pytest
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
-from geoentries.models import Category, Entry, Mail
+from geoentries.models import Category, Entry
 
 # Test category models
 

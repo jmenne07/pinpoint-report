@@ -71,27 +71,28 @@ def capture_old_instance(sender, instance, **kwargs):
         instance._old_instance = None
 
 
-@receiver(post_save)
-def evaluate_disjunction(sender, instance, created, **kwargs):
-    if ContentType.objects.get_for_model(instance) == ContentType.objects.get_for_model(
-        Entry
-    ):
-        __import__("pdb").set_trace()
-
-    valid_disjunctions = None
-    if created:
-        valid_disjunctions = Disjunction.objects.filter(
-            is_active=True,
-            on_create=created,
-            model=ContentType.objects.get_for_model(instance),
-        ).prefetch_related("literals")
-    else:
-        valid_disjunctions = Disjunction.objects.filter(
-            is_active=True, model=ContentType.objects.get_for_model(instance)
-        ).prefetch_related("literals")
-
-    for disju in valid_disjunctions:
-        print(disju)
+# @receiver(post_save)
+# def evaluate_disjunction(sender, instance, created, **kwargs):
+#    if ContentType.objects.get_for_model(instance) == ContentType.objects.get_for_model(
+#        Entry
+#    ):
+#        __import__("pdb").set_trace()
+#
+#    valid_disjunctions = None
+#    if created:
+#        valid_disjunctions = Disjunction.objects.filter(
+#            is_active=True,
+#            on_create=created,
+#            model=ContentType.objects.get_for_model(instance),
+#        ).prefetch_related("literals")
+#    else:
+#        valid_disjunctions = Disjunction.objects.filter(
+#            is_active=True, model=ContentType.objects.get_for_model(instance)
+#        ).prefetch_related("literals")
+#
+#    for disju in valid_disjunctions:
+#        print(disju)
+#
 
 
 @receiver(post_save, sender=Entry)

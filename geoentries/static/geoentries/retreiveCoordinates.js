@@ -17,15 +17,28 @@ var ad_element = document.getElementById("id_formated_adress")
 let marker = L.marker();
 
 
+map.locate({ setView: true, maxZoom: 18, enableHighAccuracy: true });
+
+
+function onLocationFound(e) {
+    marker.setLatLng(e.latlng).addTo(map);
+
+}
+
+map.on('locationfound', onLocationFound);
+
+
+
+
 // Add change listener to the input-elements
-    lat_element.addEventListener("change", () => {
+lat_element.addEventListener("change", () => {
     marker.setLatLng([lat_element.value, lng_element.value])
         .addTo(map);
-    });
-    lng_element.addEventListener("change", () => {
+});
+lng_element.addEventListener("change", () => {
     marker.setLatLng([lat_element.value, lng_element.value])
         .addTo(map);
-    });
+});
 
 
 /*
@@ -46,7 +59,7 @@ function onMapClick(e, decimal_precision = 6) {
 
 map.on("click", onMapClick);
 
-nomi.addEventListener("submit", async(e) => {
+nomi.addEventListener("submit", async (e) => {
     //prevent pagereload 
     e.preventDefault();
     e.stopPropagation();
@@ -73,12 +86,12 @@ nomi.addEventListener("submit", async(e) => {
             lng_element.value = json[0].lon;
 
             map.setView(position, map.getZoom());
-     });
+        });
 
 });
 
-function reverseGeocode(lat, lon){
-  var url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
+function reverseGeocode(lat, lon) {
+    var url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
     fetch(url)
         .then(res => res.json())
         .then(json => {

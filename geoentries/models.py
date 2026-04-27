@@ -299,6 +299,8 @@ class Literal(models.Model):
         ContentType,
         on_delete=models.CASCADE,
         limit_choices_to=limit_models_to_relevant_ones(),
+        null=True,
+        blank=True,
     )
 
     # TODO: Restrict to only available fields
